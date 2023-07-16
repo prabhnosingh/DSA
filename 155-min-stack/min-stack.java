@@ -1,5 +1,5 @@
 class MinStack {
-     ArrayList<Integer> minVal = new ArrayList<>() ;
+     HashMap<Integer, Integer> minVal = new HashMap<>() ;
      Stack<Integer> stack = new Stack<>();
     public MinStack() {
         
@@ -8,15 +8,17 @@ class MinStack {
     
     public void push(int val) {
         //  Stack<Integer> stack = new Stack<>();
-         minVal.add(val);
+         minVal.put(val, minVal.getOrDefault(val,0)+1);
          stack.push(val);
     }
     
     public void pop() {
         //  Stack<Integer> stack = new Stack<>();
         if(!stack.isEmpty()){
-        
-        minVal.remove(stack.pop());
+        int p = stack.pop();
+        minVal.put(p, minVal.getOrDefault(p,0)-1);
+        if(minVal.get(p)<=0)
+        minVal.remove(p);
         }
         // if(!stack.isEmpty()){
         // minVal = Math.min(minVal, stack.peek());
@@ -34,7 +36,7 @@ class MinStack {
 
     
     public int getMin() {
-        return Collections.min(minVal);
+        return Collections.min(minVal.keySet());
     }
 }
 
