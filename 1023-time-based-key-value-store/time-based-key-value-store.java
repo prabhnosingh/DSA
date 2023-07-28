@@ -9,7 +9,7 @@ class TimeMap {
        
         
         
-       if(map.keySet().contains(key)){
+       if(map.containsKey(key)){
            ArrayList<String> s1 = map.get(key);
            s1.add(value);
            s1.add(Integer.toString(timestamp));
