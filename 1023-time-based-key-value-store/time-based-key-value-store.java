@@ -21,7 +21,7 @@ class TimeMap {
           s.add(Integer.toString(timestamp));
            map.put(key, s);
        }
-        // map.put(key, map.getOrDefault(key, s).add(value).add(Integer.toString(timestamp)));
+
     
     }
     
@@ -41,13 +41,7 @@ class TimeMap {
        
         }
          return ans;
-        // if(Integer.parseInt(s1[1]) <= timestamp){
-        //     return s1[0];
-        // }
-        // else if(Integer.parseInt(s1[1]) > timestamp){
-        //     return "";
-        // }
-        // return null;
+
     }
     
 }
