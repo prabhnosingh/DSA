@@ -8,11 +8,11 @@ class Solution {
           
 
             for(int i = 0; i < lenP; i++){
-            int distance = target - position[i];
-            double time = (double)(distance) / speed[i];
+            // int distance = target - position[i];
+            // double time = (double)(distance) / speed[i];
 
-            timeArr[position[i]] = time;
-            // timeArr[position[i]]= (double)(target - position[i]) / speed[i];
+            // timeArr[position[i]] = time;
+            timeArr[position[i]]= (double)(target - position[i]) / speed[i];
             
              }
 
