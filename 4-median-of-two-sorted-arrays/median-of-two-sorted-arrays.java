@@ -33,8 +33,6 @@ class Solution {
                 nums[k++] = nums1[i++];
             }
         }
-
-
         mid = len/2;
     
         if(len % 2 == 0){
@@ -43,9 +41,7 @@ class Solution {
         else{
             median = nums[mid];
         }
-
         return median;
-  
     }
 }
 
