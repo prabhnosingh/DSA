@@ -1,13 +1,13 @@
 class Solution {
     public int carFleet(int target, int[] position, int[] speed) {
-       
+        int lenP = position.length;
     
         double[] timeArr = new double[target];
     
             int fleet = 0;
           
 
-            for(int i = 0; i < position.length; i++){
+            for(int i = 0; i < lenP; i++){
             // int distance = target - position[i];
             // double time = (double)(distance / speed[i]);
 
