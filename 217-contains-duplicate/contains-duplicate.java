@@ -22,7 +22,8 @@ class Solution {
         
         
         HashSet<Integer> set1= new HashSet<>();
-        for(int i=0; i< nums.length; i++){
+        int len = nums.length;
+        for(int i=0; i< len; i++){
        
                 if(set1.contains(nums[i])){
                     return true;
