@@ -13,37 +13,37 @@ class Solution {
         int j = 0;
         int k = 0;
 
-        if(len2 == 0){
-            mid = len1/2;
-            if(mid !=0 ){
-                if( mid == 1 || len1 % 2 == 0){
-                  median = (double)(nums1[mid] + nums1[mid - 1]) / 2;
-             }
-            else{
-                 median = nums1[mid];
-                }
-                return median;
-              }
-              else{
-                  return nums1[mid];
-              }
-        }
-        else if(len1 == 0){
-             mid = len2/2;
-            if(mid !=0){
-                if(mid == 1 || len2 % 2 == 0){
-                    median = (double)(nums2[mid] + nums2[mid - 1]) / 2;
-             }
-                else{
-                median = nums2[mid];
-             }
-            return median;
-            }
-            else{
-                return nums2[mid];
-            }
+        // if(len2 == 0){
+        //     mid = len1/2;
+        //     if(mid !=0 ){
+        //         if( mid == 1 || len1 % 2 == 0){
+        //           median = (double)(nums1[mid] + nums1[mid - 1]) / 2;
+        //      }
+        //     else{
+        //          median = nums1[mid];
+        //         }
+        //         return median;
+        //       }
+        //       else{
+        //           return nums1[mid];
+        //       }
+        // }
+        // else if(len1 == 0){
+        //      mid = len2/2;
+        //     if(mid !=0){
+        //         if(mid == 1 || len2 % 2 == 0){
+        //             median = (double)(nums2[mid] + nums2[mid - 1]) / 2;
+        //      }
+        //         else{
+        //         median = nums2[mid];
+        //      }
+        //     return median;
+        //     }
+        //     else{
+        //         return nums2[mid];
+        //     }
             
-        }
+        // }
 
 
 
@@ -71,7 +71,7 @@ class Solution {
 
 
         mid = len/2;
-        // if(mid != 0){
+    
         if(len % 2 == 0){
             median = (float)(nums[mid] + nums[mid-1])/2;  
         }
@@ -80,10 +80,7 @@ class Solution {
         }
 
         return median;
-    // }
-    // else{
-    //     return nums[mid];
-    // }
+  
     }
 }
 
