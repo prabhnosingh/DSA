@@ -22,14 +22,13 @@ class Solution {
         
         
         HashSet<Integer> set1= new HashSet<>();
-        int len = nums.length;
-        for(int i=0; i< len; i++){
-       
-                if(set1.contains(nums[i])){
+        for(int i=0; i< nums.length; i++){
+        int num = nums[i];
+                if(set1.contains(num)){
                     return true;
                 
             }
-            set1.add(nums[i]);
+            set1.add(num);
         }
         return false;
     }
