@@ -7,10 +7,11 @@ class Solution {
             int fleet = 0;
 
             for(int i = 0; i < lenP; i++){
-            int distance = target - position[i];
+            int pos = position[i];
+            int distance = target - pos;
             double time = (double)(distance) / speed[i];
 
-            timeArr[position[i]] = time;
+            timeArr[pos] = time;
             
              }
 
