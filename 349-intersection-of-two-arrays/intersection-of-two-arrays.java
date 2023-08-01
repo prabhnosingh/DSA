@@ -1,5 +1,36 @@
 class Solution {
     public int[] intersection(int[] nums1, int[] nums2) {
+
+        boolean[] exist = new boolean[1001];
+
+        for(int i = 0; i < nums1.length; i++){
+           exist[nums1[i]] = true;
+        }
+
+        int idx = 0;
+        int[] result = new int[Math.min(nums1.length, nums2.length)];
+        for(int i = 0; i < nums2.length; i++){
+            if(exist[nums2[i]]){
+            result[idx++] = nums2[i];
+            exist[nums2[i]] = false;                
+            }
+
+        }
+
+            return Arrays.copyOfRange(result, 0, idx);
+
+
+
+
+
+
+
+
+
+
+
+
+
         // HashSet<Integer> set = new HashSet<>();
         // ArrayList<Integer> arr = new ArrayList<>();
         // for(int i = 0; i < nums1.length; i++){
@@ -19,17 +50,7 @@ class Solution {
         // }
        
         // return arrFin;
-boolean[] exist = new boolean[1001];
-        for(int v : nums1) exist[v] = true;
-        int[] result = new int[Math.min(nums1.length, nums2.length)];
-        int idx = 0;
-        for(int v : nums2) {
-            if(exist[v]) {
-                result[idx++] = v;
-                exist[v] = false;
-            }
-        }
-        return Arrays.copyOfRange(result, 0, idx);
+
         
     }
 }
