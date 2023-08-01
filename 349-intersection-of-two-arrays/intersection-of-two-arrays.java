@@ -8,7 +8,7 @@ class Solution {
         }
 
         int idx = 0;
-        int[] result = new int[Math.min(nums1.length, nums2.length)];
+        int[] result = new int[Math.max(nums1.length, nums2.length)];
         for(int i = 0; i < nums2.length; i++){
             if(exist[nums2[i]]){
             result[idx++] = nums2[i];
