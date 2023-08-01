@@ -1,6 +1,6 @@
 class Solution {
     public boolean isAnagram(String s, String t) {
-
+    if(s == null || t == null) return false;
     int[] arr = new int[26];
 
     if(s.length() != t.length()) return false;
