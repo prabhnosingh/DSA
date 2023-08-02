@@ -21,7 +21,7 @@ class Solution {
         int totalWater =0;
         for(int k=1; k<n-1; k++){
             int water = Math.min(leftMax[k-1],rightMax[k+1]) - height[k];
-            totalWater += (water >0)? water:0;
+            totalWater += (water >0) ? water:0;
         }
         return totalWater;
 
