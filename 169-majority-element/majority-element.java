@@ -7,27 +7,28 @@ class Solution {
         
 //******************************************************************** */
         
+
+
+
+//********************************************************************* */        
         HashMap<Integer, Integer> map = new HashMap<>();
 
         for(int num : nums){
             map.put(num, map.getOrDefault(num, 0)+1);
         }
-        // HashSet<Integer> set = new HashSet<>();
         
-        int maxCount = 0;
-        int MKey = nums[0];
         int n = nums.length/2;
         for(int k : map.keySet()){  
 
             
              if(map.get(k) > n ){
-                MKey = k;
+               return k;
             }
 
            
 
         }
-        return MKey;
+        return 0;
 
         //*******************************************************
         // HashMap<Integer, Integer> map = new HashMap<>();
