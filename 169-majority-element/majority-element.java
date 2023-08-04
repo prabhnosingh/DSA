@@ -19,8 +19,8 @@ class Solution {
         int n = nums.length/2;
         for(int k : map.keySet()){  
 
-            if(map.get(k) > maxCount){
-                maxCount = map.get(k);
+            
+             if(map.get(k) > n ){
                 MKey = k;
             }
 
@@ -28,5 +28,28 @@ class Solution {
 
         }
         return MKey;
+
+        //*******************************************************
+        // HashMap<Integer, Integer> map = new HashMap<>();
+
+        // for(int num : nums){
+        //     map.put(num, map.getOrDefault(num, 0)+1);
+        // }
+        // // HashSet<Integer> set = new HashSet<>();
+        
+        // int maxCount = 0;
+        // int MKey = nums[0];
+        // int n = nums.length/2;
+        // for(int k : map.keySet()){  
+
+        //     if(map.get(k) > maxCount){
+        //         maxCount = map.get(k);
+        //         MKey = k;
+        //     }
+
+           
+
+        // }
+        // return MKey;
     }
 }
