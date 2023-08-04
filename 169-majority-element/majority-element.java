@@ -6,29 +6,41 @@ class Solution {
     // return nums[nums.length/2];   
         
 //******************************************************************** */
-        
-
-
-
-//********************************************************************* */        
         HashMap<Integer, Integer> map = new HashMap<>();
 
         for(int num : nums){
             map.put(num, map.getOrDefault(num, 0)+1);
         }
-        
+
         int n = nums.length/2;
-        for(int k : map.keySet()){  
+
+        for(Map.Entry<Integer, Integer> entry: map.entrySet()){
+            if(entry.getValue() > n){
+                return entry.getKey();
+            }
+        }
+        return 0;
+
+
+//********************************************************************* */        
+        // HashMap<Integer, Integer> map = new HashMap<>();
+
+        // for(int num : nums){
+        //     map.put(num, map.getOrDefault(num, 0)+1);
+        // }
+        
+        // int n = nums.length/2;
+        // for(int k : map.keySet()){  
 
             
-             if(map.get(k) > n ){
-               return k;
-            }
+        //      if(map.get(k) > n ){
+        //        return k;
+        //     }
 
            
 
-        }
-        return 0;
+        // }
+        // return 0;
 
         //*******************************************************
         // HashMap<Integer, Integer> map = new HashMap<>();
