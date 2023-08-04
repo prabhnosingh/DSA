@@ -19,14 +19,12 @@ class Solution {
         int n = nums.length/2;
         for(int k : map.keySet()){  
 
-            // if(map.get(k) > maxCount){
-            //     maxCount = map.get(k);
-            //     MKey = k;
-            // }
-
-            if(map.get(k) >n ){
+            if(map.get(k) > maxCount){
+                maxCount = map.get(k);
                 MKey = k;
             }
+
+           
 
         }
         return MKey;
