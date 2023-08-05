@@ -19,7 +19,7 @@ class Solution {
             if(map.get(r) ==  null ){
                 return false;
             }
-            if(map.get(r) > 0){
+            else if(map.get(r) > 0){
                 map.put(r, map.get(r)-1);
             }
 
