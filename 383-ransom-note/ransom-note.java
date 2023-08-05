@@ -1,27 +1,50 @@
 class Solution {
-    public boolean canConstruct(String ransomNote, String magazine) {
-
+    public boolean canConstruct(String ransomNote, String magazine) {   
 
         int[] count = new int[26];
 
-        for(int i = 0; i < magazine.length(); i ++){
-            char cm = magazine.charAt(i);
-
-            count[cm - 'a']++;
+        for(char c : magazine.toCharArray()){
+            count[c - 'a']++;
         }
 
-        for(int j = 0; j < ransomNote.length(); j ++){
-            char cr = ransomNote.charAt(j);
-
-            if(count[cr - 'a'] > 0){
-                count[cr - 'a']--;
-            }
-            else{
-                return false;
-            }
-
+        for(char c : ransomNote.toCharArray()){
+            if(count[c - 'a'] == 0) return false;
+            count[c - 'a']--;
         }
+
         return true;
+
+
+
+
+
+
+
+
+
+
+//**************************************************************************** */
+
+        // int[] count = new int[26];
+
+        // for(int i = 0; i < magazine.length(); i ++){
+        //     char cm = magazine.charAt(i);
+
+        //     count[cm - 'a']++;
+        // }
+
+        // for(int j = 0; j < ransomNote.length(); j ++){
+        //     char cr = ransomNote.charAt(j);
+
+        //     if(count[cr - 'a'] > 0){
+        //         count[cr - 'a']--;
+        //     }
+        //     else{
+        //         return false;
+        //     }
+
+        // }
+        // return true;
 
 
 
