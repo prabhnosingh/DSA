@@ -1,33 +1,67 @@
 class Solution {
     public boolean canConstruct(String ransomNote, String magazine) {
-        
-        char[] mag = magazine.toCharArray();
-        char[] ran = ransomNote.toCharArray();
 
-        HashMap<Character, Integer> map = new HashMap<>();
 
-        for(char m : mag){
-            map.put(m, map.getOrDefault(m, 0)+1);
+        int[] count = new int[26];
+
+        for(int i = 0; i < magazine.length(); i ++){
+            char cm = magazine.charAt(i);
+
+            count[cm - 'a']++;
         }
 
-        int i = 0;
-        // for(Map.Entry<Character, Integer> ent : map.entrySet()){
-        //     if(ran[i] <= ent.get)
-        // }
-        for(char r : ran){
+        for(int j = 0; j < ransomNote.length(); j ++){
+            char cr = ransomNote.charAt(j);
 
-            if(map.get(r) ==  null ){
+            if(count[cr - 'a'] > 0){
+                count[cr - 'a']--;
+            }
+            else{
                 return false;
             }
-            else if(map.get(r) > 0){
-                map.put(r, map.get(r)-1);
-            }
 
-            else if(map.get(r) <= 0){
-                return false;
-            }
         }
         return true;
+
+
+
+
+
+
+
+
+
+
+
+
+// **************************************************************************
+        // char[] mag = magazine.toCharArray();
+        // char[] ran = ransomNote.toCharArray();
+
+        // HashMap<Character, Integer> map = new HashMap<>();
+
+        // for(char m : mag){
+        //     map.put(m, map.getOrDefault(m, 0)+1);
+        // }
+
+        // int i = 0;
+        // // for(Map.Entry<Character, Integer> ent : map.entrySet()){
+        // //     if(ran[i] <= ent.get)
+        // // }
+        // for(char r : ran){
+
+        //     if(map.get(r) ==  null ){
+        //         return false;
+        //     }
+        //     else if(map.get(r) > 0){
+        //         map.put(r, map.get(r)-1);
+        //     }
+
+        //     else if(map.get(r) <= 0){
+        //         return false;
+        //     }
+        // }
+        // return true;
 
     }
 }
