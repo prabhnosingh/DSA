@@ -23,7 +23,7 @@ class Solution {
                 map.put(r, map.get(r)-1);
             }
 
-            else{
+            else if(map.get(r) <= 0){
                 return false;
             }
         }
