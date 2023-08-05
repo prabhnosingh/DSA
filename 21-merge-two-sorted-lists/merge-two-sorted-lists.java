@@ -29,7 +29,7 @@ class Solution {
             curr = curr.next;
         }
 
-        curr.next = list1 == null ? list2 : list1;
+        curr.next = list2 == null ? list1 : list2;
         return dummy.next;
     }
 }
