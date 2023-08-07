@@ -2,16 +2,7 @@ class Solution {
     public int jump(int[] nums) {
         
 
-        if(nums.length == 1){
-            
-            return 0;
-            // if(nums[0] == 0){
-            //     return 0;
-            // }
-            // else{
-            //     return 1;
-            // }
-        } 
+      
         int jumps = 0;
         int left = 0; 
         int right = 0;
