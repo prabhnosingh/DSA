@@ -34,9 +34,9 @@ class Solution {
                if(loc - 1 < 0) {
                   return head = i.next;
                }
-               else{
+               
                     i.next = i.next.next;
-               }
+               
                
            }
            i = i.next;
