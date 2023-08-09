@@ -6,9 +6,9 @@ class Solution {
         int temp = 0;
         int i = n - 1;
         while(i != 0){
-            temp = one + two;
-            two = one;
-            one = temp;
+            temp = one;
+            one = one + two;
+            two = temp;
             i--;
         }
         return one;
