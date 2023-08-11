@@ -20,15 +20,27 @@ class Solution {
 
     //    return slow;
 
-//******************************************************************** */      
-        int len = nums.length;
-        int[] freq = new int[len];
-
-        for(int i = 0; i < len; i++){
-            if(freq[nums[i]] == 0) freq[nums[i]] ++;
-            else return nums[i];
+//******************************************************************** */
+        for(int num : nums){
+            if(nums[Math.abs(num)] < 0){
+                return Math.abs(num);
+            }
+            else{
+                nums[Math.abs(num)] *= -1;
+            }
         }
-        return 0;
+        return -1;
+
+
+//******************************************************************** */      
+        // int len = nums.length;
+        // int[] freq = new int[len];
+
+        // for(int i = 0; i < len; i++){
+        //     if(freq[nums[i]] == 0) freq[nums[i]] ++;
+        //     else return nums[i];
+        // }
+        // return 0;
 //******************************************************************** */
     //    HashSet<Integer> set = new HashSet<>();
     //    int doubleNum = 0;
