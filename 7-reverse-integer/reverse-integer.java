@@ -5,11 +5,15 @@ class Solution {
         if(x < 0){
             neg = true;
         }
-        long finalNum = 0;
+        int finalNum = 0;
 
         while(x != 0){
-            int lastDig = x % 10;
 
+             if(finalNum > 214748364  || finalNum < -214748364){
+                     return 0;
+                 }
+            int lastDig = x % 10;
+            
             // finalNum += lastDig;
             finalNum = finalNum*10 + lastDig;
 
@@ -19,10 +23,8 @@ class Solution {
 
         // finalNum = finalNum/10;
 
-        if(finalNum > Integer.MAX_VALUE || finalNum < Integer.MIN_VALUE){
-            return 0;
-        }
+       
 
-        return (int)(finalNum);
+        return finalNum;
     }
 }
