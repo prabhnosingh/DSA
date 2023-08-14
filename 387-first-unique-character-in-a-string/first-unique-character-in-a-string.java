@@ -1,38 +1,38 @@
 class Solution {
     public int firstUniqChar(String s) {
 
-        int[] count = new int[26];
-        for(int i = 0; i < s.length(); i++){
+        // int[] count = new int[26];
+        // for(int i = 0; i < s.length(); i++){
            
-           count[s.charAt(i) - 'a'] ++;
-        }
+        //    count[s.charAt(i) - 'a'] ++;
+        // }
 
-        for(int i = 0; i < s.length(); i++){
+        // for(int i = 0; i < s.length(); i++){
 
-            if(count[s.charAt(i) - 'a'] == 1){
-                return i;
-            }
-        }
-        return -1;
+        //     if(count[s.charAt(i) - 'a'] == 1){
+        //         return i;
+        //     }
+        // }
+        // return -1;
 
 
 //************************************************************************** */
-        // int[] count = new int[26];
-        // char[] ch = s.toCharArray();
-        // for(char c : ch){
+        int[] count = new int[26];
+        char[] ch = s.toCharArray();
+        for(char c : ch){
             
-        //   count[c - 'a'] ++;
-        // }
+          count[c - 'a'] ++;
+        }
 
-        // int idx = 0;
-        // for(int c : ch){
-        //     if(count[c - 'a'] == 1){
-        //         return idx;
-        //     }
-        //     idx ++;
+        int idx = 0;
+        for(int c : ch){
+            if(count[c - 'a'] == 1){
+                return idx;
+            }
+            idx ++;
 
-        // }
-        // return -1;
+        }
+        return -1;
 
         
 //**************************************************************************** */
