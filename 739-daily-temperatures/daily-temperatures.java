@@ -1,19 +1,24 @@
 class Solution {
     public int[] dailyTemperatures(int[] t) {
 
-        int len = t.length;
+       int[] ans = new int[t.length];
+       Stack<Integer> st = new Stack<>();
+       for(int i = t.length - 1; i >= 0; i --){
 
-        int[] ans = new int[len];
-        for(int i = len - 1; i >= 0; i --){
-            for(int j = i - 1; j >= 0 && t[j] < t[i]; j --){
-                 
-                    ans[j] = i - j;
-                  
-            }
-        }
-        return ans;
+           while(!st.isEmpty() && t[i] >= t[st.peek()]){
+               st.pop();
+           }
+
+           if(!st.isEmpty()){
+               ans[i] = st.peek() - i;
+           }
+
+           st.push(i);
+       }
+       return ans;
 
 //******************************************************************* */
+      
         // Stack<Integer> stack = new Stack<>();
         // int[] ans = new int[t.length];
         
@@ -90,7 +95,7 @@ class Solution {
     
     
     
-    
+     // beats 66.66%
     
     //     Stack<Integer> st = new Stack<>();
     //     int len = t.length;
