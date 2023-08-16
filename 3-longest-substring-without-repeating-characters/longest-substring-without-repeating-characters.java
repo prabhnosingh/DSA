@@ -6,7 +6,7 @@ class Solution {
         }
 
         int maxLength = 0;
-        int[] charIndex = new int[128];
+        int[] charIndex = new int[127];
 
         for(int end = 0, start = 0; end < s.length(); end++){
             char currentChar = s.charAt(end);
