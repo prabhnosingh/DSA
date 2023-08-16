@@ -8,13 +8,21 @@ class Solution {
        }
        return "";
     }
-        private int gcd(int a, int b){ //Euclidean Algorithm
-           while(b != 0){
-            int temp = b;
-            b = a % b;
-            a = temp;
+    //     private int gcd(int a, int b){ //Euclidean Algorithm
+    //        while(b != 0){
+    //         int temp = b;
+    //         b = a % b;
+    //         a = temp;
            
-           }
-           return a; 
-       }
+    //        }
+    //        return a; 
+    //    }
+
+
+    public int gcd(int a, int b){
+        if(b == 0){
+            return a;
+        }
+        return gcd(b, a % b);
+    }
 }
