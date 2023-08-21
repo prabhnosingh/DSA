@@ -5,7 +5,7 @@ class Solution {
             if(flowerbed[0] == 0){
                 n --;
             }
-            return n > 0 ? false : true;
+            return n <= 0;
         }
         
         for(int i = 0; i < flowerbed.length; i ++){
@@ -22,6 +22,6 @@ class Solution {
                 
             }
         }
-        return n > 0 ? false : true;
+        return n <= 0;
     }
 }
