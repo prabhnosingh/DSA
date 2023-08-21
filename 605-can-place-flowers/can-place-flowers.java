@@ -14,7 +14,7 @@ class Solution {
             }
             else if(i + 1 != flowerbed.length && flowerbed[i + 1] != 1){
                 n --;
-                flowerbed[i] = 1;
+                
                 i ++;
             }
             else if(i + 1 == flowerbed.length && flowerbed[i - 1] != 1){
