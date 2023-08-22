@@ -1,55 +1,92 @@
 class Solution {
     public String reverseVowels(String s) {
-        
-       if(s == null && s.length() == 0){
-           return s;
-       }
+    
+    boolean[] vowels = new boolean[128];
 
-    //    String vowels = "aieouAIEOU";
+    char[] ch = s.toCharArray();
+    for(char c : "aeiouAEIOU".toCharArray()){
 
-    HashSet<Character> set = new HashSet<>();
+        vowels[c] = true;
+    }
 
-    set.add('a');
-    set.add('e');
-    set.add('i');
-    set.add('o');
-    set.add('u');
-    set.add('A');
-    set.add('E');
-    set.add('O');
-    set.add('U');
-    set.add('I');
+    int start = 0;
+    int end = s.length() - 1;
+    
+    while(start < end){
 
-       char[] chars = s.toCharArray();
+        while(start < end && !vowels[ch[start]]){
+            start ++;
+        }
 
-       int start = 0;
-       int end = s.length() - 1;
 
-       while(start < end){
+        while(start < end && !vowels[ch[end]]){
+            end --;
+        }
 
-           while(start < end && !set.contains(chars[start])){
-               start ++;
-           }
+        char temp = ch[start];
+        ch[start] = ch[end];
 
-           while(start < end && !set.contains(chars[end])){
-               end --;
-           }
-        //    while(start < end && !vowels.contains(chars[start]+ "")){
-        //        start ++;
-        //    }
+        ch[end] = temp; 
 
-        //    while(start < end && !vowels.contains(chars[end]+ "")){
-        //        end --;
-        //    }
+        start ++;
+        end --;
 
-           char temp = chars[end];
-           chars[end] = chars[start];
 
-           chars[start] = temp;
 
-           start ++;
-           end --;
-       }
-       return new String(chars);
+    }
+
+    return new String(ch);
+//********************************************************************** */    
+    //beats 89.2%    
+    //    if(s == null && s.length() == 0){
+    //        return s;
+    //    }
+
+    // //    String vowels = "aieouAIEOU";
+
+    // HashSet<Character> set = new HashSet<>();
+
+    // set.add('a');
+    // set.add('e');
+    // set.add('i');
+    // set.add('o');
+    // set.add('u');
+    // set.add('A');
+    // set.add('E');
+    // set.add('O');
+    // set.add('U');
+    // set.add('I');
+
+    //    char[] chars = s.toCharArray();
+
+    //    int start = 0;
+    //    int end = s.length() - 1;
+
+    //    while(start < end){
+
+    //        while(start < end && !set.contains(chars[start])){
+    //            start ++;
+    //        }
+
+    //        while(start < end && !set.contains(chars[end])){
+    //            end --;
+    //        }
+    //     //    while(start < end && !vowels.contains(chars[start]+ "")){
+    //     //        start ++;
+    //     //    }
+
+    //     //    while(start < end && !vowels.contains(chars[end]+ "")){
+    //     //        end --;
+    //     //    }
+
+    //        char temp = chars[end];
+    //        chars[end] = chars[start];
+
+    //        chars[start] = temp;
+
+    //        start ++;
+    //        end --;
+    //    }
+    //    return new String(chars);
     }
 } 
