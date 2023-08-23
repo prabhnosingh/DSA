@@ -15,11 +15,10 @@ class Solution {
         ListNode ans = curr;
         while(curr != null){
             
-            boolean isDuplicate = false;
 
             ListNode prev = curr;  
             while(curr.next != null && curr.val == curr.next.val){
-                isDuplicate = true;
+            
                 curr = curr.next;
             }
 
