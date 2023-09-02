@@ -19,7 +19,8 @@ class Solution {
           
                 s += count;
                 for(char ch : s.toCharArray()){
-                    chars[idx ++] = ch;
+                    chars[idx] = ch;
+                    idx = idx + 1;
                    ans ++;
                 }
                 s = "";
