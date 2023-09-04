@@ -22,14 +22,15 @@ class Solution {
         String s = "";
         int idx = 0;
         
+        int len = chars.length;
 
         int ans = 0;
-        for(int i = 0; i < chars.length; i ++){
-            if(i < chars.length - 1 && chars[i] == chars[i + 1]){
+        for(int i = 0; i < len; i ++){
+            if(i < len - 1 && chars[i] == chars[i + 1]){
                 s += chars[i];
                 
                  int count = 1;
-                while(i < chars.length - 1 && chars[i] == chars[i + 1]){
+                while(i < len - 1 && chars[i] == chars[i + 1]){
                     count ++; 
                     i ++;                  
                 }
