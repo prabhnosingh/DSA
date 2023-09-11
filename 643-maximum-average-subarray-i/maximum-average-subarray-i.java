@@ -11,13 +11,10 @@ class Solution {
             for(int i = start; i <= end; i ++){
                 sum += nums[i];
             }
-            if(nums.length != 1){
-             
+                  
                 maxSum = Math.max(sum, maxSum);
-            }
-            else{
-                maxSum = sum;
-            }
+       
+           
     
             maxAvg = (double)maxSum / k;
             start ++;
