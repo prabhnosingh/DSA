@@ -1,23 +1,39 @@
 class Solution {
     public double findMaxAverage(int[] nums, int k) {
-   
-   
-        int[] sum = new int[nums.length];
 
-        sum[0] = nums[0];
-        for(int i = 1; i < nums.length; i ++){
-            sum[i] = sum[i - 1] + nums[i];
+        int sum = 0;
+
+        for(int i = 0; i < k; i ++){
+            sum += nums[i];
         }
-
-        double maxAvg = (sum[k - 1] * 1.0) / k;
- 
+        double maxAvg = sum * 1.0 / k;
         for(int i = k; i < nums.length; i ++){
-            maxAvg = Math.max((sum[i] - sum[i - k]) * 1.0 / k, maxAvg);
+            sum = sum - nums[i - k] + nums[i];
+            maxAvg = Math.max(maxAvg, sum * 1.0 / k);
         }
 
         return maxAvg;
+        
 
-//***************************************************************** */
+
+//************************************************************************* */
+         // beats 43.46%
+        // int[] sum = new int[nums.length];
+
+        // sum[0] = nums[0];
+        // for(int i = 1; i < nums.length; i ++){
+        //     sum[i] = sum[i - 1] + nums[i];
+        // }
+
+        // double maxAvg = (sum[k - 1] * 1.0) / k;
+ 
+        // for(int i = k; i < nums.length; i ++){
+        //     maxAvg = Math.max((sum[i] - sum[i - k]) * 1.0 / k, maxAvg);
+        // }
+
+        // return maxAvg;
+
+//************************************************************************** */
        // beats 5 %
         // int start = 0;
         // int end = k - 1;
