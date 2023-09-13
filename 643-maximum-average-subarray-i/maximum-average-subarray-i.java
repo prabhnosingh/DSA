@@ -5,7 +5,7 @@ class Solution {
 
         int maxSum = Integer.MIN_VALUE;
         double maxAvg = 0;
-        boolean neg = false;
+      
         while(end < nums.length){
             int sum = 0;
             for(int i = start; i <= end; i ++){
