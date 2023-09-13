@@ -6,13 +6,13 @@ class Solution {
         for(int i = 0; i < k; i ++){
             sum += nums[i];
         }
-        double maxAvg = sum * 1.0 / k;
+        double maxAvg = sum;
         for(int i = k; i < nums.length; i ++){
             sum = sum - nums[i - k] + nums[i];
-            maxAvg = Math.max(maxAvg, sum * 1.0 / k);
+            maxAvg = Math.max(maxAvg, sum);
         }
 
-        return maxAvg;
+        return maxAvg / k;
         
 
 
