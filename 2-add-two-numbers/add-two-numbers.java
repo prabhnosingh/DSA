@@ -11,7 +11,9 @@
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         
+        //creating dummy node
         ListNode ans = new ListNode();
+        //assigning pointer
         ListNode curr = ans;
 
         int carry = 0;
