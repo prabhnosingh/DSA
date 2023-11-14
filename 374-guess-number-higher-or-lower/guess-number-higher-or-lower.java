@@ -28,11 +28,11 @@ public class Solution extends GuessGame {
                 mid ++;
             }
             if(guess(mid) == -1){
-                end = mid;
+                end = mid - 1;
                 
             }           
             else if(guess(mid) == 1){
-                start = mid;
+                start = mid + 1;
             } 
             else{
                 return mid;
