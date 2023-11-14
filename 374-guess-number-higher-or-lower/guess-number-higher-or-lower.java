@@ -24,9 +24,9 @@ public class Solution extends GuessGame {
         // }
         while(start <= end){
             mid = start + (end - start) / 2;
-            if((start + end) % 2 != 0){
-                mid ++;
-            }
+            // if((start + end) % 2 != 0){
+            //     mid ++;
+            // }
             if(guess(mid) == -1){
                 end = mid - 1;
                 
