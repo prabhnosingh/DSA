@@ -14,12 +14,12 @@ class Solution {
         }
 
         for(int i = 0; i < 26; i ++){
-            if(arr1[i] == arr2[i]){
-                continue;
+            // if(arr1[i] == arr2[i]){
+            //     continue;
 
-            }
+            // }
 
-            if(arr1[i] == 0 || arr2[i] == 0){
+            if(arr1[i] == 0 ^ arr2[i] == 0){
                 return false;
             }
         }
