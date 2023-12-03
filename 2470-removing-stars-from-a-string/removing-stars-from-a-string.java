@@ -1,30 +1,44 @@
 class Solution {
     public String removeStars(String s) {
-        
-        char[] ch = s.toCharArray();
-        Stack<Character> stack = new Stack<>();
 
+        char[] ch = s.toCharArray();
+        int idx = 0; 
         for(char c : ch){
             if(c != '*'){
-                stack.push(c);
+                ch[idx ++] = c;
             }
             else{
-                stack.pop();
+                idx --;
             }
         }
+        return new String(ch, 0, idx);
 
-        String s1 = "";
-        while(!stack.empty()){
-            s1 += stack.pop();
-        }
-        char[] c2 = new char[s1.length()];
-        int idx = 0;
-        for(int i = s1.length() - 1; i >= 0; i --){
-            c2[idx ++] = s1.charAt(i);
-        }
+//*********************************************************
+ // beats 18.55 %       
+        // char[] ch = s.toCharArray();
+        // Stack<Character> stack = new Stack<>();
+
+        // for(char c : ch){
+        //     if(c != '*'){
+        //         stack.push(c);
+        //     }
+        //     else{
+        //         stack.pop();
+        //     }
+        // }
+
+        // String s1 = "";
+        // while(!stack.empty()){
+        //     s1 += stack.pop();
+        // }
+        // char[] c2 = new char[s1.length()];
+        // int idx = 0;
+        // for(int i = s1.length() - 1; i >= 0; i --){
+        //     c2[idx ++] = s1.charAt(i);
+        // }
 
         
 
-        return String.valueOf(c2);
+        // return String.valueOf(c2);
     }
 } 
