@@ -3,25 +3,44 @@ class Solution {
 
 
 
-        int[] nums2 = new int[nums.length];
-
-        int start = 0;
-        int end = nums.length - 1;
-
-        for(int num : nums){
-            if(num == 0){
-                nums2[end --] = num;
+        int pointer = 0;
+        int countZeros = 0;
+        int i = 0;
+        for(i = 0; i < nums.length; i ++){
+            if(nums[i] != 0){
+                nums[pointer ++] = nums[i];
             }
             else{
-                nums2[start ++] = num;
+                countZeros ++;
             }
+        }
+        i --;
 
+        while(countZeros > 0){
+            nums[i --] = 0;
+            countZeros --;
         }
-        int idx = 0;
-        for(int num : nums){
-            nums[idx] = nums2[idx]; 
-            idx ++;
-        }
+
+//************************************************************
+        // int[] nums2 = new int[nums.length];
+
+        // int start = 0;
+        // int end = nums.length - 1;
+
+        // for(int num : nums){
+        //     if(num == 0){
+        //         nums2[end --] = num;
+        //     }
+        //     else{
+        //         nums2[start ++] = num;
+        //     }
+
+        // }
+        // int idx = 0;
+        // for(int num : nums){
+        //     nums[idx] = nums2[idx]; 
+        //     idx ++;
+        // }
 
 
 
