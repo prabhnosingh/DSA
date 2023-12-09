@@ -3,33 +3,58 @@ class Solution {
 
         int start = 0;
         int end = height.length - 1;
-        
-        int maxWater = 0;
-        while(start < end){
 
-            int water = 0;
+        int maxWater = 0;
+
+        while(start < end){
 
             int minHeight = Math.min(height[start], height[end]);
 
-            int len = end - start;
+            maxWater = Math.max((minHeight * (end - start)), maxWater);
 
-            water = len * minHeight;
-
-            maxWater = Math.max(water, maxWater);
-
-            if(height[start] < height[end]){
-                start ++;
-            }
-            else{
+            while(start < end && minHeight >= height[end]){
                 end --;
             }
-
-
-
+            while(start < end && minHeight >= height[start]){
+                start ++;
+            }
 
         }
-
         return maxWater;
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// beats 56.76 %
+        // int start = 0;
+        // int end = height.length - 1;
+        
+        // int maxWater = 0;
+        // while(start < end){
+
+        //     int water = 0;
+
+        //     int minHeight = Math.min(height[start], height[end]);
+
+        //     int len = end - start;
+
+        //     water = len * minHeight;
+
+        //     maxWater = Math.max(water, maxWater);
+
+        //     if(height[start] < height[end]){
+        //         start ++;
+        //     }
+        //     else{
+        //         end --;
+        //     }
+
+
+
+
+        // }
+
+        // return maxWater;
 
 
 
