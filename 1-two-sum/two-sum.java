@@ -7,14 +7,14 @@ class Solution {
         for(int i = 0; i < nums.length; i ++){
             int complement = target - nums[i];
 
-            if(map.containsKey(nums[i])){
-                return new int[]{i, map.get(nums[i])};
+            if(map.containsKey(complement)){
+                return new int[]{i, map.get(complement)};
 
                 // ans[0] = i;
                 // ans[1] = map.get(nums[i]);
                 // break;
             }
-            map.put(complement, i);
+            map.put(nums[i], i);
         }
         return ans;
 
