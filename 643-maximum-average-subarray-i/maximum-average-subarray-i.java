@@ -1,30 +1,30 @@
 class Solution {
     public double findMaxAverage(int[] nums, int k) {
         
-        double maxSum = 0.0;
-        int sum = 0;
-        int start = 0;
-        int end = 0;
+        // double maxSum = 0.0;
+        // int sum = 0;
+        // int start = 0;
+        // int end = 0;
 
-        while(end < nums.length){
+        // while(end < nums.length){
 
-            if(end >= k){
-                sum -= nums[start];
-                sum += nums[end];
-                start ++;
-                maxSum = Math.max(maxSum, sum);
+        //     if(end >= k){
+        //         sum -= nums[start];
+        //         sum += nums[end];
+        //         start ++;
+        //         maxSum = Math.max(maxSum, sum);
                 
-            }
-            else{
-                sum += nums[end];
-                maxSum = sum;
-            }
+        //     }
+        //     else{
+        //         sum += nums[end];
+        //         maxSum = sum;
+        //     }
 
 
-            end ++;
-        }
+        //     end ++;
+        // }
         
-        return maxSum / k;
+        // return maxSum / k;
         
         
         
@@ -48,19 +48,19 @@ class Solution {
         
         
 ///////////////////////////////////////////////////////////////////////////////////////////        
-        // // beats 62.64 % (optimal)
-        // int sum = 0;
+        // beats 62.64 % (optimal)
+        int sum = 0;
 
-        // for(int i = 0; i < k; i ++){
-        //     sum += nums[i];
-        // }
-        // double maxSum = sum;
-        // for(int i = k; i < nums.length; i ++){
-        //     sum += nums[i] - nums[i - k];
-        //     maxSum = Math.max(maxSum, sum);
-        // }
+        for(int i = 0; i < k; i ++){
+            sum += nums[i];
+        }
+        double maxSum = sum;
+        for(int i = k; i < nums.length; i ++){
+            sum += nums[i] - nums[i - k];
+            maxSum = Math.max(maxSum, sum);
+        }
 
-        // return maxSum / k;
+        return maxSum / k;
         
 
 
