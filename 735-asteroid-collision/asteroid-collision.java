@@ -10,9 +10,9 @@ class Solution {
         }
   public int[] asteroidCollision(int[] a) {
 
-      Stack<Integer> s1 = new Stack<>();
-    int poped = 0;
-      for(int i = 0; i < a.length; i ++){
+        Stack<Integer> s1 = new Stack<>();
+    
+        for(int i = 0; i < a.length; i ++){
 
           if(s1.size() == 0 || (s1.peek() < 0 && a[i] > 0) || isSameSign(s1.peek(), a[i])){
               s1.push(a[i]);
