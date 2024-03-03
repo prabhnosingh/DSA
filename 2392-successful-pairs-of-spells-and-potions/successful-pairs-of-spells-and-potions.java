@@ -1,0 +1,115 @@
+class Solution {
+    public int[] successfulPairs(int[] spells, int[] potions, long success) {
+
+        Arrays.sort(potions);
+        int[] pairs = new int[spells.length];
+        int idx = 0;
+        for(int spell : spells){
+            int left = 0;
+            int right = potions.length - 1;
+
+            while(left <= right){
+                int mid = left + (right - left) / 2;
+
+                long prod = (long) spell * potions[mid];
+
+                if(prod >= success){
+                    right = mid - 1;
+                }
+                else{
+                    left = mid + 1;
+                }
+
+
+            }
+
+            int count = potions.length - left;
+
+            pairs[idx ++] = count;
+
+
+        }
+        return pairs;
+
+
+
+
+        
+//////////////////////////////////////////////////////////////////////////////////
+        // TLE
+        // Arrays.sort(potions);
+        // int[] pairs = new int[spells.length];
+        // int idx = 0;
+        // for(int spell : spells){
+            
+        //     long prod = 0;
+        //     int start = 0;
+        //     int end = potions.length;
+        //     int mid = start + (end - start)/2;
+
+
+        //     int last_suc_idx = 0; 
+            
+        //     prod = (long) spell * potions[mid];
+        //     if(prod >= success){
+        //         while(prod >= success && mid > 0){
+        //             last_suc_idx = mid;
+        //             mid --;
+        //             prod = (long) spell * potions[mid];
+        //         }
+        //         if(mid == 0 && prod >= success){
+        //             last_suc_idx = mid;
+        //         }
+        //     }
+        //     else if(prod < success){
+        //         while(prod < success && mid < potions.length - 1){
+        //             mid ++;
+        //              prod = (long) spell * potions[mid];
+        //         }
+        //         if(mid == potions.length - 1){
+        //             if(prod >= success) last_suc_idx = mid; 
+        //             else last_suc_idx = potions.length;
+        //         }
+        //         else{
+        //             last_suc_idx = mid;
+        //         }
+        //     }
+     
+        //     intcount = potions.length - last_suc_idx;
+
+        //     pairs[idx ++] = count;
+        // }
+        // return pairs;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ///////////////////////////////////////////////////////////////////////////  
+      // TLE
+        // Arrays.sort(potions);
+        // int[] pairs = new int[spells.length];
+        // int idx = 0;
+        // for(int spell : spells){
+        //     int count = 0;
+        
+        //     for(int j = 0; j < potions.length; j ++){
+        //         long prod = (long) spell * potions[j];
+        //         if(prod >= success){
+        //             count ++;
+        //         }
+        //     }
+        //     pairs[idx ++] = count;
+        // }
+        // return pairs;
+    }
+}
