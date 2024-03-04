@@ -17,11 +17,13 @@ class Solution {
         }
         
         for (int i = 0; i < spells.length; i++) {
-            long v = (success + spells[i] - 1 ) / spells[i]; 
+            // long v = (success + spells[i] - 1 ) / spells[i]; 
+            double v = Math.ceil((double)success / spells[i]);
             spells[i] = v > maxP ? 0 : suf[(int)v];
         }
         return spells;
-    
+    }
+}
 
         //////////////////////////////////////////////////////////////////////////////////////
         // beats 83.59 %
@@ -135,5 +137,5 @@ class Solution {
         //     pairs[idx ++] = count;
         // }
         // return pairs;
-    }
-}
+//     }
+// }
