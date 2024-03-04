@@ -1,34 +1,88 @@
 class Solution {
-    public int[] successfulPairs(int[] spells, int[] potions, long success) {
+    public int[] successfulPairs(int[] spells, int[] potions, long success) {   
 
-        int maxP = 0;
-        for (int p : potions) {
-            maxP = Math.max(maxP, p);
+
+        int maxPotion = 0;
+
+        for(int p : potions){
+            maxPotion = Math.max(maxPotion, p);
         }
 
-        int[] suf = new int[maxP + 1];
-        
-        for (int p : potions){
-            
-            suf[p]++;
+        int[] biggerPotions = new int[maxPotion + 1];
+
+        for(int p : potions){
+            biggerPotions[p] ++;
         }
-        
-        for (int i = suf.length - 2; i >= 0; i--) {
-            // every cell contains number of potions (where value) higher then current index
-            suf[i] += suf[i + 1];
+
+        for(int i = biggerPotions.length - 2; i >= 0; i --){
+            biggerPotions[i] = biggerPotions[i] + biggerPotions[i + 1];
         }
-        
-        for (int i = 0; i < spells.length; i++) {
-            // long v = (success + spells[i] - 1 ) / spells[i]; 
-            //above statement is same as below
-            // Potion * Spell = Success -> Potion = Success / Spell
-            double v = Math.ceil((double)success / spells[i]);
-            // look how many potions higher than this one.
-            spells[i] = v > maxP ? 0 : suf[(int)v];
+
+        int idx = 0;
+        for(int spell : spells){
+            long potionValue = (success + spell - 1) / spell;
+
+            if(potionValue > maxPotion){
+                spells[idx ++] = 0;
+            }
+            else{
+                spells[idx ++] = biggerPotions[(int)potionValue];
+            }
         }
         return spells;
+
+
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+//         int maxP = 0;
+//         for (int p : potions) {
+//             maxP = Math.max(maxP, p);
+//         }
+
+//         int[] suf = new int[maxP + 1];
+        
+//         for (int p : potions){
+//             //one in index where potion is provided
+//             suf[p]++;
+//         }
+        
+//         for (int i = suf.length - 2; i >= 0; i--) {
+//             // every cell contains number of potions (where value) higher then current index
+//             suf[i] += suf[i + 1];
+//         }
+        
+//         for (int i = 0; i < spells.length; i++) {
+//             // long v = (success + spells[i] - 1 ) / spells[i]; 
+//             //above statement is same as below
+//             // Potion * Spell = Success -> Potion = Success / Spell
+//             double v = Math.ceil((double)success / spells[i]);
+//             // look how many potions higher than this one.
+//             spells[i] = v > maxP ? 0 : suf[(int)v];
+//         }
+//         return spells;
+//     }
+// }
 
         //////////////////////////////////////////////////////////////////////////////////////
         // beats 83.59 %
