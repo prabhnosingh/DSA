@@ -13,7 +13,7 @@ class Solution {
         }
         
         for (int i = suf.length - 2; i >= 0; i--) {
-            
+            // every cell contains number of potions (where value) higher then current index
             suf[i] += suf[i + 1];
         }
         
@@ -22,6 +22,7 @@ class Solution {
             //above statement is same as below
             // Potion * Spell = Success -> Potion = Success / Spell
             double v = Math.ceil((double)success / spells[i]);
+            
             spells[i] = v > maxP ? 0 : suf[(int)v];
         }
         return spells;
