@@ -13,11 +13,14 @@ class Solution {
         }
         
         for (int i = suf.length - 2; i >= 0; i--) {
+            
             suf[i] += suf[i + 1];
         }
         
         for (int i = 0; i < spells.length; i++) {
             // long v = (success + spells[i] - 1 ) / spells[i]; 
+            //above statement is same as below
+            // Potion * Spell = Success -> Potion = Success / Spell
             double v = Math.ceil((double)success / spells[i]);
             spells[i] = v > maxP ? 0 : suf[(int)v];
         }
