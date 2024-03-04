@@ -9,6 +9,7 @@ class Solution {
         int[] suf = new int[maxP + 1];
         
         for (int p : potions){
+            
             suf[p]++;
         }
         
@@ -22,7 +23,7 @@ class Solution {
             //above statement is same as below
             // Potion * Spell = Success -> Potion = Success / Spell
             double v = Math.ceil((double)success / spells[i]);
-            
+            // look how many potions higher than this one.
             spells[i] = v > maxP ? 0 : suf[(int)v];
         }
         return spells;
