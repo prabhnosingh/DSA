@@ -1,35 +1,59 @@
 class Solution {
     public int[] successfulPairs(int[] spells, int[] potions, long success) {
 
-        Arrays.sort(potions);
-        int[] pairs = new int[spells.length];
-        int idx = 0;
-        for(int spell : spells){
-            int left = 0;
-            int right = potions.length - 1;
-
-            while(left <= right){
-                int mid = left + (right - left) / 2;
-
-                long prod = (long) spell * potions[mid];
-
-                if(prod >= success){
-                    right = mid - 1;
-                }
-                else{
-                    left = mid + 1;
-                }
-
-
-            }
-
-            int count = potions.length - left;
-
-            pairs[idx ++] = count;
-
-
+        int maxP = 0;
+        for (int p : potions) {
+            maxP = Math.max(maxP, p);
         }
-        return pairs;
+
+        int[] suf = new int[maxP + 1];
+        
+        for (int p : potions){
+            suf[p]++;
+        }
+        
+        for (int i = suf.length - 2; i >= 0; i--) {
+            suf[i] += suf[i + 1];
+        }
+        
+        for (int i = 0; i < spells.length; i++) {
+            long v = (success + spells[i] - 1 ) / spells[i]; 
+            spells[i] = v > maxP ? 0 : suf[(int)v];
+        }
+        return spells;
+    
+
+        //////////////////////////////////////////////////////////////////////////////////////
+        // beats 83.59 %
+        // Arrays.sort(potions);
+        // int[] pairs = new int[spells.length];
+        // int idx = 0;
+        // for(int spell : spells){
+        //     int left = 0;
+        //     int right = potions.length - 1;
+
+        //     while(left <= right){
+        //         int mid = left + (right - left) / 2;
+
+        //         long prod = (long) spell * potions[mid];
+
+        //         if(prod >= success){
+        //             right = mid - 1;
+        //         }
+        //         else{
+        //             left = mid + 1;
+        //         }
+
+
+        //     }
+
+        //     int count = potions.length - left;
+
+        //     pairs[idx ++] = count;
+
+
+        // }
+        // return pairs;
 
 
 
