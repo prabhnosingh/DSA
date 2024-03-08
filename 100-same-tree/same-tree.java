@@ -22,7 +22,14 @@ class Solution {
             return ans;
         }
         else if(p != null && q != null){
-           ans = isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+            ans = isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        // this peice of code passed 63/66 testcases but failed on input p = [0, -5] and q = [0, -8]
+        // because after checking p.left(-5) and q.right(-8), the ans is false but while checking the right null == null
+        // gets the ans = true and ans being the global variable, it is returned true.
+        // The above code solves this by using && operator and making sure that both left and right counterparts 
+        // of a root node are true.
+            // isSameTree(p.left, q.left);
+            // isSameTree(p.right, q.right);
 
         }
         return ans;
