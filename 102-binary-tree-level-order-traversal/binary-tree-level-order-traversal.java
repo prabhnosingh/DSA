@@ -30,21 +30,21 @@ class Solution {
 
             for(int i = 0; i < iterations; i ++){
 
-                if(q.peek() != null){
-                    q.add(q.peek().left);
-                    q.add(q.peek().right);
-                    l.add(q.remove().val);
-                }
-                else{
-                    q.remove();
-                }
-
-                // TreeNode node = q.remove();
-                // if(node != null){
-                //     q.add(node.left);
-                //     q.add(node.right);
-                //     l.add(node.val);
+                // if(q.peek() != null){
+                //     q.add(q.peek().left);
+                //     q.add(q.peek().right);
+                //     l.add(q.remove().val);
                 // }
+                // else{
+                //     q.remove();
+                // }
+
+                TreeNode node = q.remove();
+                if(node != null){
+                    q.add(node.left);
+                    q.add(node.right);
+                    l.add(node.val);
+                }
                 
                 
             }
