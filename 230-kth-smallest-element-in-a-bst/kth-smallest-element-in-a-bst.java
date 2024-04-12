@@ -14,32 +14,62 @@
  * }
  */
 class Solution {
-    // int s = Integer.MAX_VALUE;
-    ArrayList<Integer> list = new ArrayList<>();
+    
+    ArrayList<Integer> ans = new ArrayList<>();
     public int kthSmallest(TreeNode root, int k) {
-        
-        traverse(root);
-        int n = list.size();
-        int[] ans = new int[n];
-        
-        for(int i = 0; i < n; i ++) ans[i] = list.get(i);
-        Arrays.sort(ans);
 
-        return ans[k - 1];
+        traverse(root);
+
+        return ans.get(k - 1);
 
     }
 
-    public int traverse(TreeNode root){
+    public void traverse(TreeNode root){
         if(root == null){
-            return -1;
+            return; 
         }
 
-        list.add(root.val);
-
         traverse(root.left);
+        ans.add(root.val);
         traverse(root.right);
-        
-        return 1;
-        
+
     }
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////    
+    // beats 8.18 %
+    // ArrayList<Integer> list = new ArrayList<>();
+    // public int kthSmallest(TreeNode root, int k) {
+        
+    //     traverse(root);
+    //     int n = list.size();
+    //     int[] ans = new int[n];
+        
+    //     for(int i = 0; i < n; i ++) ans[i] = list.get(i);
+    //     Arrays.sort(ans);
+
+    //     return ans[k - 1];
+
+    // }
+
+    // public int traverse(TreeNode root){
+    //     if(root == null){
+    //         return -1;
+    //     }
+
+    //     list.add(root.val);
+
+    //     traverse(root.left);
+    //     traverse(root.right);
+        
+    //     return 1;
+        
 }
