@@ -15,25 +15,52 @@
  */
 class Solution {
     
-    ArrayList<Integer> ans = new ArrayList<>();
+
     public int kthSmallest(TreeNode root, int k) {
+        
+        Stack<TreeNode> s = new Stack<>();
+        
+        TreeNode curr = root;
+        // stack.push(curr);
+        while(curr != null || !s.isEmpty()){
 
-        traverse(root);
+            while(curr != null){
+                s.push(curr);
+                curr = curr.left;
+            }
 
-        return ans.get(k - 1);
+            curr = s.pop();
 
-    }
-
-    public void traverse(TreeNode root){
-        if(root == null){
-            return; 
+            k --;
+            if(k == 0) return curr.val;
+            curr = curr.right;
         }
-
-        traverse(root.left);
-        ans.add(root.val);
-        traverse(root.right);
+        return 0;
 
     }
+
+
+///////////////////////////////////////////////////////////////    
+    // beats 100%
+    // ArrayList<Integer> ans = new ArrayList<>();
+    // public int kthSmallest(TreeNode root, int k) {
+
+    //     traverse(root);
+
+    //     return ans.get(k - 1);
+
+    // }
+
+    // public void traverse(TreeNode root){
+    //     if(root == null){
+    //         return; 
+    //     }
+
+    //     traverse(root.left);
+    //     ans.add(root.val);
+    //     traverse(root.right);
+
+    // }
 
 
 
