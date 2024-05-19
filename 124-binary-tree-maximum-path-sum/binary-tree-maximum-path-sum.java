@@ -41,12 +41,6 @@ class Solution {
             maxSum = currMaxSum;
         }
 
-        // if(currMaxSum > currMaxSum + root.val){
-        //     if(maxSum < currMaxSum + root.val){
-        //         maxSum = currMaxSum + root.val;
-        //     }
-        //     currMaxSum = currMaxSum + root.val;
-        // }
 
         int sumWithSplit = leftSum + rightSum + root.val;
         if(sumWithSplit > maxSum){
