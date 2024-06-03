@@ -11,19 +11,49 @@
 class Solution {
     public ListNode reverseList(ListNode head) {
 
-            if(head == null) return null;
-            return recur(head);
+        if(head == null) return null;
+        if(head.next == null) return head;
 
-    }        
-        public ListNode recur(ListNode head){
+        ListNode newHead = reverseList(head.next);
+
+        head.next.next = head;
+        head.next = null;
+
+        return newHead;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////
+    //         if(head == null) return null;
+    //         return recur(head);
+
+    // }        
+    //     public ListNode recur(ListNode head){
             
-            if(head.next == null) return head;
-            ListNode newHead = recur(head.next);
+    //         if(head.next == null) return head;
+    //         ListNode newHead = recur(head.next);
 
-            head.next.next = head;
-            head.next = null;
-            return newHead;
-        }
+    //         // ListNode temp = head.next;
+    //         // temp.next = head;
+    //         head.next.next = head;
+    //         head.next = null;
+    //         return newHead;
+    //     }
 
 
         
