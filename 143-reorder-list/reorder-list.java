@@ -8,6 +8,84 @@
 //  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 //  * }
 //  */
+
+class Solution {
+    public void reorderList(ListNode head) {
+
+        ListNode dummy1 = new ListNode(0);
+
+        ListNode dummy2 = new ListNode(0);
+
+
+        ListNode slow = head;
+        ListNode fast = head.next;
+
+        while(fast != null && fast.next != null){
+
+            slow = slow.next;
+            fast = fast.next.next;
+
+        }
+
+        ListNode secondHalf = slow.next;
+        ListNode prev = null;
+        slow.next = null;
+
+        while(secondHalf != null){
+            ListNode temp = secondHalf.next;
+            secondHalf.next = prev;
+
+            prev = secondHalf;
+            secondHalf = temp;
+            
+        }
+
+        ListNode secondHead = prev;
+        ListNode firstHead = head;
+        while(secondHead != null){
+            
+            ListNode temp1 = firstHead.next;
+            ListNode temp2 = secondHead.next;
+            
+            firstHead.next = secondHead;
+            secondHead.next = temp1;
+
+            firstHead = temp1;
+            secondHead = temp2;
+
+        }
+
+    }   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // class Solution {
 //     public void reorderList(ListNode head) {
         
@@ -55,7 +133,8 @@
 //     }
 // }
 
-/**
+/////////////////////Prefferred//////////////////////////////
+/** 
  * Definition for singly-linked list.
  * public class ListNode {
  *     int val;
@@ -65,58 +144,58 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-class Solution {
-    public void reorderList(ListNode head) {
+// class Solution {
+//     public void reorderList(ListNode head) {
         
-           if (head == null || head.next == null) {
-            return;
-        }
+//            if (head == null || head.next == null) {
+//             return;
+//         }
 
-        // Step 1: Find the middle of the linked list
-        ListNode middle = findMiddle(head);
+//         // Step 1: Find the middle of the linked list
+//         ListNode middle = findMiddle(head);
 
-        // Step 2: Reverse the second half of the linked list
-        ListNode reversed = reverseLinkedList(middle.next);
-        middle.next = null;
+//         // Step 2: Reverse the second half of the linked list
+//         ListNode reversed = reverseLinkedList(middle.next);
+//         middle.next = null;
 
-        // Step 3: Merge the first half and the reversed second half alternately
-        mergeLists(head, reversed);
-    }
+//         // Step 3: Merge the first half and the reversed second half alternately
+//         mergeLists(head, reversed);
+//     }
 
-    private ListNode findMiddle(ListNode head) {
-        ListNode slow = head;
-        ListNode fast = head;
+//     private ListNode findMiddle(ListNode head) {
+//         ListNode slow = head;
+//         ListNode fast = head;
 
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
+//         while (fast != null && fast.next != null) {
+//             slow = slow.next;
+//             fast = fast.next.next;
+//         }
 
-        return slow;
-    }
+//         return slow;
+//     }
 
-    private ListNode reverseLinkedList(ListNode head) {
-        ListNode prev = null;
-        ListNode current = head;
+//     private ListNode reverseLinkedList(ListNode head) {
+//         ListNode prev = null;
+//         ListNode current = head;
 
-        while (current != null) {
-            ListNode next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-        }
+//         while (current != null) {
+//             ListNode next = current.next;
+//             current.next = prev;
+//             prev = current;
+//             current = next;
+//         }
 
-        return prev;
-    }
+//         return prev;
+//     }
 
-    private void mergeLists(ListNode l1, ListNode l2) {
-        while (l2 != null) {
-            ListNode temp1 = l1.next;
-            ListNode temp2 = l2.next;
-            l1.next = l2;
-            l2.next = temp1;
-            l1 = temp1;
-            l2 = temp2;
-        }
-    }
-}
+//     private void mergeLists(ListNode l1, ListNode l2) {
+//         while (l2 != null) {
+//             ListNode temp1 = l1.next;
+//             ListNode temp2 = l2.next;
+//             l1.next = l2;
+//             l2.next = temp1;
+//             l1 = temp1;
+//             l2 = temp2;
+//         }
+//     }
+// }
