@@ -37,19 +37,16 @@ public class Solution {
         //     }
         // }
         // return false;
-        
-        if(head == null) return false;
-        
-        if(head.next == null) return false;
-        ListNode slow = head;
-        ListNode fast = head.next.next;
-        while(slow != null && fast != null && fast.next != null){
 
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast != null && fast.next != null){
+
+            slow = slow.next;
+            fast = fast.next.next;
             if(slow == fast){
                 return true;
             }
-            slow = slow.next;
-            fast = fast.next.next;
 
         }
         return false;
