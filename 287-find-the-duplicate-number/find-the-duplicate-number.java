@@ -1,35 +1,35 @@
 class Solution {
     public int findDuplicate(int[] nums) {
 
-    //     int slow = 0;
-    //     int fast = 0;
+        int slow = 0;
+        int fast = 0;
 
-    //     while(true){
-    //         slow = nums[slow];
-    //         fast = nums[nums[fast]];
-    //         if(slow == fast) break;
-    //     }
+        while(true){
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+            if(slow == fast) break;
+        }
        
-    //    int slow2 = 0;
-    //    while(true){
+       int slow2 = 0;
+       while(true){
 
-    //        slow = nums[slow];
-    //        slow2 = nums[slow2];
-    //        if(slow == slow2) break;
-    //    }
+           slow = nums[slow];
+           slow2 = nums[slow2];
+           if(slow == slow2) break;
+       }
 
-    //    return slow;
+       return slow;
 
 //******************************************************************** */
-        for(int num : nums){
-            if(nums[Math.abs(num)] < 0){
-                return Math.abs(num);
-            }
-            else{
-                nums[Math.abs(num)] *= -1;
-            }
-        }
-        return -1;
+        // for(int num : nums){
+        //     if(nums[Math.abs(num)] < 0){
+        //         return Math.abs(num);
+        //     }
+        //     else{
+        //         nums[Math.abs(num)] *= -1;
+        //     }
+        // }
+        // return -1;
 
 
 //******************************************************************** */      
