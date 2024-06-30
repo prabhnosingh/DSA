@@ -37,54 +37,34 @@ public class Solution {
         //     }
         // }
         // return false;
+        
+        if(head == null) return false;
+        
+        if(head.next == null) return false;
+        ListNode slow = head;
+        ListNode fast = head.next.next;
+        while(slow != null && fast != null && fast.next != null){
 
+            if(slow == fast){
+                return true;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-           ListNode curr = head;
-        int count = 1;
-        while(curr != null){
-            count ++;
-            if(count > 100000) return true;
-            curr = curr.next;
         }
-
         return false;
+
+// ******************************* Beats 14% *************************************
+
+        //    ListNode curr = head;
+        // int count = 1;
+        // while(curr != null){
+        //     count ++;
+        //     if(count > 100000) return true;
+        //     curr = curr.next;
+        // }
+
+        // return false;
         
 
 
