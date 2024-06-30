@@ -43,6 +43,62 @@ class Solution {
 
         // **************************************Not optimal answer(brute force)*************************************************
 
-        
+    //             ListNode reversedList1 = reverseList(l1);
+    //     ListNode reversedList2 = reverseList(l2);
+
+    //     int num1 = 0;
+    //     int num2 = 0;
+    //     ListNode currNode = reversedList1;
+    //     String s1 = "";
+    //     while(currNode != null){
+
+    //         s1 += currNode.val;
+    //         currNode = currNode.next;
+    //     }
+    //     currNode = reversedList2;
+    //     String s2 = "";
+    //     while(currNode != null){
+
+    //         s2 += currNode.val;
+    //         currNode = currNode.next;
+    //     }
+
+    //     num1 = Integer.parseInt(s1);
+    //     num2 = Integer.parseInt(s2);
+
+     
+
+    //     int sum = num1 + num2;
+
+
+    //     ListNode ansList = new ListNode(0);
+    //     if(sum == 0) return ansList;
+    //     ListNode pointer = ansList;
+
+    //     while(sum != 0){
+
+    //         ListNode digit = new ListNode(sum % 10);
+    //         pointer.next = digit;
+    //         sum = sum / 10;
+    //         pointer = pointer.next;
+    //     } 
+
+
+    //     return ansList.next;
+    // }
+    //  public ListNode reverseList(ListNode head){
+            
+    //         ListNode curr = head;
+    //         ListNode prev = null;
+    //         while(curr != null){
+
+    //             ListNode temp = curr.next;
+    //             curr.next = prev;
+
+    //             prev = curr;
+    //             curr = temp;
+    //         }
+    //         return prev;
+    //     }
     }
 }
