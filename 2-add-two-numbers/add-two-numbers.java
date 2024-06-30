@@ -37,5 +37,12 @@ class Solution {
         }
 
         return ans.next;
+
+
+
+
+        // **************************************Not optimal answer(brute force)*************************************************
+
+        
     }
 }
