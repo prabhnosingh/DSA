@@ -34,8 +34,6 @@ class Solution {
 
             ListNode dummy = new ListNode(0);
             ListNode curr = dummy;
-            ListNode curr1 = head1;
-            ListNode curr2 = head2;
 
             while(head1 != null && head2 != null){
 
