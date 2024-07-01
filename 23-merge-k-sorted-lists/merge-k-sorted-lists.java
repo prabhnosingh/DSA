@@ -12,17 +12,25 @@ class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
         
         if(lists.length == 0) return null;
+        if(lists.length == 1) return lists[0];
         
-        ListNode ans = lists[0];
+        ListNode ans1 = lists[0];
+        ListNode ans2 = lists[lists.length / 2];
         // System.out.println(ans.next.val);
         // System.out.println(ans.next.next.val);
-        ListNode ansCurr = ans;
-        for(int i = 1; i < lists.length; i ++){
+        // ListNode ansCurr = ans;
+        for(int i = 1; i < lists.length / 2; i ++){
 
-                ans = mergeTwoLists(ans, lists[i]);
+                ans1 = mergeTwoLists(ans1, lists[i]);
         
             }
-            return ans;
+
+        for(int i = lists.length / 2 + 1; i < lists.length; i ++){
+
+            ans2 = mergeTwoLists(ans2, lists[i]);
+
+        }
+            return mergeTwoLists(ans1, ans2);
 
         }
 
