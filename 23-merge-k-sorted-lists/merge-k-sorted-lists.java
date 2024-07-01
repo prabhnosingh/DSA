@@ -10,19 +10,40 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        
-        if(lists.length == 0) return null;
-        
-        ListNode ans = lists[0];
-        // System.out.println(ans.next.val);
-        // System.out.println(ans.next.next.val);
-        ListNode ansCurr = ans;
-        for(int i = 1; i < lists.length; i ++){
 
-                ans = mergeTwoLists(ans, lists[i]);
-        
+        if(lists.length == 0) return null;
+        if(lists.length == 1) return lists[0];
+
+        while(lists.length > 1){
+
+            List<ListNode> mergedLists = new ArrayList<>();
+
+            for(int i = 0; i < lists.length; i += 2){
+
+                ListNode list1 = lists[i];
+                ListNode list2 = i + 1 >= lists.length ? null : lists[i + 1];
+                mergedLists.add(mergeTwoLists(list1, list2));
             }
-            return ans;
+
+            lists = mergedLists.toArray(new ListNode[0]);
+
+        }
+
+        return lists[0];
+
+
+
+        // ********************************* Beats 15% *************************************
+        // if(lists.length == 0) return null;
+        
+        // ListNode ans = lists[0];
+        // ListNode ansCurr = ans;
+        // for(int i = 1; i < lists.length; i ++){
+
+        //         ans = mergeTwoLists(ans, lists[i]);
+        
+        //     }
+        //     return ans;
 
         }
 
