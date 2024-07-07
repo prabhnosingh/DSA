@@ -1,17 +1,19 @@
 class Solution {
     public int[][] kClosest(int[][] points, int k) {
         
-// Beats 74.36 %
-        Comparator<int[]> comp = new Comparator<int[]>(){
-            @Override
-            public int compare(int[] first, int[] second){
-                int firstDist = first[0] * first[0] + first[1] * first[1]; 
-                int secondDist = second[0] * second[0] + second[1] * second[1]; 
-                return Integer.compare(firstDist, secondDist);
-            }
-        };
 
+        // Comparator<int[]> comp = new Comparator<int[]>(){
+        //     @Override
+        //     public int compare(int[] first, int[] second){
+        //         int firstDist = first[0] * first[0] + first[1] * first[1]; 
+        //         int secondDist = second[0] * second[0] + second[1] * second[1]; 
+        //         return Integer.compare(firstDist, secondDist);
+        //     }
+        // };
+        // Beats 74.36 %
         // PriorityQueue<int[]> minHeap = new PriorityQueue<int[]>(comp);
+        
+        // Beats 89.59 %
         PriorityQueue<int[]> minHeap = new PriorityQueue<int[]>((int[] p1, int[] p2) -> (p1[0] * p1[0] + p1[1] * p1[1]) -(p2[0] * p2[0] + p2[1] * p2[1]));
         for(int[] point : points){
             minHeap.offer(point);
