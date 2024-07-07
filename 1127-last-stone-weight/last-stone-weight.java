@@ -15,6 +15,9 @@ class Solution {
                 maxHeap.offer(diff);
             }
         }
-        return maxHeap.size() > 0 ? maxHeap.poll() : 0;
+        maxHeap.offer(0);
+
+        // return maxHeap.size() > 0 ? maxHeap.poll() : 0;
+        return maxHeap.peek();
     }
 }
