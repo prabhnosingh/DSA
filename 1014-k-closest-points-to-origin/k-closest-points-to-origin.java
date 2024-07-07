@@ -39,8 +39,10 @@ class Solution {
     k --;
     while(k >= 0 && minHeap.size() != 0){
         int[] temp = minHeap.poll();
-        res[k][0] = temp[1];
-        res[k --][1] = temp[2];
+        // res[k][0] = temp[1];
+        // res[k --][1] = temp[2];
+
+        res[k --] = new int[]{temp[1], temp[2]};
     }
 
 return res;
