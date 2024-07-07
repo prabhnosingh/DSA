@@ -11,7 +11,8 @@ class Solution {
             }
         };
 
-        PriorityQueue<int[]> minHeap = new PriorityQueue<int[]>(comp);
+        // PriorityQueue<int[]> minHeap = new PriorityQueue<int[]>(comp);
+        PriorityQueue<int[]> minHeap = new PriorityQueue<int[]>((int[] p1, int[] p2) -> (p1[0] * p1[0] + p1[1] * p1[1]) -(p2[0] * p2[0] + p2[1] * p2[1]));
         for(int[] point : points){
             minHeap.offer(point);
         }
