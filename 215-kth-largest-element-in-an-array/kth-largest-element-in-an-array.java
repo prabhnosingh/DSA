@@ -9,6 +9,6 @@ class Solution {
                 maxHeap.poll();
             }
         }
-        return maxHeap.peek();
+        return maxHeap.poll();
     }
 }
