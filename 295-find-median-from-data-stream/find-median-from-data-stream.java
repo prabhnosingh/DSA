@@ -11,7 +11,8 @@ class MedianFinder {
     public void addNum(int num) {
 
         if(smallHeap.size() != 0 && bigHeap.size() != 0){
-            if(num >= bigHeap.peek()){                bigHeap.offer(num);
+            if(num >= bigHeap.peek()){
+                bigHeap.offer(num);
             }
     
             else{
