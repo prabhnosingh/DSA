@@ -12,8 +12,8 @@ class Solution {
         }
 
         HashMap<Integer, Integer> map = new HashMap<>();
-        sum = sum % p;
-        int reqMod = (int)sum;
+        // sum = sum % p;
+        int reqMod = (int)(sum % p);
         int len = n;
         int currMod = 0;
 
