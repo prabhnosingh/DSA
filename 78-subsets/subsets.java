@@ -14,9 +14,9 @@ class Solution {
 
         subset.add(nums[i]);
         dfs(nums, i + 1, subset, res);
-        System.out.println("Subset before removing: " + subset);
+        // System.out.println("Subset before removing: " + subset);
         subset.remove(subset.size() - 1);
-        System.out.println("Subset after removing: " + subset);
+        // System.out.println("Subset after removing: " + subset);
         dfs(nums, i + 1, subset, res);
     }
 }
