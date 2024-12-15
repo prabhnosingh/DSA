@@ -3,8 +3,8 @@
 
 Select Distinct Views.author_id as id
 From Views
-Where views.author_id = views.viewer_id
-Order by views.author_id ASC
+Where Views.author_id = Views.viewer_id
+Order by Views.author_id ASC
 
 
 
