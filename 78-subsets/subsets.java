@@ -69,7 +69,7 @@ class Solution {
     private void dfs(int[] nums, int i, List<Integer> subset, List<List<Integer>> res){
         if(i == nums.length){
             res.add(new ArrayList<>(subset));
-            // System.out.println("subset that is added to res is: " + subset); 
+            System.out.println("subset that is added to res is: " + subset); 
             // subset that is added to res is: [1, 2, 3]
             // subset that is added to res is: [1, 2]
             // subset that is added to res is: [1, 3]
