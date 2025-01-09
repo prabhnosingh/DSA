@@ -1,25 +1,25 @@
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
-        backtrack(res, new ArrayList<>(), nums, 0);
+        List<Integer> subset = new ArrayList<>();
+
+        createSubsets(nums, 0, res, subset);
         return res;
     }
 
-    private void backtrack(List<List<Integer>> res, List<Integer> currSubset, int[] nums, int start){
-        res.add(new ArrayList<>(currSubset));
-        
-        
-        for(int i = start; i < nums.length; i ++){
-            currSubset.add(nums[i]);
-            backtrack(res, currSubset, nums, i + 1); // because we do not want to reuse the same element
-            currSubset.remove(currSubset.size() - 1);
+    private void createSubsets(int[] nums, int index, List<List<Integer>> res, List<Integer> subset) {
+        if(index == nums.length) {
+            res.add(new ArrayList<>(subset));
+            return;
         }
 
-    }
- 
-     
-}
+        subset.add(nums[index]);
+        createSubsets(nums, index + 1, res, subset);
 
+        subset.remove(subset.size() - 1);
+        createSubsets(nums, index + 1, res, subset);
+    }
+}
 
 
 
