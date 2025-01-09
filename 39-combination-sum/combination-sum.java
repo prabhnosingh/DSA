@@ -25,7 +25,7 @@ class Solution {
         // adding the same candidate
         dfs(res, candidates, target, start, combination);
 
-        // not adding the same number again by doing 'start + 1' and removing the last number added  
+        // not adding the same number again by doing 'start + 1' and removing the last number added from the combination 
         combination.remove(combination.size() - 1);
         dfs(res, candidates, target, start + 1, combination);
     }
