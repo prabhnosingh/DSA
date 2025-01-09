@@ -16,6 +16,9 @@ class Solution {
         }
         else{
             for(int i = start; i < candidates.length; i ++){
+                if(candidates[i] > currTarget){
+                break;
+                }
                 if(i > start && candidates[i - 1] == candidates[i]) continue; // for skipping duplicates
                 currCombination.add(candidates[i]);
                 backtrack(res, currCombination, candidates, currTarget - candidates[i], i + 1);
