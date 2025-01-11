@@ -50,17 +50,39 @@ class Solution {
         
        
         
-        dfsRes = dfs(board, word, tempWord, row + 1, column, startIdx, idxSet) ||  // going down
-        // going up
-        dfs(board, word, tempWord, row - 1, column, startIdx, idxSet) ||
+        // dfsRes = dfs(board, word, tempWord, row + 1, column, startIdx, idxSet) ||  // going down
+        // // going up
+        // dfs(board, word, tempWord, row - 1, column, startIdx, idxSet) ||
+
+        // // tempWord = tempWord.replaceFirst(tempWord.charAt(tempWord.length() - 1) + "", ""); // removing the previously added character
+        // // going right
+        // dfs(board, word, tempWord, row, column + 1, startIdx, idxSet) ||
+
+        // // going left
+        // dfs(board, word, tempWord, row, column - 1, startIdx, idxSet);
+
+        if(dfs(board, word, tempWord, row + 1, column, startIdx, idxSet)){
+            return true;
+        } 
+        if(dfs(board, word, tempWord, row - 1, column, startIdx, idxSet)){
+            return true;
+        }
 
         // tempWord = tempWord.replaceFirst(tempWord.charAt(tempWord.length() - 1) + "", ""); // removing the previously added character
         // going right
-        dfs(board, word, tempWord, row, column + 1, startIdx, idxSet) ||
+        if(dfs(board, word, tempWord, row, column + 1, startIdx, idxSet)){
+            return true;
+        } 
 
         // going left
-        dfs(board, word, tempWord, row, column - 1, startIdx, idxSet);
-        idxSet.remove(tempList);
+        if(dfs(board, word, tempWord, row, column - 1, startIdx, idxSet)){
+            return true;
+        }
+       
+       
+       
+       
+        idxSet.remove(tempList); // removing the idx before returning so that the next call(new char search) can visit this idx
         return dfsRes;
     }
 }
