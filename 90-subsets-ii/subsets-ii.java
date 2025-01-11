@@ -9,9 +9,9 @@ class Solution {
 
     private void dfs(List<List<Integer>> res, List<Integer> currSubset, int[] nums, int start){
         if(start == nums.length){
-            if(!res.contains(currSubset)){ // this works as we have sorted the array in the first place
+            // if(!res.contains(currSubset)){ // this works as we have sorted the array in the first place
                 res.add(new ArrayList<>(currSubset));
-            }
+            // }
             return;
         }
 
