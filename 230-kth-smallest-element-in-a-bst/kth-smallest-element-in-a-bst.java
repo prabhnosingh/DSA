@@ -52,7 +52,7 @@ class Solution {
         if(root == null){
             return;
         }         
-        traverse(root.left, k);
+        traverse(root.left, k); // traversing to the left most element to find the smallest element first
         count ++;
         if(k == count){
             ans = root.val;
