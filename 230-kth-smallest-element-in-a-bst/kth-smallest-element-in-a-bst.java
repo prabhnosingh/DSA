@@ -35,8 +35,10 @@ class Solution {
     // }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //intuition 2: Use BST's properties (left < root < right) to optimize. Traverse to the left most 
-    //node(having left child as null), then start backtracking and decreasing k by 1 with each traversal
-    //and return the node where k == 0
+    //node(having left child as null), then start backtracking and increasing count by 1 with each traversal
+    //and update the ans with root.val when k == count
+    // Simply doing k -- does not work as intended as k will again be replaced to its previous value (rather than 1 less)
+    // when it goes back to upper level in recursive call.
     int count = 0;
     int ans = 0;
     public int kthSmallest(TreeNode root, int k) {
