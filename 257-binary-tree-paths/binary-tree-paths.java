@@ -60,14 +60,16 @@ class Solution {
 
         if(root.left == null && root.right == null){ // leafNode encountered
             ans.add(path.toString());
-          
+
         }
         else{
             path.append("->");
             dfs(root.left, path);
             dfs(root.right, path);
         }
-        path.setLength(len);
+        path.setLength(len); // resetting the length of path (stringBuilder) to the previous len
+        //This removes the current node's value (and the "->" separator, if added) from the 
+        //currentPath. This is important to avoid mixing paths when backtracking to different nodes.
         
     }
 }
