@@ -69,12 +69,19 @@ class Solution {
             ans.add(0, new ArrayList<>());
         }
         
-        ans.get(ans.size() - level - 1).add(root.val);
+        ans.get(ans.size() - level - 1).add(root.val); // ans.size() - level - 1 to add elements to 
+        // the latest added sublist in ans (from front) 
         // System.out.println("ans.get(level) : " + ans.get(level));
         // System.out.println("***********");
 
         // levelTraversal(root.left, level ++);
-        // levelTraversal(root.right, level ++);
+        // levelTraversal(root.right, level ++); 
+        // level ++ increments the variable for subsequent recursive calls, which messes up recursion, 
+        // level + 1 only affects the current call, keeping levels accurate.
+
+        // level = 0 
+        // level ++ -> this will send the level as 0 in this call and update the level to 1 after this call
+        // leve + 1 -> this will send the level as 1 in this call, leaving next call independent
         levelTraversal(root.left, level + 1);
         levelTraversal(root.right, level + 1);
     }
