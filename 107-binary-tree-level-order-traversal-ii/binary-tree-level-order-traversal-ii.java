@@ -61,17 +61,17 @@ class Solution {
             return;
         }
 
-        System.out.println("ans.size() : " + ans.size());
-        System.out.println("root.val : " + root.val);
-        System.out.println("level : " + level);
+        // System.out.println("ans.size() : " + ans.size());
+        // System.out.println("root.val : " + root.val);
+        // System.out.println("level : " + level);
         if(ans.size() == level){ // control is one level down than the size of ans. i.e. there is a need to have a new sublist in ans
         // as previous sublists must have been populated by previous levels
             ans.add(0, new ArrayList<>());
         }
         
         ans.get(ans.size() - level - 1).add(root.val);
-        System.out.println("ans.get(level) : " + ans.get(level));
-        System.out.println("***********");
+        // System.out.println("ans.get(level) : " + ans.get(level));
+        // System.out.println("***********");
 
         // levelTraversal(root.left, level ++);
         // levelTraversal(root.right, level ++);
