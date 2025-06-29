@@ -35,7 +35,7 @@ class Solution {
                 }
             }
             if(tempList.size() > 0){
-                ans.add(0, tempList);   
+                ans.add(0, tempList);    // to add the elements from the start rather than adding at last
             }
         }
         // return Collections.reverse(ans);
