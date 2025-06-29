@@ -38,8 +38,10 @@ class Solution {
         int rootVal = postorder[postOrderIdx --]; // 3
         TreeNode root = new TreeNode(rootVal);
         int mid = map.get(rootVal); // 1
-
-        root.right = build(postorder, mid + 1, end); // (4 - 1, 1)
+        // building right subtree first because postOrderIdx -- will give right subtree first as postorder is in 
+        // left -> right -> root format and as we are starting from last element, ther order becomes root -> right -> left
+        root.right = build(postorder, mid + 1, end); //when you are specifying the start and end for recursive calls, set them 
+        //like you are splitting inorder array which is in left -> root -> right format 
         root.left = build(postorder, start, mid - 1);
         return root;
     }
