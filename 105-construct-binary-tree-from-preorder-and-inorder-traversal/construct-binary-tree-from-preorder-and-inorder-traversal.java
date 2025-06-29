@@ -140,7 +140,8 @@ class Solution {
         int rootVal = preorder[preOrderIndex ++];
         TreeNode root = new TreeNode(rootVal);
         int mid = map.get(rootVal);
-        root.left = build(preorder, start, mid - 1);
+        root.left = build(preorder, start, mid - 1);//When you are specifying the start and end for recursive calls, set them 
+        //like you are splitting inorder array which is in left -> root -> right format 
         root.right = build(preorder, mid + 1, end);
         return root;
     }
@@ -154,8 +155,7 @@ class Solution {
 // (root, root.left and root.right) and then try to come up with a recursive solution.
 // Just solve a subproblem and the rest will be taken care of recursion
 
-//When you are specifying the start and end for recursive calls, set them like you are splitting inorder array
-    //which is in left -> root -> right format 
+
 
 
 
