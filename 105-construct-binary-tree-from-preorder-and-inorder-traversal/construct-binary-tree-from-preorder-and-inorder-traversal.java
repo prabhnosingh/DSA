@@ -61,19 +61,47 @@ class Solution {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // inuition 2: use recursive approach to build left and right sub trees by dividing the arrays
+    // public TreeNode buildTree(int[] preorder, int[] inorder){
+    //     if(preorder.length == 0){
+    //         return null;
+    //     }
+    //     TreeNode root = new TreeNode(preorder[0]);
+
+    //     int rootIdxInInorder = 0;
+    //     for(int i = 0; i < inorder.length; i ++){
+    //         if(preorder[0] == inorder[i]){
+    //             rootIdxInInorder = i;
+    //             break;
+    //         }
+    //     }
+
+    //     int mid = rootIdxInInorder; //in inorder array, left of this index is the left subtree and right is right subtree
+    //     int[] leftPreorder = Arrays.copyOfRange(preorder, 1, mid + 1);
+    //     int[] leftInorder = Arrays.copyOfRange(inorder, 0, mid + 1);
+    //     root.left = buildTree(leftPreorder, leftInorder);
+
+    //     int[] rightPreorder = Arrays.copyOfRange(preorder, mid + 1, preorder.length);
+    //     int[] rightInorder = Arrays.copyOfRange(inorder, mid + 1, preorder.length);
+    //     root.right = buildTree(rightPreorder, rightInorder);
+
+    //     return root;
+    // }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // inuition 3(hashmap): use recursive approach to build left and right sub trees by dividing the arrays. Use HashMap to \
+    //find the index of root(preorder[0])
     public TreeNode buildTree(int[] preorder, int[] inorder){
         if(preorder.length == 0){
             return null;
         }
         TreeNode root = new TreeNode(preorder[0]);
+        HashMap<Integer, Integer> map = new HashMap<>();
 
-        int rootIdxInInorder = 0;
         for(int i = 0; i < inorder.length; i ++){
-            if(preorder[0] == inorder[i]){
-                rootIdxInInorder = i;
-                break;
-            }
+            map.put(inorder[i], i);
         }
+        int rootIdxInInorder = map.get(preorder[0]);
 
         int mid = rootIdxInInorder; //in inorder array, left of this index is the left subtree and right is right subtree
         int[] leftPreorder = Arrays.copyOfRange(preorder, 1, mid + 1);
