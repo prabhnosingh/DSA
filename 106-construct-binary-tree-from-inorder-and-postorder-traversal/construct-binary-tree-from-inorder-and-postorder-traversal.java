@@ -15,7 +15,9 @@
  */
 class Solution {
     // intuition 1: The last element of postorder will be the master root. The left of root in inorder will be left subtree
-    // the right of root in inorder will be right subtree. Use HashMap to store the indices if inorder elements
+    // the right of root in inorder will be right subtree. Use HashMap to store the indices if inorder elements.
+    // when you are specifying the start and end for recursive calls, set them like you are splitting inorder array
+    //which is in left -> root -> right format 
     private HashMap<Integer, Integer> map;
     private int postOrderIdx;
     public TreeNode buildTree(int[] inorder, int[] postorder) {
