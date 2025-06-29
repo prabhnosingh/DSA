@@ -89,29 +89,56 @@ class Solution {
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // inuition 3(hashmap): use recursive approach to build left and right sub trees by dividing the arrays. Use HashMap to \
-    //find the index of root(preorder[0])
-    public TreeNode buildTree(int[] preorder, int[] inorder){
-        if(preorder.length == 0){
-            return null;
-        }
-        TreeNode root = new TreeNode(preorder[0]);
-        HashMap<Integer, Integer> map = new HashMap<>();
+    // // inuition 3(hashmap): use recursive approach to build left and right sub trees by dividing the arrays. Use HashMap to \
+    // //find the index of root(preorder[0])
+    // public TreeNode buildTree(int[] preorder, int[] inorder){
+    //     if(preorder.length == 0){
+    //         return null;
+    //     }
+    //     TreeNode root = new TreeNode(preorder[0]);
+    //     HashMap<Integer, Integer> map = new HashMap<>();
 
+    //     for(int i = 0; i < inorder.length; i ++){
+    //         map.put(inorder[i], i);
+    //     }
+    //     int rootIdxInInorder = map.get(preorder[0]);
+
+    //     int mid = rootIdxInInorder; //in inorder array, left of this index is the left subtree and right is right subtree
+    //     int[] leftPreorder = Arrays.copyOfRange(preorder, 1, mid + 1);
+    //     int[] leftInorder = Arrays.copyOfRange(inorder, 0, mid + 1);
+    //     root.left = buildTree(leftPreorder, leftInorder);
+
+    //     int[] rightPreorder = Arrays.copyOfRange(preorder, mid + 1, preorder.length);
+    //     int[] rightInorder = Arrays.copyOfRange(inorder, mid + 1, preorder.length);
+    //     root.right = buildTree(rightPreorder, rightInorder);
+
+    //     return root;
+    // }    
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // inuition 4(hashmap): use recursive approach with helper function and hashmap to store inorder indexes but only once.
+    // use start and end to determine if have reached extremes of a particular a subtree and return null.
+    private HashMap<Integer, Integer> map = new HashMap<>();
+    private int preOrderIndex = 0;
+    public TreeNode buildTree(int[] preorder, int[] inorder){
+        // map = new HashMap<>();
+        // preOrderIndex = 0;
         for(int i = 0; i < inorder.length; i ++){
             map.put(inorder[i], i);
         }
-        int rootIdxInInorder = map.get(preorder[0]);
 
-        int mid = rootIdxInInorder; //in inorder array, left of this index is the left subtree and right is right subtree
-        int[] leftPreorder = Arrays.copyOfRange(preorder, 1, mid + 1);
-        int[] leftInorder = Arrays.copyOfRange(inorder, 0, mid + 1);
-        root.left = buildTree(leftPreorder, leftInorder);
+        return build(preorder, 0, preorder.length - 1);
+    }
 
-        int[] rightPreorder = Arrays.copyOfRange(preorder, mid + 1, preorder.length);
-        int[] rightInorder = Arrays.copyOfRange(inorder, mid + 1, preorder.length);
-        root.right = buildTree(rightPreorder, rightInorder);
+    private TreeNode build(int[] preorder, int start, int end){
+        if(start > end){ // start becomes greater than end when there are no more children to add to the root
+            return null;
+        }
 
+        int rootVal = preorder[preOrderIndex ++];
+        TreeNode root = new TreeNode(rootVal);
+        int mid = map.get(rootVal);
+        root.left = build(preorder, start, mid - 1);
+        root.right = build(preorder, mid + 1, end);
         return root;
     }
 
