@@ -120,33 +120,33 @@ class Solution {
     
     // inuition 4(hashmap): use recursive approach with helper function and hashmap to store inorder indexes but only once.
     // use start and end to determine if have reached extremes of a particular a subtree and return null.
-    private HashMap<Integer, Integer> map = new HashMap<>();
-    private int preOrderIndex = 0;
-    public TreeNode buildTree(int[] preorder, int[] inorder){
-        // map = new HashMap<>();
-        // preOrderIndex = 0;
-        for(int i = 0; i < inorder.length; i ++){
-            map.put(inorder[i], i);
-        }
+    // private HashMap<Integer, Integer> map = new HashMap<>();
+    // private int preOrderIndex = 0;
+    // public TreeNode buildTree(int[] preorder, int[] inorder){
+    //     // map = new HashMap<>();
+    //     // preOrderIndex = 0;
+    //     for(int i = 0; i < inorder.length; i ++){
+    //         map.put(inorder[i], i);
+    //     }
 
-        return build(preorder, 0, preorder.length - 1);
-    }
+    //     return build(preorder, 0, preorder.length - 1);
+    // }
 
-    private TreeNode build(int[] preorder, int start, int end){
-        if(start > end){ // start becomes greater than end when there are no more children to add to the root
-            return null;
-        }
+    // private TreeNode build(int[] preorder, int start, int end){
+    //     if(start > end){ // start becomes greater than end when there are no more children to add to the root
+    //         return null;
+    //     }
 
-        int rootVal = preorder[preOrderIndex ++];
-        TreeNode root = new TreeNode(rootVal);
-        int mid = map.get(rootVal);
-        root.left = build(preorder, start, mid - 1);//When you are specifying the start and end for recursive calls, set them 
-        //like you are splitting inorder array which is in left -> root -> right format 
-        root.right = build(preorder, mid + 1, end);
-        return root;
-    }
+    //     int rootVal = preorder[preOrderIndex ++];
+    //     TreeNode root = new TreeNode(rootVal);
+    //     int mid = map.get(rootVal);
+    //     root.left = build(preorder, start, mid - 1);//When you are specifying the start and end for recursive calls, set them 
+    //     //like you are splitting inorder array which is in left -> root -> right format 
+    //     root.right = build(preorder, mid + 1, end);
+    //     return root;
+    // }
 
-}
+// }
 
 
 
@@ -155,6 +155,39 @@ class Solution {
 // (root, root.left and root.right) and then try to come up with a recursive solution.
 // Just solve a subproblem and the rest will be taken care of recursion
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
+// inuition 5(using limit): use recursive approach with helper function and limit variable to 
+// know .
+    // use start and end to determine if have reached extremes of a particular a subtree and .
+    private int inOrderIndex = 0;
+    private int preOrderIndex = 0;
+    public TreeNode buildTree(int[] preorder, int[] inorder){
+
+        return build(preorder, inorder, Integer.MAX_VALUE);
+    }
+
+    private TreeNode build(int[] preorder, int[] inorder, int limit){ // limit is parent root's value
+        if(preOrderIndex == preorder.length){
+            return null;
+        }
+
+        if(inorder[inOrderIndex] == limit){ // this signals end of the current left subtree. 
+        //indicates when a parent has been encountered.
+            inOrderIndex ++; // ++ to skip the parent 
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preorder[preOrderIndex ++]);//3
+
+        root.left = build(preorder, inorder, root.val); // inorder -> [lefval, lefval, lefval, root]
+        root.right = build(preorder, inorder, limit); // inorder -> [root, rightval, rightval, rightval]
+
+        return root;
+    }
+
+
+}
 
 
 
