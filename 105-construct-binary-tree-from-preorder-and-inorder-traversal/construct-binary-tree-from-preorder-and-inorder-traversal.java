@@ -115,6 +115,9 @@ class Solution {
     //     return root;
     // }    
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    //95% beat but can still be optimized -> without using hasmap
+    
     // inuition 4(hashmap): use recursive approach with helper function and hashmap to store inorder indexes but only once.
     // use start and end to determine if have reached extremes of a particular a subtree and return null.
     private HashMap<Integer, Integer> map = new HashMap<>();
