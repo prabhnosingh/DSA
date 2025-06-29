@@ -150,9 +150,12 @@ class Solution {
 
 
 
+// Basically find the pattern and try to solve a single problem, like assume that there are only 3 nodes 
+// (root, root.left and root.right) and then try to come up with a recursive solution.
+// Just solve a subproblem and the rest will be taken care of recursion
 
-
-
+//When you are specifying the start and end for recursive calls, set them like you are splitting inorder array
+    //which is in left -> root -> right format 
 
 
 
