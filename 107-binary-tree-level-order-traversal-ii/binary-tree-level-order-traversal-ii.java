@@ -14,32 +14,69 @@
  * }
  */
 class Solution {
-    // intuition 1: Use queue to store and retrieve accordingly
+    // intuition 1: Use queue to store and retrieve accordingly. Add sub lists to ans from front rather than last
+    // public List<List<Integer>> levelOrderBottom(TreeNode root) {
+    //     List<List<Integer>> ans = new ArrayList<>();
+    //     if(root == null){
+    //         return ans;
+    //     }
+    //     Queue<TreeNode> queue = new LinkedList<>();
+    //     queue.offer(root);
+
+    //     while(!queue.isEmpty()){
+    //         int qSize = queue.size();
+    //         List<Integer> tempList = new ArrayList<>();
+    //         for(int i = 0; i < qSize; i ++){
+    //             TreeNode tempNode = queue.poll();
+    //             if(tempNode != null){
+    //                 tempList.add(tempNode.val);
+    //                 queue.offer(tempNode.left);
+    //                 queue.offer(tempNode.right);
+    //             }
+    //         }
+    //         if(tempList.size() > 0){
+    //             ans.add(0, tempList);    // to add the elements from the start rather than adding at last
+    //         }
+    //     }
+    //     // return Collections.reverse(ans);
+    //     return ans;
+
+    // }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // intuition 2 (without using extra memory, i.e. not using queue): Use helper function and create new lists per level.
+    // Add sub lists to ans from front rather than last.
+    List<List<Integer>> ans = new ArrayList<>();
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
-        List<List<Integer>> ans = new ArrayList<>();
         if(root == null){
             return ans;
         }
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
-
-        while(!queue.isEmpty()){
-            int qSize = queue.size();
-            List<Integer> tempList = new ArrayList<>();
-            for(int i = 0; i < qSize; i ++){
-                TreeNode tempNode = queue.poll();
-                if(tempNode != null){
-                    tempList.add(tempNode.val);
-                    queue.offer(tempNode.left);
-                    queue.offer(tempNode.right);
-                }
-            }
-            if(tempList.size() > 0){
-                ans.add(0, tempList);    // to add the elements from the start rather than adding at last
-            }
-        }
-        // return Collections.reverse(ans);
+        levelTraversal(root, 0);
         return ans;
-
     }
+
+    private void levelTraversal(TreeNode root, int level){
+        if(root == null){
+            return;
+        }
+
+        System.out.println("ans.size() : " + ans.size());
+        System.out.println("root.val : " + root.val);
+        System.out.println("level : " + level);
+        if(ans.size() == level){ // control is one level down than the size of ans. i.e. there is a need to have a new sublist in ans
+        // as previous sublists must have been populated by previous levels
+            ans.add(0, new ArrayList<>());
+        }
+        
+        ans.get(ans.size() - level - 1).add(root.val);
+        System.out.println("ans.get(level) : " + ans.get(level));
+        System.out.println("***********");
+
+        // levelTraversal(root.left, level ++);
+        // levelTraversal(root.right, level ++);
+        levelTraversal(root.left, level + 1);
+        levelTraversal(root.right, level + 1);
+    }
+
 }
