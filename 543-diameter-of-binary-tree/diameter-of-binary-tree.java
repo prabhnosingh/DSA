@@ -28,26 +28,63 @@ class Solution {
     //SC: O(h) : h = height of tree
     
     public int diameterOfBinaryTree(TreeNode root) {
-        int diameter = 0;
-
-        Pair<Integer, Integer> ans = heightOfBinaryTree(root, diameter);
-        return ans.getValue();
+        int[] diameter = new int[1];
+        
+        heightOfBinaryTree(root, diameter);
+        return diameter[0];
     }
-    private Pair<Integer, Integer> heightOfBinaryTree(TreeNode root, int diameter){
+    private int heightOfBinaryTree(TreeNode root, int[] diameter){
         //base case
         if(root == null){
-            return new Pair(0, 0);
+            return 0;
         }
 
         //hypothesis
-        Pair<Integer, Integer> leftSTHeight = heightOfBinaryTree(root.left, diameter);
-        Pair<Integer, Integer> rightSTHeight = heightOfBinaryTree(root.right, diameter);
+        int leftSTHeight = heightOfBinaryTree(root.left, diameter);
+        int rightSTHeight = heightOfBinaryTree(root.right, diameter);
         
-        diameter = Math.max(Math.max(diameter, leftSTHeight.getKey() + rightSTHeight.getKey()), Math.max(leftSTHeight.getValue(), rightSTHeight.getValue())); 
+        diameter[0] = Math.max(diameter[0], leftSTHeight + rightSTHeight);
+        //considering diameter returned from a single subtree as well
        
         // induction
-        return new Pair((1 + Math.max(leftSTHeight.getKey(), rightSTHeight.getKey())), diameter);
+        return 1 + Math.max(leftSTHeight, rightSTHeight);
     }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 16 Nov 2025:
+
+    // //intuition 1 (solving without global variable): At any node, the diameter will be left height + right height. 
+    // //Maintain a global diameter variable that will keep track of max(leftHeight + rightHeight) till now
+
+    // //Diameter of a binary tree is the longest path between two nodes
+
+    // //Beats 100%: Only calling heightOfBinaryTree once and storing diameter in global var
+    // //TC: O(3n) = O(n) : n = number of nodes in the tree
+    //     //3n because of 3 operations per node: visiting the node, computing left height, computing right height
+    // //SC: O(h) : h = height of tree
+    
+    // public int diameterOfBinaryTree(TreeNode root) {
+    //     int diameter = 0;
+
+    //     Pair<Integer, Integer> ans = heightOfBinaryTree(root, diameter);
+    //     return ans.getValue();
+    // }
+    // private Pair<Integer, Integer> heightOfBinaryTree(TreeNode root, int diameter){
+    //     //base case
+    //     if(root == null){
+    //         return new Pair(0, 0);
+    //     }
+
+    //     //hypothesis
+    //     Pair<Integer, Integer> leftSTHeight = heightOfBinaryTree(root.left, diameter);
+    //     Pair<Integer, Integer> rightSTHeight = heightOfBinaryTree(root.right, diameter);
+        
+    //     diameter = Math.max(Math.max(diameter, leftSTHeight.getKey() + rightSTHeight.getKey()), Math.max(leftSTHeight.getValue(), rightSTHeight.getValue())); 
+    //     //considering diameter returned from a single subtree as well
+       
+    //     // induction
+    //     return new Pair((1 + Math.max(leftSTHeight.getKey(), rightSTHeight.getKey())), diameter);
+    // }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
