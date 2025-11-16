@@ -19,33 +19,70 @@ class Solution {
 
     //Re-solving on 16 Nov 2025:
 
-    //intuition 1 (dfs): traverse right side first, keep track of maxLevelTraversed and update the ans list if a new max
-    //level is reached 
+    //intuition 1 (bfs): Do level order traversal and then add last element from each level to the ans list
 
-    int maxLevelTraversed;
+
     public List<Integer> rightSideView(TreeNode root) {
-        maxLevelTraversed = 0;
         List<Integer> rightSideViewList = new ArrayList<>();
+        if(root == null) return rightSideViewList;
+        Queue<TreeNode> levelOrderQueue = new ArrayDeque<>();
 
-        traverseTree(root, rightSideViewList, 1);
+        levelOrderQueue.offer(root);
+
+        while(!levelOrderQueue.isEmpty()){
+            int currSize = levelOrderQueue.size();
+
+            for(int i = 0; i < currSize; i ++){
+                TreeNode currNode = levelOrderQueue.poll();
+
+                if(currNode.left != null){
+                    levelOrderQueue.offer(currNode.left);
+                }
+                if(currNode.right != null){
+                    levelOrderQueue.offer(currNode.right);
+                }
+
+                if(i == currSize - 1){ //last element of that level
+                    rightSideViewList.add(currNode.val);
+                }   
+            }
+        }
 
         return rightSideViewList;
     }
 
-    private void traverseTree(TreeNode root, List<Integer> rightSideViewList, int currLevel){
-        if(root == null){
-            return;
-        }
+    
 
-        if(currLevel > maxLevelTraversed){
-            maxLevelTraversed = currLevel;
-            rightSideViewList.add(root.val);
-        }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 16 Nov 2025:
 
-        traverseTree(root.right, rightSideViewList, currLevel + 1);
-        traverseTree(root.left, rightSideViewList, currLevel + 1);
+    // //intuition 1 (dfs): traverse right side first, keep track of maxLevelTraversed and update the ans list if a new max
+    // //level is reached 
 
-    }
+    // int maxLevelTraversed;
+    // public List<Integer> rightSideView(TreeNode root) {
+    //     maxLevelTraversed = 0;
+    //     List<Integer> rightSideViewList = new ArrayList<>();
+
+    //     traverseTree(root, rightSideViewList, 1);
+
+    //     return rightSideViewList;
+    // }
+
+    // private void traverseTree(TreeNode root, List<Integer> rightSideViewList, int currLevel){
+    //     if(root == null){
+    //         return;
+    //     }
+
+    //     if(currLevel > maxLevelTraversed){
+    //         maxLevelTraversed = currLevel;
+    //         rightSideViewList.add(root.val);
+    //     }
+
+    //     traverseTree(root.right, rightSideViewList, currLevel + 1);
+    //     traverseTree(root.left, rightSideViewList, currLevel + 1);
+
+    // }
 
 
 
