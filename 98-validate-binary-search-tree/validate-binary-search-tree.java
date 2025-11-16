@@ -17,43 +17,92 @@ class Solution {
 
     // //Re-solving on 16 Nov 2025:
 
-    //intuition 1 (dfs): Have a helper function that takes max and min values 
+    //intuition 1 (dfs): Using two helper functions getMax and getMin
     //Check if left ST's any element is not greater than the max of root
     //Check if right ST's any element is not smaller than the min of root  
     
     public boolean isValidBST(TreeNode root) {  
-        return traverseBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
-        // return traverseBST(root, Integer.MIN_VALUE - 1, Integer.MAX_VALUE + 1); //+1/-1 to consider the case where both root
-        //node and left/right node could be same boundary values for integers
+        
+        if(root == null) return true;
+
+        if(maxElement(root.left) >= root.val){
+            return false;
+        }
+
+        if(minElement(root.right) <= root.val){
+            return false;
+        }
+
+        return isValidBST(root.left) && isValidBST(root.right);       
     }
 
-    private boolean traverseBST(TreeNode root, long minVal, long maxVal){
+    private long maxElement(TreeNode root){
         if(root == null){
-            return true;
+            return Long.MIN_VALUE;
         }   
 
-        
-        if(root.val <= minVal) return false;
-            // System.out.println(root.val);
-        if(root.val >= maxVal) return false;
-        
-        
-        // if(root.left != null){  
-        //     if(root.val <= root.left.val){
-        //         return false;
-        //     }
-        // }
-        // if(root.right != null){
-        //     if(root.val >= root.right.val){
-        //         return false;
-        //     }
-        // }
+        long maxLST = maxElement(root.left);
+        long maxRST = maxElement(root.right);
 
-        boolean isLSTBST = traverseBST(root.left, minVal, root.val);
-        boolean isRSTBST = traverseBST(root.right, root.val, maxVal);
-
-        return isLSTBST && isRSTBST;
+        return Math.max(root.val, Math.max(maxLST, maxRST));    
+    
     }
+
+    private long minElement(TreeNode root){
+        if(root == null){
+            return Long.MAX_VALUE;
+        }   
+
+        long minLST = minElement(root.left);
+        long minRST = minElement(root.right);
+
+        return Math.min(root.val, Math.min(minLST, minRST));    
+    
+    }
+        
+        
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+    // // //Re-solving on 16 Nov 2025:
+
+    // //intuition 1 (dfs): Have a helper function that takes max and min values 
+    // //Check if left ST's any element is not greater than the max of root
+    // //Check if right ST's any element is not smaller than the min of root  
+    
+    // public boolean isValidBST(TreeNode root) {  
+    //     return traverseBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    //     // return traverseBST(root, Integer.MIN_VALUE - 1, Integer.MAX_VALUE + 1); //+1/-1 to consider the case where both root
+    //     //node and left/right node could be same boundary values for integers -> does not work
+        
+    // }
+
+    // private boolean traverseBST(TreeNode root, long minVal, long maxVal){
+    //     if(root == null){
+    //         return true;
+    //     }   
+
+        
+    //     if(root.val <= minVal) return false;
+    //         // System.out.println(root.val);
+    //     if(root.val >= maxVal) return false;
+        
+        
+    //     // if(root.left != null){  
+    //     //     if(root.val <= root.left.val){
+    //     //         return false;
+    //     //     }
+    //     // }
+    //     // if(root.right != null){
+    //     //     if(root.val >= root.right.val){
+    //     //         return false;
+    //     //     }
+    //     // }
+
+    //     boolean isLSTBST = traverseBST(root.left, minVal, root.val);
+    //     boolean isRSTBST = traverseBST(root.right, root.val, maxVal);
+
+    //     return isLSTBST && isRSTBST;
+    // }
         
         
 
