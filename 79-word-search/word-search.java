@@ -19,16 +19,16 @@ class Solution {
                 if(dfsBacktrack(board, word, 0, visitedSet, row, col)){
                     return true;
                 }
-                visitedSet = new boolean[rows][cols]; 
+                // visitedSet = new boolean[rows][cols]; 
             }
         }
         return false;
     }
 
     public boolean dfsBacktrack(char[][] board, String word, int charIdxInWord, boolean[][] visitedSet, int row, int col){
-
         if(row < 0 || col < 0 || row == board.length || col == board[0].length) return false;
 
+        // System.out.println(board[row][col]);
         if(word.charAt(charIdxInWord) != board[row][col] || visitedSet[row][col]){
             return false;
         }
@@ -43,7 +43,7 @@ class Solution {
         boolean right = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row, col + 1); //moving right 
 
         visitedSet[row][col] = false; //resetting visitedSet for row, col (backtracking)
-        return down || up || left || right;
+        return down || up || left || right; //return true if any of the direction gave true in return
     }
 
     
