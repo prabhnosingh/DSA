@@ -13,10 +13,11 @@ class Solution {
         int rows = board.length;
         int cols = board[0].length;
         // HashSet<Character> visitedSet = new HashSet<>();
-        boolean[][] visitedSet = new boolean[rows][cols];
+        // boolean[][] visitedSet = new boolean[rows][cols];
         for(int row = 0; row < rows; row ++){
             for(int col = 0; col < cols; col ++){
-                if(dfsBacktrack(board, word, 0, visitedSet, row, col)){
+                // if(dfsBacktrack(board, word, 0, visitedSet, row, col)){
+                if(dfsBacktrack(board, word, 0, row, col)){
                     return true;
                 }
                 // visitedSet = new boolean[rows][cols]; 
@@ -25,24 +26,36 @@ class Solution {
         return false;
     }
 
-    public boolean dfsBacktrack(char[][] board, String word, int charIdxInWord, boolean[][] visitedSet, int row, int col){
+    // public boolean dfsBacktrack(char[][] board, String word, int charIdxInWord, boolean[][] visitedSet, int row, int col){
+    public boolean dfsBacktrack(char[][] board, String word, int charIdxInWord, int row, int col){
         if(row < 0 || col < 0 || row == board.length || col == board[0].length) return false;
 
         // System.out.println(board[row][col]);
-        if(word.charAt(charIdxInWord) != board[row][col] || visitedSet[row][col]){
+        char currChar = board[row][col];
+        // if(word.charAt(charIdxInWord) != board[row][col] || visitedSet[row][col]){
+        //     return false;
+        // }
+        if(word.charAt(charIdxInWord) != currChar){
             return false;
         }
         
         if(charIdxInWord == word.length() - 1) return true; //last char of word found
-        visitedSet[row][col] = true;
+        // visitedSet[row][col] = true;
+        board[row][col] = '#';
 
         //moving in all directions
-        boolean down = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row + 1, col); //moving down
-        boolean up = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row - 1, col); //moving up
-        boolean left = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row, col - 1); //moving left
-        boolean right = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row, col + 1); //moving right 
+        // boolean down = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row + 1, col); //moving down
+        // boolean up = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row - 1, col); //moving up
+        // boolean left = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row, col - 1); //moving left
+        // boolean right = dfsBacktrack(board, word, charIdxInWord + 1, visitedSet, row, col + 1); //moving right 
+        //moving in all directions
+        boolean down = dfsBacktrack(board, word, charIdxInWord + 1, row + 1, col); //moving down
+        boolean up = dfsBacktrack(board, word, charIdxInWord + 1, row - 1, col); //moving up
+        boolean left = dfsBacktrack(board, word, charIdxInWord + 1, row, col - 1); //moving left
+        boolean right = dfsBacktrack(board, word, charIdxInWord + 1, row, col + 1); //moving right 
 
-        visitedSet[row][col] = false; //resetting visitedSet for row, col (backtracking)
+        // visitedSet[row][col] = false; //resetting visitedSet for row, col (backtracking)
+        board[row][col] = currChar;
         return down || up || left || right; //return true if any of the direction gave true in return
     }
 
