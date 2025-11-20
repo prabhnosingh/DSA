@@ -9,13 +9,13 @@
 //using a hashmap (beats 20%)
 
 
-class TrieNode{
-    TrieNode[] children = new TrieNode[26];
-    boolean isWordEnd = false;
-}
 
 class Trie {
-   
+    class TrieNode{
+        TrieNode[] children = new TrieNode[26];
+        boolean isWordEnd = false;
+    }
+
     private TrieNode root;
     public Trie() {
         root = new TrieNode();
