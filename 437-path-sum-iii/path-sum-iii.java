@@ -17,46 +17,85 @@ class Solution {
 
     //Re-Solving on 21 Nov 2025    
     
-    //intuition 2: prefix sum
-    
-    //intuition 1: Have a helper function that can track currSum of the path being traversed
+    //intuition 2 (prefix sum): Have a prefix sum hashmap that stores the complementatry sum till now
+    //Have a helper function to traverse the tree
+      
    
-   
-    int ans = 0;
     public int pathSum(TreeNode root, int targetSum) {
+        HashMap<Long, Integer> prefixMap = new HashMap<>();
+
+        prefixMap.put(0L, 1); //0 sum occurs with 1 frequency
+
+        return traverseTree(root, targetSum, 0, prefixMap);
         
-        if(root == null){
-            return 0;
-        }
-
-        traverseTree(root, (long) targetSum);
-
-        pathSum(root.left, targetSum);
-        pathSum(root.right, targetSum);
-
-        return ans;
     }
 
-    private void traverseTree(TreeNode root, long targetSum){
-        if(root == null){
-            return;
+    private int traverseTree(TreeNode root, int targetSum, long currSum, HashMap<Long, Integer> prefixMap){
+        if(root == null) return 0;
+        currSum += root.val;
+        int countOfPrefixSum = 0;
+        if(prefixMap.containsKey(currSum - targetSum)){
+            countOfPrefixSum = prefixMap.get(currSum - targetSum);
         }
+        prefixMap.put(currSum, prefixMap.getOrDefault(currSum, 0) + 1);
 
-        // currSum += root.val;
+        countOfPrefixSum += traverseTree(root.left, targetSum, currSum, prefixMap);
+        countOfPrefixSum += traverseTree(root.right, targetSum, currSum, prefixMap);
 
-        if(targetSum - root.val == 0){
-            ans += 1;
-        }
-        // else if(targetSum - root.val < 0){
-        //     return;
-        // }
-
-        traverseTree(root.left, targetSum - root.val);
-        traverseTree(root.right, targetSum - root.val);
+        prefixMap.put(currSum, prefixMap.get(currSum) - 1);
+        return countOfPrefixSum;
     }
 
 
 }
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-Solving on 21 Nov 2025    
+    
+//     //intuition 2: prefix sum
+    
+//     //intuition 1: Have a helper function that can track currSum of the path being traversed
+   
+   
+//     int ans = 0;
+//     public int pathSum(TreeNode root, int targetSum) {
+        
+//         if(root == null){
+//             return 0;
+//         }
+
+//         traverseTree(root, (long) targetSum);
+
+//         pathSum(root.left, targetSum);
+//         pathSum(root.right, targetSum);
+
+//         return ans;
+//     }
+
+//     private void traverseTree(TreeNode root, long targetSum){
+//         if(root == null){
+//             return;
+//         }
+
+//         // currSum += root.val;
+
+//         if(targetSum - root.val == 0){
+//             ans += 1;
+//         }
+//         // else if(targetSum - root.val < 0){
+//         //     return;
+//         // }
+
+//         traverseTree(root.left, targetSum - root.val);
+//         traverseTree(root.right, targetSum - root.val);
+//     }
+
+
+// }
 
 
 
