@@ -36,7 +36,7 @@ class Solution {
             minHeap.offer(list);
         }   
 
-        ListNode mergedList = new ListNode();
+        ListNode mergedList = new ListNode(0);
         ListNode mergedListPointer = mergedList;
 
         while(!minHeap.isEmpty()){
