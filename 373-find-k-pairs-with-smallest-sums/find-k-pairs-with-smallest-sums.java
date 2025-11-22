@@ -5,8 +5,10 @@ class Solution{
 
     //Re-solving on 22 Nov 2025
 
-    //intuition 2 (minHeap): Have a minHeap and offer it all the combinations of possible sums, then remove first k pairs
-    //We don't need to offer all the combinations though
+    //intuition 2 (minHeap): 
+        //Have a Pair custom class that takes idx1, idx2, num1, num2 and computes sum = num1 + num2 
+        //Have a minHeap of type Pair and offer it all nums1 elements mapped to nums2[0] element
+        //Then remove the elements from 
     
     static class Pair{
         int idx1, idx2, num1, num2, sum;
@@ -29,7 +31,8 @@ class Solution{
         List<List<Integer>> smallestPairs = new ArrayList<>();
         PriorityQueue<Pair> minHeap = new PriorityQueue<>((a, b) -> (a.sum - b.sum));       
 
-        for(int i = 0; i < Math.min(k, nums1.length); i ++){
+        // for(int i = 0; i < Math.min(k, nums1.length); i ++){
+        for(int i = 0; i < nums1.length; i ++){
             minHeap.offer(new Pair(i, 0, nums1[i], nums2[0])); //inserting first k or all nums1 elements mapped 
             //to nums2's 0 index element
         }
