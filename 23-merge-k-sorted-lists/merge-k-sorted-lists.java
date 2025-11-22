@@ -9,71 +9,33 @@
  * }
  */
 class Solution {
+
+    //Re-solving on 22 Nov 2025:
+
+    //intuition 1: Offer all the elements from each linked list to a min heap. At last
+    //construct a final linked list by removing from the min heap
     public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> (a.val - b.val)); 
+        //sort list nodes based on their values 
+        ListNode ansRoot = new ListNode(); //dummy node 
+        ListNode tempNode = ansRoot;
 
-        if(lists.length == 0) return null;
-        if(lists.length == 1) return lists[0];
-
-        while(lists.length > 1){
-
-            List<ListNode> mergedLists = new ArrayList<>();
-
-            for(int i = 0; i < lists.length; i += 2){
-
-                ListNode list1 = lists[i];
-                ListNode list2 = i + 1 >= lists.length ? null : lists[i + 1];
-                mergedLists.add(mergeTwoLists(list1, list2));
+        for(ListNode list : lists){
+            ListNode currNode = list;
+            while(currNode != null){
+                ListNode temp = new ListNode(currNode.val); //to avoid cycles while construcing final linked
+                //list (eg: lists = [[-2,-1,-1,-1],[]])
+                minHeap.offer(temp);
+                currNode = currNode.next;
             }
-
-            lists = mergedLists.toArray(new ListNode[0]);
-
         }
 
-        return lists[0];
-
-
-
-        // ********************************* Beats 15% *************************************
-        // if(lists.length == 0) return null;
-        
-        // ListNode ans = lists[0];
-        // ListNode ansCurr = ans;
-        // for(int i = 1; i < lists.length; i ++){
-
-        //         ans = mergeTwoLists(ans, lists[i]);
-        
-        //     }
-        //     return ans;
-
+        while(!minHeap.isEmpty()){
+            System.out.println(minHeap.peek().val);
+            tempNode.next = minHeap.remove();
+            tempNode = tempNode.next;
         }
 
-
-        public ListNode mergeTwoLists(ListNode head1, ListNode head2){
-
-            if(head1 == null) return head2;
-            if(head2 == null) return head1;
-
-            ListNode dummy = new ListNode(0);
-            ListNode curr = dummy;
-
-
-            while(head1 != null && head2 != null){
-
-                if(head1.val < head2.val){
-                    curr.next = head1;
-                    head1 = head1.next;
-                }
-                else{
-                    curr.next = head2;
-                    head2 = head2.next;
-                }
-
-                curr = curr.next;
-
-            }
-
-            curr.next = head2 == null ? head1 : head2;
-            return dummy.next;
-        }
-        
+        return ansRoot.next;
     }
+}
