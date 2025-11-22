@@ -1,27 +1,31 @@
 class Solution {
     //Re-solving on 22 Nov 2025:
 
-    //intuition 1 (heap) (beats 22.54%): Have a heap and initialize it with all stones. Then remove two stones at a time and
-    //offer back the result of smash (if non-zero). At last return the final result 
+    //intuition 1 (two-pointers): Sort the array. 
+        //store the results of last two stone collision into length - 2 index and then sort array
+        //form 0, length - 2(inclusive) 
     
     public int lastStoneWeight(int[] stones) {
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a,b) -> (b-a));
+        
+        Arrays.sort(stones);
 
-        for(int stoneW : stones){
-            maxHeap.offer(stoneW);
+        for(int i = stones.length - 1; i >= 1; i --){
+            int stone1 = stones[i];
+            int stone2 = stones[i - 1];
+
+            int collisionRes = stone1 - stone2;
+            // if(collisionRes == 0){
+            //     i --;
+            //     continue;
+            // }
+            stones[i - 1] = collisionRes;
+
+            Arrays.sort(stones, 0, i); //excludes i
+
         }
 
-        while(maxHeap.size() > 1){
-            int stone1 = maxHeap.remove();
-            int stone2 = maxHeap.remove();
+        return stones[0];
 
-            int smashResult = stone1 - stone2;
-            if(smashResult != 0){
-                maxHeap.offer(smashResult);
-            }
-        }
-
-        return maxHeap.isEmpty() ? 0 : maxHeap.remove();
 
     }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +35,8 @@ class Solution {
     // //intuition 1 (heap) (beats 22.54%): Have a heap and initialize it with all stones. Then remove two stones at a time and
     // //offer back the result of smash (if non-zero). At last return the final result 
     
+    //TC: O(nlogn) where n is the number of stones
+    //SC: O(n) where n is the number of stones
     // public int lastStoneWeight(int[] stones) {
     //     PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a,b) -> (b-a));
 
