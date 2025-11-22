@@ -12,7 +12,7 @@ class Solution {
 
     //Re-solving on 22 Nov 2025:
 
-    //intuition 1 (beats 14%): Offer all the elements from each linked list to a min heap. At last
+    //intuition 1 (beats 35.85%): Offer all the elements from each linked list to a min heap. At last
     //construct a final linked list by removing from the min heap
 
     //We should also insert new independant nodes (without "next" addresses) to avoid any cycle
