@@ -10,9 +10,43 @@
  */
 class Solution {
 
+    // //Re-solving on 22 Nov 2025:
+
+    // //intuition 3: Have a helper function that merges two lists and returns the merged list. Pass two lists at a time 
+    // //the main function 
+    // public ListNode mergeKLists(ListNode[] lists) {
+        
+    //     if(lists.length == 0) return null;
+
+    //     int ansList = lists[0];
+    //     for(int i = 1; i < lists.length; i ++){
+    //         ansList = mergeTwoLists(ansList, lists[i]);
+    //     }
+
+    //     return ansList;
+
+
+    // }
+
+    // private ListNode mergeTwoLists(ListNode list1, ListNode list2){
+    //     // if(list1 == null) return list2;
+    //     if(list2 == null) return list1;
+    //     ListNode mergedList = new ListNode;
+    //     ListNode mergedListPointer = mergedList;
+    //     while(list1 != null && list2 != null){
+
+    //     }
+
+
+
+    // }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Re-solving on 22 Nov 2025:
 
-    //intuition 2: Merging linked lists into one main ans list as we traverse lists
+    //intuition 2(beats 5%): Merging linked lists into one main ans list as we traverse lists
     public ListNode mergeKLists(ListNode[] lists) {
         
         if(lists.length == 0){
@@ -24,9 +58,7 @@ class Solution {
         if(lists.length == 1){
             return list1;
         }
-
-
-        // ListNode listPointer = 
+ 
         for(int i = 1; i < lists.length; i ++){
             ListNode list1Pointer = list1;
             ListNode list2Pointer = lists[i];
@@ -45,17 +77,19 @@ class Solution {
                 }
             }
 
-            while(list1Pointer != null){
-                mergedListPointer.next = list1Pointer;
-                mergedListPointer = mergedListPointer.next;
-                list1Pointer = list1Pointer.next;
-            }
+            // while(list1Pointer != null){
+            //     mergedListPointer.next = list1Pointer;
+            //     mergedListPointer = mergedListPointer.next;
+            //     list1Pointer = list1Pointer.next;
+            // }
 
-            while(list2Pointer != null){
-                mergedListPointer.next = list2Pointer;
-                mergedListPointer = mergedListPointer.next;
-                list2Pointer = list2Pointer.next;
-            }
+            // while(list2Pointer != null){
+            //     mergedListPointer.next = list2Pointer;
+            //     mergedListPointer = mergedListPointer.next;
+            //     list2Pointer = list2Pointer.next;
+            // }
+
+            mergedListPointer.next = list1Pointer == null ? list2Pointer : list1Pointer;
 
             list1 = newMergedList.next;
         }
