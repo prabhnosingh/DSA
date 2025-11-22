@@ -1,0 +1,416 @@
+
+
+class Solution{
+
+
+    //Re-solving on 22 Nov 2025
+
+    //intuition 2 (minHeap): Have a minHeap and offer it all the combinations of possible sums, then remove first k pairs
+    //We don't need to offer all the combinations though
+    
+    static class Pair{
+        int idx1, idx2, num1, num2, sum;
+        Pair(int idx1, int idx2, int num1, int num2){
+            this.idx1 = idx1;
+            this.idx2 = idx2;
+
+            this.num1 = num1;
+            this.num2 = num2;
+
+            this.sum = num1 + num2;
+        }
+
+    }
+
+
+
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+            
+        List<List<Integer>> smallestPairs = new ArrayList<>();
+        PriorityQueue<Pair> minHeap = new PriorityQueue<>((a, b) -> (a.sum - b.sum));       
+
+        for(int i = 0; i < Math.min(k, nums1.length); i ++){
+            minHeap.offer(new Pair(i, 0, nums1[i], nums2[0])); //inserting first k or all nums1 elements mapped 
+            //to nums2's 0 index element
+        }
+
+        while(!minHeap.isEmpty() && smallestPairs.size() < k){
+            Pair smallestSumPair = minHeap.remove();
+            smallestPairs.add(new ArrayList<>(Arrays.asList(smallestSumPair.num1, smallestSumPair.num2)));
+
+            if(smallestSumPair.idx2 + 1 < nums2.length){
+                int idx1 = smallestSumPair.idx1;
+                int idx2 = smallestSumPair.idx2 + 1;
+                minHeap.offer(new Pair(idx1, idx2, nums1[idx1], nums2[idx2]));
+
+            }
+        }
+
+        return smallestPairs;
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 22 Nov 2025
+
+    // //intuition 1 (TLE): Have a minHeap and offer it all the combinations of possible sums, then remove first k pairs
+    // //We don't need to offer all the combinations though
+    
+    // public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        
+    //     List<List<Integer>> smallestPairs = new ArrayList<>();
+    //     PriorityQueue<List<Integer>> minHeap = new PriorityQueue<>((a, b) -> ((a.get(0) + a.get(1)) - (b.get(0) + b.get(1))));       
+
+    //     for(int i = 0; i < nums1.length; i ++){
+    //         for(int j = 0; j < nums2.length; j ++){
+    //             minHeap.offer(new ArrayList<>(Arrays.asList(nums1[i], nums2[j])));
+    //         }
+    //     }
+
+    //     while(k != 0){
+    //         smallestPairs.add(minHeap.remove());
+    //         k --;
+    //     }
+
+    //     return smallestPairs;
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //re-solving: 12 Oct 2025
+
+    // //intuition 2(heap): The logic is to start with 0,0 and then travers 0, 1 and 1, 0. Then for 0,1 traverse 0,2 and 1,1
+    // //as after 0,0 the next smallest sum will be either in 0,1 or 1,0. 
+    // //For 0,1 next smallest sum will be in either 0,2 or 1,1
+    // //For 1,0 next smallest sum will be in either 2,0 or 1,1 => Here we observe that we have redundant pairs. To avoid this
+    // //we use visited set.
+
+    // //visited set's need can be removed if we add i,0 pairs to minheap initially, where i is the index of nums1.
+    // //kind of mapping elements of nums1 with nums2[0] 
+
+    // //And later only adding pointer2 increments to the heap. This way duplicates are avoided 
+
+    // static class Pair{
+    //         int p1, p2, num1, num2, sum;
+    //         Pair(int p1, int p2, int num1, int num2){
+    //             this.p1 = p1;
+    //             this.p2 = p2;
+    //             this.num1 = num1;
+    //             this.num2 = num2;
+    //             this.sum = num1 + num2;
+
+    //         }
+    //     }
+    
+    // public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+
+        
+
+    //     PriorityQueue<Pair> minHeap = new PriorityQueue<>((pair1, pair2) -> (pair1.sum - pair2.sum));
+    //     List<List<Integer>> kPairsWithSmallestSums = new ArrayList<>();
+
+    //     // Set<String> visited = new HashSet<>();
+    //     for(int i = 0; i < nums1.length; i ++){
+    //         minHeap.offer(new Pair(i, 0, nums1[i], nums2[0]));
+    //     }
+    //     // visited.add("0, 0");
+
+
+    //     while(!minHeap.isEmpty() && kPairsWithSmallestSums.size() < k){
+    //         Pair tempPair = minHeap.poll();
+    //         int pointer1 = tempPair.p1;
+    //         int pointer2 = tempPair.p2;
+
+    //         kPairsWithSmallestSums.add(new ArrayList<>(Arrays.asList(nums1[pointer1], nums2[pointer2])));
+
+    //         // if(pointer1 + 1 < nums1.length && visited.add((pointer1 + 1) + ", " + pointer2)){
+    //         //     minHeap.add(new Pair(pointer1 + 1, pointer2, nums1[pointer1 + 1], nums2[pointer2]));
+    //         // }
+    //         if(pointer2 + 1 < nums2.length){
+    //             minHeap.add(new Pair(pointer1, pointer2 + 1, nums1[pointer1], nums2[pointer2 + 1]));
+    //         }
+
+    //     }
+    //     return kPairsWithSmallestSums;
+
+       
+
+    // }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //re-solving: 12 Oct 2025
+
+    // //intuition 1(heap): The logic is to start with 0,0 and then travers 0, 1 and 1, 0. Then for 0,1 traverse 0,2 and 1,1
+    // //as the after 0,0 the next smallest sum will be either in 0,1 or 1,0. 
+    // //For 0,1 next smallest sum will be in either 0,2 or 1,1
+    // //For 1,0 next smallest sum will be in either 2,0 or 1,1 => Here we observe that we have redundant pairs. To avoid this
+    // //we use visited set.
+
+    
+
+    // static class Pair{
+    //         int p1, p2, num1, num2, sum;
+    //         Pair(int p1, int p2, int num1, int num2){
+    //             this.p1 = p1;
+    //             this.p2 = p2;
+    //             this.num1 = num1;
+    //             this.num2 = num2;
+    //             this.sum = num1 + num2;
+
+    //         }
+    //     }
+    
+    // public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+
+        
+
+    //     PriorityQueue<Pair> minHeap = new PriorityQueue<>((pair1, pair2) -> (pair1.sum - pair2.sum));
+    //     List<List<Integer>> kPairsWithSmallestSums = new ArrayList<>();
+
+    //     Set<String> visited = new HashSet<>();
+
+    //     minHeap.offer(new Pair(0, 0, nums1[0], nums2[0]));
+    //     visited.add("0, 0");
+
+
+    //     while(!minHeap.isEmpty() && kPairsWithSmallestSums.size() < k){
+    //         Pair tempPair = minHeap.poll();
+    //         int pointer1 = tempPair.p1;
+    //         int pointer2 = tempPair.p2;
+
+    //         kPairsWithSmallestSums.add(new ArrayList<>(Arrays.asList(nums1[pointer1], nums2[pointer2])));
+
+    //         if(pointer1 + 1 < nums1.length && visited.add((pointer1 + 1) + ", " + pointer2)){
+    //             minHeap.add(new Pair(pointer1 + 1, pointer2, nums1[pointer1 + 1], nums2[pointer2]));
+    //         }
+    //         if(pointer2 + 1 < nums2.length && visited.add(pointer1 + ", " + (pointer2 + 1))){
+    //             minHeap.add(new Pair(pointer1, pointer2 + 1, nums1[pointer1], nums2[pointer2 + 1]));
+    //         }
+
+    //     }
+    //     return kPairsWithSmallestSums;
+
+       
+
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // // intuition 1 (TLE): use a priorityQueue of max length k with a comparator of smallest (u + v). 
+    // // Keep adding elements for each possible combination using double for loop (though this part could be optimized)
+    
+    // public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    //     // PriorityQueue<int[]> pq = new PriorityQueue<>((b, a) -> Integer.compare(a[0] + a[1], b[0] + b[1]));  // maxHeap
+    //     PriorityQueue<List<Integer>> pq = new PriorityQueue<>((b, a) -> 
+    //     Integer.compare(a.get(0) + a.get(1), b.get(0) + b.get(1)));  // maxHeap
+    //     // try updating this with list instead of array
+    //     List<List<Integer>> ans = new ArrayList<>();
+    //     for(int i = 0; i < nums1.length; i ++){
+    //         for(int j = 0; j < nums2.length; j ++){
+    //             pq.offer(new ArrayList<>(List.of(nums1[i], nums2[j])));
+    //             if(pq.size() > k){
+    //                 pq.poll();
+    //             }
+    //         }
+
+    //     }
+
+    //     for(int i2 = 0; i2 < k; i2 ++){
+    //         // int[] temp = pq.poll();
+    //         // ans.add(Arrays.asList(temp[0], temp[1]));
+    //         ans.add(pq.poll());
+    //     }
+    //     return ans;
+    // }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+    // intuition 2 (after seeing the editorial): use the already sorted arrays to your advantage and only traverse
+    // necessary pairs. 
+
+    //At each step, we chose the minimum sum pair from the remaining leftover pairs and the next two new pairs.
+    //The answer will not be present outside of these pairs being considered only because the arrays are sorted. 
+    // We repeat this process until we get k pairs.
+    
+//     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+
+//         int nums1Len = nums1.length;
+//         int nums2Len = nums2.length;
+
+//         List<List<Integer>> ans = new ArrayList<>();
+
+//         Set<Pair<Integer, Integer>> visited = new HashSet<>(); // storing a dedicated two-element tuple type (Pair<K,V>). 
+//         // It can only ever hold exactly two things (a “first” and a “second”), and its whole purpose is to model a pair.
+
+//         PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> (a[0] - b[0])); // sort based on sum of nums 
+//         // (first element of a and b int arrays)
+        
+//         minHeap.offer(new int[]{nums1[0] + nums2[0], 0, 0});
+//         visited.add(new Pair<Integer, Integer>(0, 0));
+
+//         while(k > 0 && !minHeap.isEmpty()){
+//             int[] top = minHeap.poll();
+
+//             int i = top[1]; // format of top array -> sum, nums1 index, nums2 index
+//             int j = top[2];
+
+//             ans.add(List.of(nums1[i], nums2[j]));
+
+//             if(i + 1 < nums1Len && !visited.contains(new Pair<Integer, Integer>(i + 1, j))){
+//                 minHeap.offer(new int[]{nums1[i + 1] + nums2[j], i + 1, j});
+//                 visited.add(new Pair<Integer, Integer>(i + 1, j));
+//             } 
+                // Keep adding probable pairs to minHeap in the hope that one of them might get utilized in the future
+                // when all other pairs are giving higher sums than that particular pair
+//             if(j + 1 < nums2Len && !visited.contains(new Pair<Integer, Integer>(i, j + 1))){
+//                 minHeap.offer(new int[]{nums1[i] + nums2[j + 1], i, j + 1});
+//                 visited.add(new Pair<Integer, Integer>(i, j + 1));
+//             }
+//             k --;
+
+//         }
+//         return ans;
+
+
+//     }
+// }
+
+////////////////////////////////////////////////////////////////////////////////
+// understand the below solution (copied) -> Also try to to look at more optimized solutions and observe what they exactly did to reduce time complexity
+
+/*
+class Solution {
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        PriorityQueue<Pair> minHeap = new PriorityQueue<>((a,b) -> a.sum - b.sum);
+        Set<String> visited = new HashSet<>();
+
+        //we're going to do BFS traversal using priorityQueue(minHeap)(Basically we're simulating dikstra's algo)
+        minHeap.offer(new Pair(0, 0, nums1[0], nums2[0]));
+        visited.add("0,0");
+
+        while(!minHeap.isEmpty() && result.size() != k){
+            Pair curr = minHeap.poll();
+            int i = curr.i, j = curr.j;
+            result.add(Arrays.asList(nums1[i],nums2[j]));
+            if(i+1 < nums1.length && visited.add((i+1)+","+j)) minHeap.offer(new Pair(i+1, j, nums1[i+1], nums2[j]));
+            if(j+1 < nums2.length && visited.add(i+","+(j+1))) minHeap.offer(new Pair(i, j+1, nums1[i], nums2[j+1]));
+        }
+
+        return result;
+    }
+
+    static class Pair{
+        int i, j, num1, num2, sum;
+        Pair(int i, int j, int num1, int num2){
+            this.i = i;
+            this.j = j;
+            this.num1 = num1;
+            this.num2 = num2;
+            this.sum = num1+num2;
+        }
+    }
+}
+*/
+
+/* More optimal solution through we don't have to use the set to prevent duplicates(it's time consuming). We can prevent it by first pushing first k elements of nums1 mapped with the 0th element of nums2 in the minHeap.
+*/
+
+// class Solution {
+//     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+
+//         List<List<Integer>> result = new ArrayList<>();
+//         PriorityQueue<Pair> minHeap = new PriorityQueue<>((a,b) -> a.sum - b.sum);
+
+
+//         //we're going to do BFS traversal using priorityQueue(minHeap)(Basically we're simulating dikstra's algo)
+//         for(int i = 0; i < Math.min(k, nums1.length); i++){ //pushing first k of nums1
+//             minHeap.offer(new Pair(i, 0, nums1[i], nums2[0]));
+//         }
+
+
+//         while(!minHeap.isEmpty() && result.size() != k){
+//             Pair curr = minHeap.poll();
+//             int i = curr.i, j = curr.j;
+//             result.add(Arrays.asList(nums1[i], nums2[j]));
+//             if(j+1 < nums2.length) minHeap.offer(new Pair(i, j+1, nums1[i], nums2[j+1]));
+//         }
+
+//         return result;
+//     }
+
+//     static class Pair{
+//         int i, j, num1, num2, sum;
+//         Pair(int i, int j, int num1, int num2){
+//             this.i = i;
+//             this.j = j;
+//             this.num1 = num1;
+//             this.num2 = num2;
+//             this.sum = num1+num2;
+//         }
+//     }
+}
+
+
+
+
+
+
+
+
+
+
+
