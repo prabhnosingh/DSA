@@ -10,21 +10,40 @@
  */
 class Solution {
 
+
     //Re-solving on 22 Nov 2025:
 
-    //intuition 3: Have a helper function that merges two lists and returns the merged list. Pass two lists at a time 
-    //the main function 
+    //intuition 4 (Divide and Conquer - Merge Sort): Have a helper function that merges two lists and returns the merged list.
+    //Pass two lists at a time the main function. Have a mergedList arraylist that stores the returned values from helper
+    //function and then convertes
     public ListNode mergeKLists(ListNode[] lists) {
         
         if(lists.length == 0) return null;
+        if(lists.length == 1) return lists[0];
 
-        ListNode ansList = lists[0];
-        for(int i = 1; i < lists.length; i ++){
-            ansList = mergeTwoLists(ansList, lists[i]);
+        
+        List<ListNode> listsArray = new ArrayList<>();
+
+        for(ListNode list : lists){
+            listsArray.add(list);
         }
 
-        return ansList;
+        while(listsArray.size() > 1){
+            
+            List<ListNode> mergedLists = new ArrayList<>();
+            for(int i = 0; i < listsArray.size(); i += 2){
+                ListNode list1 = listsArray.get(i);
+                ListNode list2 = i + 1 >= listsArray.size() ? null : listsArray.get(i + 1);
 
+                mergedLists.add(mergeTwoLists(list1, list2));
+
+            }
+
+            listsArray = mergedLists; //updating listsArray to mergedLists (reducing the size by half)
+
+        }
+
+        return listsArray.get(0);
 
     }
 
@@ -54,6 +73,50 @@ class Solution {
 
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 22 Nov 2025:
+
+    // //intuition 3: Have a helper function that merges two lists and returns the merged list. Pass two lists at a time 
+    // //the main function 
+    // public ListNode mergeKLists(ListNode[] lists) {
+        
+    //     if(lists.length == 0) return null;
+
+    //     ListNode ansList = lists[0];
+    //     for(int i = 1; i < lists.length; i ++){
+    //         ansList = mergeTwoLists(ansList, lists[i]);
+    //     }
+
+    //     return ansList;
+
+
+    // }
+
+    // private ListNode mergeTwoLists(ListNode list1, ListNode list2){
+    //     // if(list1 == null) return list2;
+    //     if(list2 == null) return list1;
+    //     ListNode mergedList = new ListNode();
+    //     ListNode mergedListPointer = mergedList;
+    //     while(list1 != null && list2 != null){
+    //         if(list1.val <= list2.val){
+    //             mergedListPointer.next = list1;
+    //             list1 = list1.next;
+    //         }
+    //         else{
+    //             mergedListPointer.next = list2;
+    //             list2 = list2.next;
+    //         }
+
+    //         mergedListPointer = mergedListPointer.next;
+    //     }
+
+    //     mergedListPointer.next = list1 == null ? list2 : list1;
+
+    //     return mergedList.next;
+
+
+
+    // }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
