@@ -36,12 +36,13 @@ class Solution{
 
         while(!minHeap.isEmpty() && smallestPairs.size() < k){
             Pair smallestSumPair = minHeap.remove();
-            smallestPairs.add(new ArrayList<>(Arrays.asList(smallestSumPair.num1, smallestSumPair.num2)));
+            int idx1 = smallestSumPair.idx1;
+            int idx2 = smallestSumPair.idx2;
+            // smallestPairs.add(new ArrayList<>(Arrays.asList(smallestSumPair.num1, smallestSumPair.num2)));
+            smallestPairs.add(new ArrayList<>(Arrays.asList(nums1[idx1], nums2[idx2])));
 
-            if(smallestSumPair.idx2 + 1 < nums2.length){
-                int idx1 = smallestSumPair.idx1;
-                int idx2 = smallestSumPair.idx2 + 1;
-                minHeap.offer(new Pair(idx1, idx2, nums1[idx1], nums2[idx2]));
+            if(idx2 + 1 < nums2.length){
+                minHeap.offer(new Pair(idx1, idx2 + 1, nums1[idx1], nums2[idx2 + 1]));
 
             }
         }
