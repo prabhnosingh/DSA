@@ -13,69 +13,113 @@ class Solution {
 
     //Re-solving on 22 Nov 2025:
 
-    //intuition 4 (Divide and Conquer - Merge Sort) (beats 78%): Have a helper function that merges two lists and returns the merged list.
-    //Pass two lists at a time the main function. Have a mergedList arraylist that stores the returned values from helper
-    //function and then convertes
+    //intuition 5 (minHeap): Initialize minHeap with first nodes (which also is smallest) of each list in lists.
+    //Then remove the smallest of it and add to the ansList and then also offer the smallest.next to minHeap if it
+    //is not null. This way we will always have samllest element from all the lists on top of minheap. 
 
-    //TC: O(nlogk) where n is total nodes and k is the number of lists => total n nodes merged for k lists 
-    //"You never repeatedly merge a large growing list with a small list."
-    //"You merge lists of similar size each round → fewer operations."
+    //The algo is kind of smaller to levelorder traversal in trees
+
+    //TC: O(nlogk): where n is total number of nodes and k is total number of lists. For each insertion and removal
+        //it costs logk and there will be n such operations
+    //SC: O(k): where k is the total number of lists. At any time there will be at max k elements in the minHeap 
+
     public ListNode mergeKLists(ListNode[] lists) {
-        
+
         if(lists.length == 0) return null;
         if(lists.length == 1) return lists[0];
 
-        
-        List<ListNode> listsArray = new ArrayList<>();
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> (a.val - b.val));
 
+        //adding first element (smallest) from each list
         for(ListNode list : lists){
-            listsArray.add(list);
-        }
+            if(list == null) continue;
+            minHeap.offer(list);
+        }   
 
-        while(listsArray.size() > 1){
-            
-            List<ListNode> mergedLists = new ArrayList<>();
-            for(int i = 0; i < listsArray.size(); i += 2){
-                ListNode list1 = listsArray.get(i);
-                ListNode list2 = i + 1 >= listsArray.size() ? null : listsArray.get(i + 1);
-
-                mergedLists.add(mergeTwoLists(list1, list2));
-
-            }
-
-            listsArray = mergedLists; //updating listsArray to mergedLists (reducing the size by half)
-
-        }
-
-        return listsArray.get(0);
-
-    }
-
-    private ListNode mergeTwoLists(ListNode list1, ListNode list2){
-        // if(list1 == null) return list2;
-        if(list2 == null) return list1;
         ListNode mergedList = new ListNode();
         ListNode mergedListPointer = mergedList;
-        while(list1 != null && list2 != null){
-            if(list1.val <= list2.val){
-                mergedListPointer.next = list1;
-                list1 = list1.next;
-            }
-            else{
-                mergedListPointer.next = list2;
-                list2 = list2.next;
-            }
 
+        while(!minHeap.isEmpty()){
+            ListNode currSmallest = minHeap.remove();
+            mergedListPointer.next = currSmallest;
             mergedListPointer = mergedListPointer.next;
+
+            if(currSmallest.next != null){
+                minHeap.offer(currSmallest.next);
+            }
         }
 
-        mergedListPointer.next = list1 == null ? list2 : list1;
-
         return mergedList.next;
-
-
+        
 
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 22 Nov 2025:
+
+    // //intuition 4 (Divide and Conquer - Merge Sort) (beats 78%): Have a helper function that merges two lists and returns the merged list.
+    // //Pass two lists at a time the main function. Have a mergedList arraylist that stores the returned values from helper
+    // //function and then convertes
+
+    // //TC: O(nlogk) where n is total nodes and k is the number of lists => total n nodes merged for k lists 
+    // //"You never repeatedly merge a large growing list with a small list."
+    // //"You merge lists of similar size each round → fewer operations."
+    // public ListNode mergeKLists(ListNode[] lists) {
+        
+    //     if(lists.length == 0) return null;
+    //     if(lists.length == 1) return lists[0];
+
+        
+    //     List<ListNode> listsArray = new ArrayList<>();
+
+    //     for(ListNode list : lists){
+    //         listsArray.add(list);
+    //     }
+
+    //     while(listsArray.size() > 1){
+            
+    //         List<ListNode> mergedLists = new ArrayList<>();
+    //         for(int i = 0; i < listsArray.size(); i += 2){
+    //             ListNode list1 = listsArray.get(i);
+    //             ListNode list2 = i + 1 >= listsArray.size() ? null : listsArray.get(i + 1);
+
+    //             mergedLists.add(mergeTwoLists(list1, list2));
+
+    //         }
+
+    //         listsArray = mergedLists; //updating listsArray to mergedLists (reducing the size by half)
+
+    //     }
+
+    //     return listsArray.get(0);
+
+    // }
+
+    // private ListNode mergeTwoLists(ListNode list1, ListNode list2){
+    //     // if(list1 == null) return list2;
+    //     if(list2 == null) return list1;
+    //     ListNode mergedList = new ListNode();
+    //     ListNode mergedListPointer = mergedList;
+    //     while(list1 != null && list2 != null){
+    //         if(list1.val <= list2.val){
+    //             mergedListPointer.next = list1;
+    //             list1 = list1.next;
+    //         }
+    //         else{
+    //             mergedListPointer.next = list2;
+    //             list2 = list2.next;
+    //         }
+
+    //         mergedListPointer = mergedListPointer.next;
+    //     }
+
+    //     mergedListPointer.next = list1 == null ? list2 : list1;
+
+    //     return mergedList.next;
+
+
+
+    // }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Re-solving on 22 Nov 2025:
