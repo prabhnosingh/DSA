@@ -1,7 +1,7 @@
 class Solution {
     //Re-solving on 22 Nov 2025:
 
-    //intuition 1 (heap): Have a heap and initialize it with all stones. Then remove two stones at a time and
+    //intuition 1 (heap) (beats 22.54%): Have a heap and initialize it with all stones. Then remove two stones at a time and
     //offer back the result of smash (if non-zero). At last return the final result 
     
     public int lastStoneWeight(int[] stones) {
@@ -24,6 +24,33 @@ class Solution {
         return maxHeap.isEmpty() ? 0 : maxHeap.remove();
 
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+    // //Re-solving on 22 Nov 2025:
+
+    // //intuition 1 (heap) (beats 22.54%): Have a heap and initialize it with all stones. Then remove two stones at a time and
+    // //offer back the result of smash (if non-zero). At last return the final result 
+    
+    // public int lastStoneWeight(int[] stones) {
+    //     PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a,b) -> (b-a));
+
+    //     for(int stoneW : stones){
+    //         maxHeap.offer(stoneW);
+    //     }
+
+    //     while(maxHeap.size() > 1){
+    //         int stone1 = maxHeap.remove();
+    //         int stone2 = maxHeap.remove();
+
+    //         int smashResult = stone1 - stone2;
+    //         if(smashResult != 0){
+    //             maxHeap.offer(smashResult);
+    //         }
+    //     }
+
+    //     return maxHeap.isEmpty() ? 0 : maxHeap.remove();
+
+    // }
  
 
 
