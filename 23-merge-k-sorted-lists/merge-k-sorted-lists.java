@@ -14,6 +14,13 @@ class Solution {
 
     //intuition 1: Offer all the elements from each linked list to a min heap. At last
     //construct a final linked list by removing from the min heap
+
+    //We should also insert new independant nodes (without "next" addresses) to avoid any cycle
+    //formation while constructing final linked list as if nodes are passed directly, their
+    //next is also being passed with them, and in some scenarios like lists = [[-2,-1,-1,-1],[]]
+    //where -1 nodes have next of -1 nodes, we can have a case where one of the -1 nodes goes to 
+    //the last of the final list while its next still points to another -1 node that is somewhere
+    //in the middle of the final list.
     public ListNode mergeKLists(ListNode[] lists) {
         PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> (a.val - b.val)); 
         //sort list nodes based on their values 
