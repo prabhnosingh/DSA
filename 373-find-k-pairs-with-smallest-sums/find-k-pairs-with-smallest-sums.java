@@ -7,8 +7,18 @@ class Solution{
 
     //intuition 2 (minHeap): 
         //Have a Pair custom class that takes idx1, idx2, num1, num2 and computes sum = num1 + num2 
-        //Have a minHeap of type Pair and offer it all nums1 elements mapped to nums2[0] element
-        //Then remove the elements from 
+        //Have a minHeap of type Pair with comparator based on Pari.sum and offer it all nums1 elements
+            //mapped to nums2[0] element
+        //Then remove the elements from minHeap and add it to ansList, then check if idx2 is still less than
+            //nums2.length, if yes offer new Pair(idx1, idx2 + 2, nums1[idx1], nums2[idx2 + 1]) to consider
+            //the next combination as well
+        
+        //By following this algo, we ensure that the smallest pair is always on the top to the minHeap.
+
+        //This works as it is guaranteed that the smallest pair will be (0, 0), then it will be either from
+        //(1, 0) or (0, 1). 
+            //If smallest is (1,0) then next will be from either (1,1) (added now) or (2,0) (already there) 
+            //If smallest is (0,1) then next will be from either (1,0) (already there) or (0,2) (added now)
     
     static class Pair{
         int idx1, idx2, num1, num2, sum;
@@ -31,8 +41,10 @@ class Solution{
         List<List<Integer>> smallestPairs = new ArrayList<>();
         PriorityQueue<Pair> minHeap = new PriorityQueue<>((a, b) -> (a.sum - b.sum));       
 
-        // for(int i = 0; i < Math.min(k, nums1.length); i ++){
-        for(int i = 0; i < nums1.length; i ++){
+        // for(int i = 0; i < nums1.length; i ++){ //we only need k pairs, so triming the initializaiton of heap
+        //to first k elements (or even smaller) of nums1 array. This makes sense as we will find our k pairs within
+        //these pairs only
+        for(int i = 0; i < Math.min(k, nums1.length); i ++){
             minHeap.offer(new Pair(i, 0, nums1[i], nums2[0])); //inserting first k or all nums1 elements mapped 
             //to nums2's 0 index element
         }
