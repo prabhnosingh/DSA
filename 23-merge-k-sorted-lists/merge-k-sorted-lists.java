@@ -13,9 +13,13 @@ class Solution {
 
     //Re-solving on 22 Nov 2025:
 
-    //intuition 4 (Divide and Conquer - Merge Sort): Have a helper function that merges two lists and returns the merged list.
+    //intuition 4 (Divide and Conquer - Merge Sort) (beats 78%): Have a helper function that merges two lists and returns the merged list.
     //Pass two lists at a time the main function. Have a mergedList arraylist that stores the returned values from helper
     //function and then convertes
+
+    //TC: O(nlogk) where n is total nodes and k is the number of lists => total n nodes merged for k lists 
+    //"You never repeatedly merge a large growing list with a small list."
+    //"You merge lists of similar size each round → fewer operations."
     public ListNode mergeKLists(ListNode[] lists) {
         
         if(lists.length == 0) return null;
