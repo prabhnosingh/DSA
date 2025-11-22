@@ -57,7 +57,7 @@ class Solution {
                 list2Pointer = list2Pointer.next;
             }
 
-            list1 = newMergedList.next;;
+            list1 = newMergedList.next;
         }
 
         return list1;
