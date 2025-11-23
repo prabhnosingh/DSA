@@ -3,6 +3,10 @@ class Solution {
     //Re-solving on 23 Nov 2025:
 
     //intuition 1: use min-heap based priority queue that have a maximum size of k
+
+    //TC: O(nlogk) where n is the length of nums
+    //SC: O(k)
+    
     public int findKthLargest(int[] nums, int k) {
         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
 
