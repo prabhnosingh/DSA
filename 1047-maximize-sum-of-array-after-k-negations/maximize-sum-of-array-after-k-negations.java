@@ -1,44 +1,130 @@
 class Solution {
 
-    //Solving on 22 Nov 2025
+    //Solving on 23 Nov 2025
 
-    //intuition 2 (beats 5.5%): 
-        //Sort the array
-        //Run for loop and negate each negative or zero number while k > 0, else break
-        //Sort the array
-        //Check if k is odd, if yes then negate the nums[0] number as this is the smallest one
-            //and as the k is odd this number will result in "- nums[0]" irrespective of value of k
-    
+    //intuition 1: Push all elements in a minHeap. This will make the negatives (if any) to
+    //come on the top. Then remove them one by one and change the sign (negate) and decrement
+    //k. Only do this until the top is a negative element. If you encounter the top element as 
+    //positive, break from loop and if remaining k is odd, then change the sign of that smallest
+    //positive number. 
+    //If you encounter 0, then just break the loop. 
+    //Compute the sum and then return.
+      
     
 
-    //TC: O(nlogn) (sorting) 
-    //SC: O(1)
+    //TC:  
+    //SC:  
     public int largestSumAfterKNegations(int[] nums, int k) {
-        Arrays.sort(nums);
-        int sum = 0;
-
-        for(int i = 0; i < nums.length; i ++){
-            if(nums[i] <= 0 && k > 0){
-                nums[i] = -1 * nums[i]; 
-                k --;
-            }
-            else{ //either we have reached positive numbers of k have become zero
-                break;
-            }
-        }
-
-        Arrays.sort(nums);
-
-        if(k % 2 != 0){ //k is odd
-            nums[0] = -1 * nums[0];
-        }
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        int largestSum = 0;
 
         for(int num : nums){
-            sum += num;
+            minHeap.offer(num);
         }
 
-        return sum;
+        while(k > 0){
+            if(minHeap.peek() >= 0){
+                break;
+            }
+            int currNum = minHeap.remove();
+
+            minHeap.offer(currNum * -1);
+            k --;
+
+        }
+
+        if(k % 2 != 0){ //k is odd
+            minHeap.offer(minHeap.remove() * -1);
+        }
+
+        while(!minHeap.isEmpty()){
+            largestSum += minHeap.remove();
+        }
+
+        return largestSum;
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Solving on 22 Nov 2025
+
+    // //intuition 2: 
+    //     //Sort the array
+    //     //Run for loop and negate each negative or zero number while k > 0, else break
+    //     //Sort the array
+    //     //Check if k is odd, if yes then negate the nums[0] number as this is the smallest one
+    //         //and as the k is odd this number will result in "- nums[0]" irrespective of value of k
+    
+    
+
+    // //TC: O(nlogn + n) = O(nlogn) (sorting) 
+    // //SC: O(1)
+    // public int largestSumAfterKNegations(int[] nums, int k) {
+    //     Arrays.sort(nums);
+    //     int sum = 0;
+
+    //     for(int i = 0; i < nums.length; i ++){
+    //         if(nums[i] <= 0 && k > 0){
+    //             nums[i] = -1 * nums[i]; 
+    //             k --;
+    //         }
+    //         else{ //either we have reached positive numbers of k have become zero
+    //             break;
+    //         }
+    //     }
+
+    //     Arrays.sort(nums);
+
+    //     if(k % 2 != 0){ //k is odd
+    //         nums[0] = -1 * nums[0];
+    //     }
+
+    //     for(int num : nums){
+    //         sum += num;
+    //     }
+
+    //     return sum;
+    // }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
