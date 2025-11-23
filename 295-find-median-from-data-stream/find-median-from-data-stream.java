@@ -1,7 +1,7 @@
 
 //Re-solving on 23 Nov 2025
 
-//intuition 2 (beats 13.6%): Maintain two heaps, one min Heap and one max Heap. 
+//intuition 3 (Optimizing intuition 2): Maintain two heaps, one min Heap and one max Heap. 
     //Every time addNum is called add to max heap
     //The remove the top elemnt from maxHeap and add it to the minHeap
     //If minHeap.size() > maxHeap.size(). Remove the top from min and add it to max to
@@ -12,36 +12,85 @@
 
 class MedianFinder {
 
-    PriorityQueue<Integer> first_half;
-    PriorityQueue<Integer> second_half;
+    private PriorityQueue<Integer> small; // max-heap
+    private PriorityQueue<Integer> large; // min-heap
 
     public MedianFinder() {
-        first_half = new PriorityQueue<>((a,b) -> (b-a)); //max Heap
-        second_half = new PriorityQueue<>((a,b) -> (a-b)); //min Heap
+        small = new PriorityQueue<>(Collections.reverseOrder());
+        large = new PriorityQueue<>();
     }
-    
-    public void addNum(int num) {
-        second_half.offer(num);
-        first_half.offer(second_half.remove());
 
-        if(first_half.size() > second_half.size()){
-            second_half.offer(first_half.remove());
+    public void addNum(int num) {
+
+        // Step 1: Always push to max-heap first
+        if (small.isEmpty() || num <= small.peek()) {
+            small.offer(num);
+        } else {
+            large.offer(num);
+        }
+
+        // Step 2: Rebalance heaps (sizes differ by > 1)
+        if (small.size() > large.size() + 1) {
+            large.offer(small.poll());
+        } else if (large.size() > small.size() + 1) {
+            small.offer(large.poll());
         }
     }
-    
+
     public double findMedian() {
-       if(first_half.size() == second_half.size()){ //even numbers
-            return (double)(first_half.peek() + second_half.peek()) / 2;
-       }
-       else{
-        return (double) second_half.peek();
-       }
+        if (small.size() == large.size()) {
+            return (small.peek() + large.peek()) / 2.0;
+        }
+        return small.size() > large.size() ? small.peek() : large.peek();
     }
 
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// //Re-solving on 23 Nov 2025
+
+// //intuition 2 (beats 13.6%): Maintain two heaps, one min Heap and one max Heap. 
+//     //Every time addNum is called add to max heap
+//     //The remove the top elemnt from maxHeap and add it to the minHeap
+//     //If minHeap.size() > maxHeap.size(). Remove the top from min and add it to max to
+//         //maintain the median at top of maxHeap 
+//     //If findMedian is called:
+//         //if both heaps are of equal size, then return average of tops of both heaps
+//         //if the size of maxHeap is greater than minHeap, return top to maxHeap
+
+// class MedianFinder {
+
+//     PriorityQueue<Integer> first_half;
+//     PriorityQueue<Integer> second_half;
+
+//     public MedianFinder() {
+//         first_half = new PriorityQueue<>((a,b) -> (b-a)); //max Heap
+//         second_half = new PriorityQueue<>((a,b) -> (a-b)); //min Heap
+//     }
+    
+//     public void addNum(int num) {
+//         first_half.offer(num);
+//         second_half.offer(first_half.remove());
+
+//         if(second_half.size() > first_half.size()){
+//             first_half.offer(second_half.remove());
+//         }
+//     }
+    
+//     public double findMedian() {
+//        if(first_half.size() == second_half.size()){ //even numbers
+//             return (double)(first_half.peek() + second_half.peek()) / 2;
+//        }
+//        else{
+//         return (double) first_half.peek();
+//        }
+//     }
+
+// }
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // //Re-solving on 23 Nov 2025
 
