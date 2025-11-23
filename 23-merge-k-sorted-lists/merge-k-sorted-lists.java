@@ -11,48 +11,134 @@
 class Solution {
 
 
-    //Re-solving on 22 Nov 2025:
+    //Re-solving on 23 Nov 2025:
 
-    //intuition 5 (minHeap): Initialize minHeap with first nodes (which also is smallest) of each list in lists.
-    //Then remove the smallest of it and add to the ansList and then also offer the smallest.next to minHeap if it
-    //is not null. This way we will always have samllest element from all the lists on top of minheap. 
+    //intuition 1 (min Heap): Have a minheap that keeps listnode with smallest val on top.
 
-    //The algo is kind of smaller to levelorder traversal in trees
+    //First insert all the first ndoes of each list into minheap. 
+    //Then remove the top and add its next (if not null) and make the removed node the next
+    //of mergedListPoitner
 
-    //TC: O(nlogk): where n is total number of nodes and k is total number of lists. For each insertion and removal
-        //it costs logk and there will be n such operations
-    //SC: O(k): where k is the total number of lists. At any time there will be at max k elements in the minHeap 
+    //This way mergedListPoitner will only have smallest elements at any time 
 
     public ListNode mergeKLists(ListNode[] lists) {
-
-        if(lists.length == 0) return null;
-        if(lists.length == 1) return lists[0];
-
         PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> (a.val - b.val));
+        ListNode mergedList = new ListNode(0);
 
-        //adding first element (smallest) from each list
+        ListNode mergedListPointer = mergedList;
+
         for(ListNode list : lists){
             if(list == null) continue;
             minHeap.offer(list);
-        }   
+        }
+       
 
-        ListNode mergedList = new ListNode(0);
-        ListNode mergedListPointer = mergedList;
+       while(!minHeap.isEmpty()){
+            ListNode currSmallestNode = minHeap.remove();
 
-        while(!minHeap.isEmpty()){
-            ListNode currSmallest = minHeap.remove();
-            mergedListPointer.next = currSmallest;
+            mergedListPointer.next = currSmallestNode;
             mergedListPointer = mergedListPointer.next;
 
-            if(currSmallest.next != null){
-                minHeap.offer(currSmallest.next);
+            if(currSmallestNode.next != null){
+                minHeap.offer(currSmallestNode.next);
             }
-        }
 
-        return mergedList.next;
+            
+       }
+
+       return mergedList.next;
         
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 22 Nov 2025:
+
+    // //intuition 5 (minHeap): Initialize minHeap with first nodes (which also is smallest) of each list in lists.
+    // //Then remove the smallest of it and add to the ansList and then also offer the smallest.next to minHeap if it
+    // //is not null. This way we will always have samllest element from all the lists on top of minheap. 
+
+    // //The algo is kind of similar to levelorder traversal in trees
+
+    // //TC: O(nlogk): where n is total number of nodes and k is total number of lists. For each insertion and removal
+    //     //it costs logk and there will be n such operations
+    // //SC: O(k): where k is the total number of lists. At any time there will be at max k elements in the minHeap 
+
+    // public ListNode mergeKLists(ListNode[] lists) {
+
+    //     if(lists.length == 0) return null;
+    //     if(lists.length == 1) return lists[0];
+
+    //     PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> (a.val - b.val));
+
+    //     //adding first element (smallest) from each list
+    //     for(ListNode list : lists){
+    //         if(list == null) continue;
+    //         minHeap.offer(list);
+    //     }   
+
+    //     ListNode mergedList = new ListNode(0);
+    //     ListNode mergedListPointer = mergedList;
+
+    //     while(!minHeap.isEmpty()){
+    //         ListNode currSmallest = minHeap.remove();
+    //         mergedListPointer.next = currSmallest;
+    //         mergedListPointer = mergedListPointer.next;
+
+    //         if(currSmallest.next != null){
+    //             minHeap.offer(currSmallest.next);
+    //         }
+    //     }
+
+    //     return mergedList.next;
+        
+
+    // }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Re-solving on 22 Nov 2025:
