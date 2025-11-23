@@ -2,7 +2,10 @@ class Solution {
  
     //Re-solving on 23 Nov 2025:
 
-    //intuition 1: use min-heap based priority queue that have a maximum size of k
+    //intuition 2 (optimmized): use min-heap based priority queue that have a maximum size of k. If 
+    //the new element is less than the top element (peek) leave that element, don't add it in heap.
+    //If the element is greater than top, then add it in heap while making sure that size is of heap
+    //is still k.
 
     //TC: O(nlogk) where n is the length of nums
     //SC: O(k)
@@ -11,10 +14,17 @@ class Solution {
         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
 
         for(int num : nums){
-            minHeap.offer(num);
-
-            if(minHeap.size() > k){
-                minHeap.remove();
+            if(minHeap.size() < k){
+                minHeap.offer(num);
+            }
+            else if(minHeap.size() == k){
+                if(num < minHeap.peek()){
+                    continue;
+                }
+                else if(num >= minHeap.peek()){
+                    minHeap.remove();
+                    minHeap.offer(num);
+                }
             }
         }
 
@@ -22,6 +32,31 @@ class Solution {
 
 
     }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 23 Nov 2025:
+
+    // //intuition 1 (beats 60%): use min-heap based priority queue that have a maximum size of k
+
+    // //TC: O(nlogk) where n is the length of nums
+    // //SC: O(k)
+    
+    // public int findKthLargest(int[] nums, int k) {
+    //     PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
+
+    //     for(int num : nums){
+    //         minHeap.offer(num);
+
+    //         if(minHeap.size() > k){
+    //             minHeap.remove();
+    //         }
+    //     }
+
+    //     return minHeap.remove();
+
+
+    // }
 
  
  
