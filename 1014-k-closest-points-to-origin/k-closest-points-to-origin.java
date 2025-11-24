@@ -1,54 +1,19 @@
 class Solution {
 
-    //intuition 4(optimizing intuition 2 & 3 ): Have a max heap of size k that takes arraylist of integers and
-    // compares a.get(0)^2 + a.get(0)^2
+    // //intuition 4(optimizing intuition 2 & 3 -> Beats 75%): Have a max heap of size k that takes arraylist of integers and
+    // // compares a.get(0)^2 + a.get(0)^2
 
-    //precomute distance before inserting to heap. 
-
-    //TC: O(nlogn + klogn) = O(nlogn) where n is the number of points 
-    public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare(a[2], b[2]));
-        int[][] kClosest = new int[k][2];
-        int idx = 0;
-        
-        for(int[] point : points){ //O(nlogn)
-            int dist = point[0] * point[0] + point[1] * point[1];
-            minHeap.offer(new int[]{point[0], point[1], dist});
-            
-            // if(maxHeap.size() > k) maxHeap.remove(); //to keept the size upto k only
-        }
-        
-        
-        while(!minHeap.isEmpty() && k > 0){ //O(klogn)
-            int[] currPoint = minHeap.remove();
-
-            
-            kClosest[idx ++] = new int[]{currPoint[0], currPoint[1]};
-            k --;
-        }
-
-        return kClosest;
-
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////KEY FINDING: Why Intuition 2 is slower than Intuition 3:
-    //     //Java’s PriorityQueue is heavily optimized for min-heap, not max-heap. 
-    //     //Max-heap comparator is more expensive
-    //     //Min-heap is more cache-friendly and comparator-friendly in practice:
-    
-    // //Re-solving on 24 Nov 2025:
-
-    // //intuition 3(optimizing intuition 2): Have a max heap of size k that takes arraylist of integers and compares a.get(0)^2 + a.get(0)^2
+    // //precomute distance before inserting to heap. 
 
     // //TC: O(nlogn + klogn) = O(nlogn) where n is the number of points 
     // public int[][] kClosest(int[][] points, int k) {
-    //     PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
+    //     PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare(a[2], b[2]));
     //     int[][] kClosest = new int[k][2];
     //     int idx = 0;
         
     //     for(int[] point : points){ //O(nlogn)
-    //         minHeap.offer(point);
+    //         int dist = point[0] * point[0] + point[1] * point[1];
+    //         minHeap.offer(new int[]{point[0], point[1], dist});
             
     //         // if(maxHeap.size() > k) maxHeap.remove(); //to keept the size upto k only
     //     }
@@ -58,13 +23,50 @@ class Solution {
     //         int[] currPoint = minHeap.remove();
 
             
-    //         kClosest[idx ++] = currPoint;
+    //         kClosest[idx ++] = new int[]{currPoint[0], currPoint[1]};
     //         k --;
     //     }
 
     //     return kClosest;
 
     // }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //KEY FINDING: Why Intuition 2 is slower than Intuition 3:
+        //Java’s PriorityQueue is heavily optimized for min-heap, not max-heap. 
+        //Max-heap comparator is more expensive
+        //Min-heap is more cache-friendly and comparator-friendly in practice:
+    
+    //Re-solving on 24 Nov 2025:
+
+    //intuition 3(optimizing intuition 2 -> Beats 90.64%): Have a max heap of size k that takes arraylist of integers and 
+    // compares a.get(0)^2 + a.get(0)^2
+
+    //TC: O(nlogn + klogn) = O(nlogn) where n is the number of points 
+    public int[][] kClosest(int[][] points, int k) {
+        // PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare((a[0]*a[0] + a[1]*a[1]), (b[0]*b[0] + b[1]*b[1])));
+        int[][] kClosest = new int[k][2];
+        int idx = 0;
+        
+        for(int[] point : points){ //O(nlogn)
+            minHeap.offer(point);
+            
+            // if(maxHeap.size() > k) maxHeap.remove(); //to keept the size upto k only
+        }
+        
+        
+        while(!minHeap.isEmpty() && k > 0){ //O(klogn)
+            int[] currPoint = minHeap.remove();
+
+            
+            kClosest[idx ++] = currPoint;
+            k --;
+        }
+
+        return kClosest;
+
+    }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
