@@ -2,31 +2,62 @@ class Solution {
     
     //Re-solving on 24 Nov 2025:
 
-    //intuition 2(using int[]): Have a max heap of size k that takes arraylist of integers and compares a.get(0)^2 + a.get(0)^2
+    //intuition 3(similar to intuition 2): Have a max heap of size k that takes arraylist of integers and compares a.get(0)^2 + a.get(0)^2
 
-    //TC: O(nlogk) where n is the number of points 
+    //TC: O(nlogk + nlogk + nlogk) where n is the number of points 
     public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((b,a) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
         int[][] kClosest = new int[k][2];
         int idx = 0;
         
         for(int[] point : points){
-            maxHeap.offer(point);
+            minHeap.offer(point);
             
-            if(maxHeap.size() > k) maxHeap.remove(); //to keept the size upto k only
+            // if(maxHeap.size() > k) maxHeap.remove(); //to keept the size upto k only
         }
         
-
-        while(!maxHeap.isEmpty()){
-            int[] currPoint = maxHeap.remove();
+        
+        while(!minHeap.isEmpty() && k > 0){
+            int[] currPoint = minHeap.remove();
 
             
             kClosest[idx ++] = currPoint;
+            k --;
         }
 
         return kClosest;
 
     }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 24 Nov 2025:
+
+    // //intuition 2(using int[]): Have a max heap of size k that takes arraylist of integers and compares a.get(0)^2 + a.get(0)^2
+
+    // //TC: O(nlogk + nlogk + nlogk) where n is the number of points 
+    // public int[][] kClosest(int[][] points, int k) {
+    //     PriorityQueue<int[]> maxHeap = new PriorityQueue<>((b,a) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
+    //     int[][] kClosest = new int[k][2];
+    //     int idx = 0;
+        
+    //     for(int[] point : points){
+    //         maxHeap.offer(point);
+            
+    //         if(maxHeap.size() > k) maxHeap.remove(); //to keept the size upto k only
+    //     }
+        
+
+    //     while(!maxHeap.isEmpty()){
+    //         int[] currPoint = maxHeap.remove();
+
+            
+    //         kClosest[idx ++] = currPoint;
+    //     }
+
+    //     return kClosest;
+
+    // }
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Re-solving on 24 Nov 2025:
