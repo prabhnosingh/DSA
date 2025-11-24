@@ -7,7 +7,7 @@ class Solution {
 
     //TC: O(nlogn + klogn) = O(nlogn) where n is the number of points 
     public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> (a[2] -b[2]));
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare(a[2], b[2]));
         int[][] kClosest = new int[k][2];
         int idx = 0;
         
