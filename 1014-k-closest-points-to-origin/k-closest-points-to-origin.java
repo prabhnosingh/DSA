@@ -3,6 +3,8 @@ class Solution {
     //Re-solving on 24 Nov 2025:
 
     //intuition 2(using int[]): Have a max heap of size k that takes arraylist of integers and compares a.get(0)^2 + a.get(0)^2
+
+    //TC: O(nlogk) where n is the number of points 
     public int[][] kClosest(int[][] points, int k) {
         PriorityQueue<int[]> maxHeap = new PriorityQueue<>((b,a) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
         int[][] kClosest = new int[k][2];
@@ -208,7 +210,7 @@ class Solution {
 
     // //doing with maxheap to reduce TC
 
-    // //TC: O(nlog)
+    // //TC: O(nlogk)
     // //SC:
     // public int[][] kClosest(int[][] points, int k) {
     //     int[][] ans = new int[k][2];
