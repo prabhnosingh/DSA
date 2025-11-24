@@ -44,8 +44,8 @@ class Solution {
 
     //TC: O(nlogn + klogn) = O(nlogn) where n is the number of points 
     public int[][] kClosest(int[][] points, int k) {
-        // PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare((a[0]*a[0] + a[1]*a[1]), (b[0]*b[0] + b[1]*b[1])));
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
+        // PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare((a[0]*a[0] + a[1]*a[1]), (b[0]*b[0] + b[1]*b[1])));
         int[][] kClosest = new int[k][2];
         int idx = 0;
         
