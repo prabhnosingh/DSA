@@ -18,18 +18,24 @@ class Solution {
 
     //a = [[0,1], [1,0], [2,0]]
 
+
+
+    //Optimization: Passing only the sum and not the nums. This will save time in calculating full sum for each newNums.
+    //instead we will just pass newSum = oldSum - oldNum + newNum. This will work as only a single element is being replaced
+    //per ArraySum object
     static class ArraySum{
         int[][] indices;
-        int[] nums;
+        // int[] nums;
         int sum;
-        ArraySum(int[][] indices, int[] nums){
+        // ArraySum(int[][] indices, int[] nums){
+        ArraySum(int[][] indices, int sum){
             this.indices = indices;
-            this.nums = nums;
-            int tempSum = 0;
-            for(int num : nums){
-                tempSum += num;
-            }
-            this.sum = tempSum;
+            // this.nums = nums;
+            // int tempSum = 0;
+            // for(int num : nums){
+            //     tempSum += num;
+            // }
+            this.sum = sum;
         }
 
     }
@@ -44,17 +50,19 @@ class Solution {
         int cols = mat[0].length;
         
         int[][] initialIdxArray = new int[rows][2];
-        int[] initialNumsArray = new int[rows];
-        // StringBuilder idxArrayString = new StringBuilder();
+        // int[] initialNumsArray = new int[rows];
+        int initialSum = 0;
+        StringBuilder idxArrayString = new StringBuilder();
         for(int row = 0; row < rows; row ++){
             initialIdxArray[row] = new int[]{row, 0};
-            initialNumsArray[row] = mat[row][0];
-            // idxArrayString.append(row).append(",").append(0).append(","); //1,0,2,0,
+            // initialNumsArray[row] = mat[row][0];
+            initialSum += mat[row][0];
+
+            idxArrayString.append(row).append(",").append(0).append(","); //1,0,2,0,
             // idxArrayString.append();
         }
-        minHeap.offer(new ArraySum(initialIdxArray, initialNumsArray));
-        // visitedIdxSet.add(idxArrayString.toString());
-        visitedIdxSet.add(Arrays.deepToString(initialIdxArray));
+        minHeap.offer(new ArraySum(initialIdxArray, initialSum));
+        visitedIdxSet.add(idxArrayString.toString());
 
 
         while(k > 1 && !minHeap.isEmpty()){
@@ -62,7 +70,7 @@ class Solution {
 
             int[][] indices = currArraySumObject.indices;
 
-            int[] nums = currArraySumObject.nums; 
+            // int[] nums = currArraySumObject.nums; 
 
             //
             // System.out.print("nums : [");
@@ -78,26 +86,26 @@ class Solution {
                     newIndices[row] = Arrays.copyOf(indices[row], indices[row].length);
                 }
 
-                int[] newNums = Arrays.copyOf(nums, nums.length); //using copyOf to have deep copy and avoid updating 
+                // int[] newNums = Arrays.copyOf(nums, nums.length); //using copyOf to have deep copy and avoid updating 
                 //elements in the original array
 
               
 
                 if(indices[i][1] + 1 < cols){
                     newIndices[i] = new int[]{i, indices[i][1] + 1}; //increasing column by 1
-                    newNums[i] = mat[i][indices[i][1] + 1];
+                    // newNums[i] = mat[i][indices[i][1] + 1];
 
                     // System.out.print("newNums : [");
-                    // StringBuilder idxArrayString2 = new StringBuilder();
-                    // for(int l = 0; l < rows; l ++){
-                    //     idxArrayString2.append(newIndices[l][0]).append(",").append(newIndices[l][1]).append(",");
-                    // }
+                    StringBuilder idxArrayString2 = new StringBuilder();
+                    for(int l = 0; l < rows; l ++){
+                        idxArrayString2.append(newIndices[l][0]).append(",").append(newIndices[l][1]).append(",");
+                    }
                     // System.out.println("]");
-                    // String key = idxArrayString2.toString();
-                    String key = Arrays.deepToString(newIndices);
+                    String key = idxArrayString2.toString();
                     if(!visitedIdxSet.add(key)) continue; 
                     
-                    minHeap.offer(new ArraySum(newIndices, newNums)); 
+                    minHeap.offer(new ArraySum(newIndices, currArraySumObject.sum - mat[indices[i][0]][indices[i][1]] 
+                    + mat[newIndices[i][0]][newIndices[i][1]])); 
                 }
 
                 
