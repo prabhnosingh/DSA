@@ -51,7 +51,7 @@ class Solution {
         for(int row = 0; row < rows; row ++){
             initialIdxArray[row] = new int[]{row, 0};
             initialNumsArray[row] = mat[row][0];
-            idxArrayString.append(row + "," + 0 + ","); //1,0,2,0,
+            idxArrayString.append(row).append(",").append(0).append(","); //1,0,2,0,
             // idxArrayString.append();
         }
         minHeap.offer(new ArraySum(initialIdxArray, initialNumsArray));
