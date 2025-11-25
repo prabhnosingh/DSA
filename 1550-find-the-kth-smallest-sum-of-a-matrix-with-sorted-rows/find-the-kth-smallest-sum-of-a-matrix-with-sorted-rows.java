@@ -66,11 +66,11 @@ class Solution {
             int[] nums = currArraySumObject.nums; 
 
             //
-            System.out.print("nums : [");
-            for(int s = 0; s < nums.length; s ++){
-                System.out.print(nums[s] + ",");
-            }
-            System.out.println("]");
+            // System.out.print("nums : [");
+            // for(int s = 0; s < nums.length; s ++){
+            //     System.out.print(nums[s] + ",");
+            // }
+            // System.out.println("]");
             //
 
             for(int i = 0; i < rows; i ++){
@@ -109,10 +109,10 @@ class Solution {
         }
         int ansSum = 0;
         ansSum = minHeap.peek().sum;
-        while(!minHeap.isEmpty()){
-            ArraySum ans = minHeap.poll();
-            System.out.println(ans.sum);
-        }
+        // while(!minHeap.isEmpty()){
+        //     ArraySum ans = minHeap.poll();
+        //     System.out.println(ans.sum);
+        // }
         return ansSum;
     }
 }
