@@ -21,6 +21,9 @@ class Solution{
             //bounds of second array's length, if no, we insert the object in minHeap
             //0,0, 1,0, 2,0, 3,0 -> 0,1, 1,1, 2,1, 3,1
         //After each poll, add the list of numbers (2 numbers) to the ans list of k smallest pairs
+    //major optimization is of choosing minimum from k and nums1.length while inserting combinations 
+        //of nums1's all elements array with nums2's first element as we only need k initial pairs 
+        //to have our answer
 
     static class Pair{
         int num1, num2, idx1, idx2, sum;
@@ -43,7 +46,9 @@ class Solution{
         List<List<Integer>> kSmallestPairs = new ArrayList<>();
 
         //add all the combinations of nums1 elements with nums2's first element
-        for(int i = 0; i < Math.min(k, nums1.length); i ++){
+        for(int i = 0; i < Math.min(k, nums1.length); i ++){ //major optimization is of choosing minimum
+        //from k and nums1.length while inserting combinations of nums1's all elements array with nums2's
+        // first element as we only need k initial pairs to have our answer
             Pair pairObj = new Pair(nums1[i], nums2[0], i, 0);
             
             minHeap.offer(pairObj);
