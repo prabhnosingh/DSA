@@ -60,7 +60,8 @@ class Solution{
             // int num1 = currSmallestSumPairObj.num1;
             // int num2 = currSmallestSumPairObj.num2;
 
-            kSmallestPairs.add(new ArrayList<>(Arrays.asList(nums1[idx1], nums2[idx2])));
+            // kSmallestPairs.add(new ArrayList<>(Arrays.asList(nums1[idx1], nums2[idx2])));
+            kSmallestPairs.add(Arrays.asList(nums1[idx1], nums2[idx2]));
 
             // int newIdx1 = idx1 + 1;
             int newIdx2 = idx2 + 1;
