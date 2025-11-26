@@ -5,7 +5,7 @@ class Solution{
 
     //Re-solving on 26 Nov 2025
 
-    //intuition 1: Have a custom class, whose each object stores the nums (num1 and num2), 
+    //intuition 1 (without HashSet): Have a custom class, whose each object stores the nums (num1 and num2), 
         //their indices(idx1 and idx2) along with the sum of num1 and num2.
     //Have minHeap that takes the object of this custom class and sorts the objects based on the 
         //sum (obj.sum)
@@ -19,6 +19,7 @@ class Solution{
             //with second array's first (0) index. This will remove the need of a visited Hashset.
             //Then when we pop the smallest object at any time, we check if idx2 + 1 goes out of 
             //bounds of second array's length, if no, we insert the object in minHeap
+            //0,0, 1,0, 2,0, 3,0 -> 0,1, 1,1, 2,1, 3,1
         //After each poll, add the list of numbers (2 numbers) to the ans list of k smallest pairs
 
     static class Pair{
@@ -34,17 +35,22 @@ class Solution{
             this.sum = num1 + num2;
         }
     }
-    //first approach (using visited hashSet)
+    //second approach (without using visited hashSet)
     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
 
         PriorityQueue<Pair> minHeap = new PriorityQueue<>((a,b) -> (a.sum-b.sum));
-        HashSet<String> visited = new HashSet<>();
+        // HashSet<String> visited = new HashSet<>();
         List<List<Integer>> kSmallestPairs = new ArrayList<>();
 
-        Pair initialPairObj = new Pair(nums1[0], nums2[0], 0, 0);
+        //add all the combinations of nums1 elements with nums2's first element
+        for(int i = 0; i < nums1.length; i ++){
+            Pair pairObj = new Pair(nums1[i], nums2[0], i, 0);
+            
+            minHeap.offer(pairObj);
 
-        minHeap.offer(initialPairObj);
-        visited.add(0 + "," + 0); // "0,0"
+        }
+
+        // visited.add(0 + "," + 0); // "0,0"
         
 
         while(kSmallestPairs.size() != k){
@@ -56,14 +62,10 @@ class Solution{
 
             kSmallestPairs.add(new ArrayList<>(Arrays.asList(num1, num2)));
 
-            int newIdx1 = idx1 + 1;
+            // int newIdx1 = idx1 + 1;
             int newIdx2 = idx2 + 1;
 
-            if(newIdx1 < nums1.length && visited.add(newIdx1 + "," + idx2)){ //1,0
-                minHeap.offer(new Pair(nums1[newIdx1], nums2[idx2], newIdx1, idx2));
-            }
-
-            if(newIdx2 < nums2.length && visited.add(idx1 + "," + newIdx2)){ //0,1
+            if(newIdx2 < nums2.length){ //0,1
                 minHeap.offer(new Pair(nums1[idx1], nums2[newIdx2], idx1, newIdx2));
             }
 
@@ -73,6 +75,93 @@ class Solution{
         return kSmallestPairs;
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+    // //Re-solving on 26 Nov 2025
+
+    // //intuition 1 (using HashSet): Have a custom class, whose each object stores the nums (num1 and num2), 
+    //     //their indices(idx1 and idx2) along with the sum of num1 and num2.
+    // //Have minHeap that takes the object of this custom class and sorts the objects based on the 
+    //     //sum (obj.sum)
+    // //Two ways to insert elements in minHeap:
+    //     //First go with inserting all possible combinations while maintaining a visited hashset
+    //         //that will ensure no duplicate indices are added in the minHeap. Start with inserting 
+    //         //0,0 from both arrays and then expanding to next possible indices. 0,0 will lead to 
+    //         //0,1 or 1,0
+
+    //     //Second go with first inserting all possible combinations of all first array's indices 
+    //         //with second array's first (0) index. This will remove the need of a visited Hashset.
+    //         //Then when we pop the smallest object at any time, we check if idx2 + 1 goes out of 
+    //         //bounds of second array's length, if no, we insert the object in minHeap
+    //     //After each poll, add the list of numbers (2 numbers) to the ans list of k smallest pairs
+
+    // static class Pair{
+    //     int num1, num2, idx1, idx2, sum;
+
+    //     Pair(int num1, int num2, int idx1, int idx2){
+    //         this.num1 = num1;
+    //         this.idx1 = idx1;
+
+    //         this.num2 = num2;
+    //         this.idx2 = idx2;
+
+    //         this.sum = num1 + num2;
+    //     }
+    // }
+    // //first approach (using visited hashSet)
+    // public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+
+    //     PriorityQueue<Pair> minHeap = new PriorityQueue<>((a,b) -> (a.sum-b.sum));
+    //     HashSet<String> visited = new HashSet<>();
+    //     List<List<Integer>> kSmallestPairs = new ArrayList<>();
+
+    //     Pair initialPairObj = new Pair(nums1[0], nums2[0], 0, 0);
+
+    //     minHeap.offer(initialPairObj);
+    //     visited.add(0 + "," + 0); // "0,0"
+        
+
+    //     while(kSmallestPairs.size() != k){
+    //         Pair currSmallestSumPairObj = minHeap.poll();
+    //         int idx1 = currSmallestSumPairObj.idx1;
+    //         int idx2 = currSmallestSumPairObj.idx2;
+    //         int num1 = currSmallestSumPairObj.num1;
+    //         int num2 = currSmallestSumPairObj.num2;
+
+    //         kSmallestPairs.add(new ArrayList<>(Arrays.asList(num1, num2)));
+
+    //         int newIdx1 = idx1 + 1;
+    //         int newIdx2 = idx2 + 1;
+
+    //         if(newIdx1 < nums1.length && visited.add(newIdx1 + "," + idx2)){ //1,0
+    //             minHeap.offer(new Pair(nums1[newIdx1], nums2[idx2], newIdx1, idx2));
+    //         }
+
+    //         if(newIdx2 < nums2.length && visited.add(idx1 + "," + newIdx2)){ //0,1
+    //             minHeap.offer(new Pair(nums1[idx1], nums2[newIdx2], idx1, newIdx2));
+    //         }
+
+    //     }
+        
+
+    //     return kSmallestPairs;
+
+    // }
 
 
 
