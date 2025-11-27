@@ -1,48 +1,47 @@
 class Solution {
 
-    //Solving on 23 Nov 2025
+    //Solving on 27 Nov 2025
 
-    //intuition 1: Push all elements in a minHeap. This will make the negatives (if any) to
-    //come on the top. Then remove them one by one and change the sign (negate) and decrement
-    //k. Only do this until the top is a negative element. If you encounter the top element as 
-    //positive, break from loop and if remaining k is odd, then change the sign of that smallest
-    //positive number. 
-    //If you encounter 0, then just break the loop. 
-    //Compute the sum and then return.
+    //intuition 1: To maximize the sum, we should aim at negating the smallest elements first.
+        //First push all elements in minHeap
+        //Poll and negate all the negative elements until positive element is encountered
+            //If a 0 is encountered, make k = 0;
+            //If not a 0, check if k is an odd number, if yes, negate the top element and push back
+                //to minheap   
+
+
       
     
-
-    //TC:  
-    //SC:  
+ 
+    //TC
     public int largestSumAfterKNegations(int[] nums, int k) {
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
         int largestSum = 0;
 
         for(int num : nums){
             minHeap.offer(num);
         }
 
-        while(k > 0){
-            if(minHeap.peek() >= 0){
+        while(k != 0){
+            if(minHeap.peek() < 0){
+                minHeap.offer(minHeap.poll() * -1);
+            }
+            else{ //if minHeap.peek() >= 0
                 break;
             }
-            int currNum = minHeap.remove();
-
-            minHeap.offer(currNum * -1);
             k --;
-
         }
 
         if(k % 2 != 0){ //k is odd
-            minHeap.offer(minHeap.remove() * -1);
+            minHeap.offer(minHeap.poll() * -1);
         }
 
         while(!minHeap.isEmpty()){
-            largestSum += minHeap.remove();
+            largestSum += minHeap.poll();
         }
 
         return largestSum;
-
     }
 
 
@@ -86,6 +85,94 @@ class Solution {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 23 Nov 2025
+
+//     //intuition 1: Push all elements in a minHeap. This will make the negatives (if any) to
+//     //come on the top. Then remove them one by one and change the sign (negate) and decrement
+//     //k. Only do this until the top is a negative element. If you encounter the top element as 
+//     //positive, break from loop and if remaining k is odd, then change the sign of that smallest
+//     //positive number. 
+//     //If you encounter 0, then just break the loop. 
+//     //Compute the sum and then return.
+
+
+      
+    
+ 
+//     //TC:  nlogn + nlogk + nlogn = O(nlogn)
+//     //SC:  O(n)
+//     public int largestSumAfterKNegations(int[] nums, int k) {
+//         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+//         int largestSum = 0;
+
+//         for(int num : nums){
+//             minHeap.offer(num);
+//         }
+
+//         while(k > 0){
+//             if(minHeap.peek() >= 0){
+//                 break;
+//             }
+//             int currNum = minHeap.remove();
+
+//             minHeap.offer(currNum * -1);
+//             k --;
+
+//         }
+
+//         if(k % 2 != 0){ //k is odd
+//             minHeap.offer(minHeap.remove() * -1);
+//         }
+
+//         while(!minHeap.isEmpty()){
+//             largestSum += minHeap.remove();
+//         }
+
+//         return largestSum;
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 22 Nov 2025
 
     // //intuition 2: 
