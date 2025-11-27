@@ -6,7 +6,7 @@ class Solution {
     //intuition 3 (freq-array): Have a freqency array of size max - min. Store the frequency in relative indices (num - min).
     //Then traverse the freqArray from right to left and decrease k with each non-zero frequency encountered until k becomes <= 0
     
-    //TC: 
+    //TC: O(n)
     public int findKthLargest(int[] nums, int k) {
         
         int maxNum = Integer.MIN_VALUE;
