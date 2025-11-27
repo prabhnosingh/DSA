@@ -1,41 +1,80 @@
 class Solution {
  
+
     //Re-solving on 26 Nov 2025:
 
-    //intuition 2: use minHeap of size of k and adding elements in minHeap only if the current peek element is
-    //smaller
+    //intuition 3 (freq-array): Have a freqency array of size max - min. Store the frequency in relative indices (num - min).
+    //Then traverse the freqArray from right to left and decrease k with each non-zero frequency encountered until k becomes <= 0
     
+    //TC: 
     public int findKthLargest(int[] nums, int k) {
-       
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
+        
+        int maxNum = Integer.MIN_VALUE;
+        int minNum = Integer.MAX_VALUE;
 
         for(int num : nums){
-            if(minHeap.size() < k){
-                minHeap.offer(num);
-            }
-            else{
-                if(num > minHeap.peek()){
-                    minHeap.poll();
-                    minHeap.offer(num);
-                }
-            }
-
-            // if(minHeap.size() > k){
-            //     minHeap.poll();
-            // }
+            maxNum = Math.max(maxNum, num);
+            minNum = Math.min(minNum, num);
         }
 
-        return minHeap.poll();
+        int[] freqArray = new int[maxNum - minNum + 1];
+
+        for(int num : nums){
+            freqArray[num - minNum] ++;
+        }
+
+        for(int i = freqArray.length - 1; i >= 0; i --){
+            k -= freqArray[i];
+
+            if(k <= 0){
+                return i + minNum;
+            }
+        }
+        return 0;
+       
     }
 
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 26 Nov 2025:
+
+//     //intuition 2: use minHeap of size of k and adding elements in minHeap only if the current peek element is
+//     //smaller
+    
+//     //TC: O(nlogk)
+//     //SC: O(k)
+//     public int findKthLargest(int[] nums, int k) {
+       
+//         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
+
+//         for(int num : nums){
+//             if(minHeap.size() < k){
+//                 minHeap.offer(num);
+//             }
+//             else{
+//                 if(num > minHeap.peek()){
+//                     minHeap.poll();
+//                     minHeap.offer(num);
+//                 }
+//             }
+
+//         }
+
+//         return minHeap.poll();
+//     }
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Re-solving on 26 Nov 2025:
 
     // //intuition 1: use minHeap of size of k
     
+    //TC: O(nlogk)
+    //SC: O(k)
     // public int findKthLargest(int[] nums, int k) {
        
     //     PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
