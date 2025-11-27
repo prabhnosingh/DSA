@@ -2,22 +2,54 @@ class Solution {
  
     //Re-solving on 26 Nov 2025:
 
-    //intuition 1: use minHeap of size of k
+    //intuition 2: use minHeap of size of k and adding elements in minHeap only if the current peek element is
+    //smaller
     
     public int findKthLargest(int[] nums, int k) {
        
         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
 
         for(int num : nums){
-            minHeap.offer(num);
-
-            if(minHeap.size() > k){
-                minHeap.poll();
+            if(minHeap.size() < k){
+                minHeap.offer(num);
             }
+            else{
+                if(num > minHeap.peek()){
+                    minHeap.poll();
+                    minHeap.offer(num);
+                }
+            }
+
+            // if(minHeap.size() > k){
+            //     minHeap.poll();
+            // }
         }
 
         return minHeap.poll();
     }
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 26 Nov 2025:
+
+    // //intuition 1: use minHeap of size of k
+    
+    // public int findKthLargest(int[] nums, int k) {
+       
+    //     PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
+
+    //     for(int num : nums){
+    //         minHeap.offer(num);
+
+    //         if(minHeap.size() > k){
+    //             minHeap.poll();
+    //         }
+    //     }
+
+    //     return minHeap.poll();
+    // }
 
 
 
