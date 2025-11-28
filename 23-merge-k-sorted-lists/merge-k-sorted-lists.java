@@ -11,45 +11,123 @@
 class Solution {
 
 
-    //Re-solving on 23 Nov 2025:
+    //Re-solving on 27 Nov 2025:
 
-    //intuition 1 (min Heap): Have a minheap that keeps listnode with smallest val on top.
+    //intuition 1: use a min heap to store the nodes based on their values and then poll and add to 
+        //final list.
 
-    //First insert all the first ndoes of each list into minheap. 
-    //Then remove the top and add its next (if not null) and make the removed node the next
-    //of mergedListPoitner
-
-    //This way mergedListPoitner will only have smallest elements at any time 
+    //Optimized way would be to first add first node of all the sublists and then expand from there 
+        //by adding the next node of current smallest node from minheap 
 
     public ListNode mergeKLists(ListNode[] lists) {
-        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> (a.val - b.val));
+        
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a,b) -> (a.val - b.val));
+        
         ListNode mergedList = new ListNode(0);
+        ListNode currNode = mergedList;
 
-        ListNode mergedListPointer = mergedList;
-
+        //inserting first node from each sub list
         for(ListNode list : lists){
             if(list == null) continue;
             minHeap.offer(list);
         }
-       
+        
+        while(!minHeap.isEmpty()){
+            ListNode currSmallestNode = minHeap.poll();
 
-       while(!minHeap.isEmpty()){
-            ListNode currSmallestNode = minHeap.remove();
-
-            mergedListPointer.next = currSmallestNode;
-            mergedListPointer = mergedListPointer.next;
+            currNode.next = currSmallestNode;
+            currNode = currNode.next;
 
             if(currSmallestNode.next != null){
                 minHeap.offer(currSmallestNode.next);
             }
+        }
 
-            
-       }
-
-       return mergedList.next;
-        
+        return mergedList.next;
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    // //Re-solving on 23 Nov 2025:
+
+    // //intuition 1 (min Heap): Have a minheap that keeps listnode with smallest val on top.
+
+    // //First insert all the first ndoes of each list into minheap. 
+    // //Then remove the top and add its next (if not null) and make the removed node the next
+    // //of mergedListPoitner
+
+    // //This way mergedListPoitner will only have smallest elements at any time 
+
+
+    // //TC: O(nlogK)
+    // //SC: O(k)
+
+
+    // //First explain the solution that takes every node of each list and adds to minHeap. That
+    // //will be inefficient approach that will take TC of O(nlogn) and SC of O(n), then explain
+    // //the current (optimized) approach in the interview
+
+    // public ListNode mergeKLists(ListNode[] lists) {
+    //     PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> (a.val - b.val));
+    //     ListNode mergedList = new ListNode(0);
+
+    //     ListNode mergedListPointer = mergedList;
+
+    //     for(ListNode list : lists){
+    //         if(list == null) continue;
+    //         minHeap.offer(list);
+    //     }
+       
+
+    //    while(!minHeap.isEmpty()){
+    //         ListNode currSmallestNode = minHeap.remove();
+
+    //         mergedListPointer.next = currSmallestNode;
+    //         mergedListPointer = mergedListPointer.next;
+
+    //         if(currSmallestNode.next != null){
+    //             minHeap.offer(currSmallestNode.next);
+    //         }
+
+            
+    //    }
+
+    //    return mergedList.next;
+        
+
+    // }
 
 
 
