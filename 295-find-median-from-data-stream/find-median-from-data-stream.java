@@ -56,7 +56,7 @@ class MedianFinder {
 
     public double findMedian() {
         if(firstHalf.size() == secondHalf.size()){ //even length array
-            return (double) (firstHalf.peek() + secondHalf.peek()) / 2.0;
+            return (double) (firstHalf.peek() + secondHalf.peek()) / 2;
         }
         else{
             if(firstHalf.size() > secondHalf.size()){
