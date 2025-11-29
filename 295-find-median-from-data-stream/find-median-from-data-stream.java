@@ -69,17 +69,30 @@ class MedianFinder {
 
     public double findMedian() {
 
-        if(firstHalf.size() == secondHalf.size()){ //even length array
+        int lenDiff = firstHalf.size() - secondHalf.size();
+
+        if(lenDiff == 0){ //even length array
             return (double) (firstHalf.peek() + secondHalf.peek()) / 2;
         }
         else{
-            if(firstHalf.size() > secondHalf.size()){
+            if(lenDiff > 0){
                 return (double) firstHalf.peek();
             }
             else{
                 return (double) secondHalf.peek();
             }
         }
+        // if(firstHalf.size() == secondHalf.size()){ //even length array
+        //     return (double) (firstHalf.peek() + secondHalf.peek()) / 2;
+        // }
+        // else{
+        //     if(firstHalf.size() > secondHalf.size()){
+        //         return (double) firstHalf.peek();
+        //     }
+        //     else{
+        //         return (double) secondHalf.peek();
+        //     }
+        // }
 
     }
        
