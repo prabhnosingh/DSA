@@ -1,13 +1,18 @@
 
 //Re-solving on 28 Nov 2025
 
-//intuition 2: Have two heaps (one minHeap(secondHalf) and one maxHeap(firstHalf)). This way the median 
+//intuition 3: Have two heaps (one minHeap(secondHalf) and one maxHeap(firstHalf)). This way the median 
 //will be on the top of either (odd) or both (even) the heaps.
 
-//Everytime we add a number, check if first half is empty or the currNum is smaller than equal to the peek
-    //of first half, if yes, add the number to firstHalf. Else add the number to second half.
+//Everytime we add a number, check if firstHalf and second half are both empty:
+    //If they both are non-empty then:
+        //if the num is greater than equal to the top of second half, add the num to second half
+        //if the num is smaller than equal to the top of first half, add the num to the first half
+    //else if one of them is non-empty then:
+        //add the num to first half
 
-//The rebalance both the heaps. If either of them have a size greater than the other by more than 1 (or
+
+//Then rebalance both the heaps. If either of them have a size greater than the other by more than 1 (or
     //>= 2), shift the top element from the greater heap to the smaller heap
 
 //In case of findMedian, if the size of both the heaps is not same (i.e. current array is of odd length),
@@ -30,11 +35,19 @@ class MedianFinder {
     public void addNum(int num) {
         
         //adding element to either of the heaps
-        if(firstHalf.isEmpty() || firstHalf.peek() >= num){
-            firstHalf.offer(num);
+        if(!firstHalf.isEmpty() && !secondHalf.isEmpty()){
+            if(firstHalf.peek() >= num){
+                firstHalf.offer(num);
+            }
+            // else if(secondHalf.peek() <= num){
+            //     secondHalf.offer(num);
+            // }
+            else {
+                secondHalf.offer(num);
+            }
         }
         else{
-            secondHalf.offer(num);
+            firstHalf.offer(num);
         }
 
         //rebalancing: this is required as we cannot let one of the heaps to grow in size while
@@ -55,6 +68,9 @@ class MedianFinder {
     }
 
     public double findMedian() {
+        System.out.println("f peek: " + firstHalf.peek());
+        System.out.println("s peek: " + secondHalf.peek());
+        System.out.println();
         if(firstHalf.size() == secondHalf.size()){ //even length array
             return (double) (firstHalf.peek() + secondHalf.peek()) / 2;
         }
@@ -91,6 +107,99 @@ class MedianFinder {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// //Re-solving on 28 Nov 2025
+
+// //intuition 2: Have two heaps (one minHeap(secondHalf) and one maxHeap(firstHalf)). This way the median 
+// //will be on the top of either (odd) or both (even) the heaps.
+
+// //Everytime we add a number, check if first half is empty or the currNum is smaller than equal to the peek
+//     //of first half, if yes, add the number to firstHalf. Else add the number to second half.
+
+// //The rebalance both the heaps. If either of them have a size greater than the other by more than 1 (or
+//     //>= 2), shift the top element from the greater heap to the smaller heap
+
+// //In case of findMedian, if the size of both the heaps is not same (i.e. current array is of odd length),
+//     //return the top of the heap that have greater size. And if the size of both the heaps is 
+//     //same (i.e. current array is of even length), return the average of both the tops
+
+
+
+// class MedianFinder {
+
+//     PriorityQueue<Integer> secondHalf;
+//     PriorityQueue<Integer> firstHalf; 
+   
+
+//     public MedianFinder() {
+//         secondHalf = new PriorityQueue<>((a,b) -> (a-b));
+//         firstHalf = new PriorityQueue<>((a,b) -> (b-a));
+//     }
+
+//     public void addNum(int num) {
+        
+//         //adding element to either of the heaps
+//         if(firstHalf.isEmpty() || firstHalf.peek() >= num){
+//             firstHalf.offer(num);
+//         }
+//         else{
+//             secondHalf.offer(num);
+//         }
+
+//         //rebalancing: this is required as we cannot let one of the heaps to grow in size while
+//         //the other one remains lesser in size. This will ensure our median finding logic works.
+//         if(firstHalf.size() > secondHalf.size() + 1){
+//         // if(firstHalf.size() >= secondHalf.size() + 2){
+//             secondHalf.offer(firstHalf.poll());
+//         }
+//         else if(secondHalf.size() > firstHalf.size() + 1){ 
+//             // System.out.println(firstHalf.size());
+//             // System.out.println(secondHalf.size());
+//             firstHalf.offer(secondHalf.poll());
+//         }
+
+
+
+      
+//     }
+
+//     public double findMedian() {
+//         if(firstHalf.size() == secondHalf.size()){ //even length array
+//             return (double) (firstHalf.peek() + secondHalf.peek()) / 2;
+//         }
+//         else{
+//             if(firstHalf.size() > secondHalf.size()){
+//                 return (double) firstHalf.peek();
+//             }
+//             else{
+//                 return (double) secondHalf.peek();
+//             }
+//         }
+
+//     }
+       
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // //Re-solving on 28 Nov 2025
 
