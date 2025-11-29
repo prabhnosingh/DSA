@@ -68,8 +68,7 @@ class MedianFinder {
     }
 
     public double findMedian() {
-        System.out.println("f peek: " + firstHalf.peek());
-        System.out.println("s peek: " + secondHalf.peek());
+
         System.out.println();
         if(firstHalf.size() == secondHalf.size()){ //even length array
             return (double) (firstHalf.peek() + secondHalf.peek()) / 2;
