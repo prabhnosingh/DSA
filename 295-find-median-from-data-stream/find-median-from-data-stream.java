@@ -36,14 +36,14 @@ class MedianFinder {
         
         //adding element to either of the heaps
         if(!firstHalf.isEmpty() && !secondHalf.isEmpty()){
-            if(firstHalf.peek() >= num){
-                firstHalf.offer(num);
+            if(secondHalf.peek() <= num){
+                secondHalf.offer(num);
             }
             // else if(secondHalf.peek() <= num){
             //     secondHalf.offer(num);
             // }
             else {
-                secondHalf.offer(num);
+                firstHalf.offer(num);
             }
         }
         else{
