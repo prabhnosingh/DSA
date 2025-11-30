@@ -31,7 +31,7 @@ class Solution {
             }
         }
 
-        return Math.min(candyType.length / 2 , differentCandyTypes);
+        return Math.min(candyType.length / 2, differentCandyTypes);
     }
 
 
