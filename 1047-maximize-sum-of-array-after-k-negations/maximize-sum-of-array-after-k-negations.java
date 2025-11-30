@@ -1,19 +1,17 @@
 class Solution {
 
-    //Solving on 27 Nov 2025
+    //Solving on 30 Nov 2025
 
-    //intuition 1: To maximize the sum, we should aim at negating the smallest elements first.
-        //First push all elements in minHeap
-        //Poll and negate all the negative elements until positive element is encountered
-            //If a 0 is encountered, make k = 0;
-            //If not a 0, check if k is an odd number, if yes, negate the top element and push back
-                //to minheap   
+    //intuition 1: For the sum to be the greatest, we will have to make sure to apply negations to the 
+        //smallest elements first. 
+            //Have a minHeap to store all the elements.
+                //If there are any negatives, negate them and add back to the minHeap
+                //If the peek is a positive, break the loop and check if k is odd, if yes, poll the top
+                    //element, negate it and push it back in the minHeap.
 
-
-      
-    
- 
-    //TC
+            //Then poll all the elements from the minHeap and compute the ansSum
+       
+    //TC:
     public int largestSumAfterKNegations(int[] nums, int k) {
         
         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
@@ -23,24 +21,24 @@ class Solution {
             minHeap.offer(num);
         }
 
-        while(k != 0){
-            if(minHeap.peek() < 0){
-                minHeap.offer(minHeap.poll() * -1);
-            }
-            else{ //if minHeap.peek() >= 0
+
+        while(k > 0){
+            if(minHeap.peek() >= 0){
                 break;
             }
+
+            minHeap.offer(minHeap.poll() * -1);
             k --;
         }
 
-        if(k % 2 != 0){ //k is odd
+        if(k % 2 != 0){
             minHeap.offer(minHeap.poll() * -1);
         }
 
         while(!minHeap.isEmpty()){
             largestSum += minHeap.poll();
         }
-
+        
         return largestSum;
     }
 
@@ -85,6 +83,91 @@ class Solution {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 27 Nov 2025
+
+//     //intuition 1: To maximize the sum, we should aim at negating the smallest elements first.
+//         //First push all elements in minHeap
+//         //Poll and negate all the negative elements until positive element is encountered
+//             //If a 0 is encountered, make k = 0;
+//             //If not a 0, check if k is an odd number, if yes, negate the top element and push back
+//                 //to minheap   
+
+
+      
+    
+ 
+//     //TC: O(nlogn + klogn + nlogn)
+//     public int largestSumAfterKNegations(int[] nums, int k) {
+        
+//         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> (a-b));
+//         int largestSum = 0;
+
+//         for(int num : nums){
+//             minHeap.offer(num);
+//         }
+
+//         while(k != 0){
+//             if(minHeap.peek() < 0){
+//                 minHeap.offer(minHeap.poll() * -1);
+//             }
+//             else{ //if minHeap.peek() >= 0
+//                 break;
+//             }
+//             k --;
+//         }
+
+//         if(k % 2 != 0){ //k is odd
+//             minHeap.offer(minHeap.poll() * -1);
+//         }
+
+//         while(!minHeap.isEmpty()){
+//             largestSum += minHeap.poll();
+//         }
+
+//         return largestSum;
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Solving on 23 Nov 2025
 
 //     //intuition 1: Push all elements in a minHeap. This will make the negatives (if any) to
@@ -99,7 +182,7 @@ class Solution {
       
     
  
-//     //TC:  nlogn + nlogk + nlogn = O(nlogn)
+//     //TC:  nlogn + klogn + nlogn = O(nlogn)
 //     //SC:  O(n)
 //     public int largestSumAfterKNegations(int[] nums, int k) {
 //         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
