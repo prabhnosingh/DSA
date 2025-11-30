@@ -1,32 +1,83 @@
 class Solution {
 
-    //Solving on 29 Nov 2025:
+    //Solving on 30 Nov 2025:
 
-    //intuition 1: Sort the array. There could be two scenarios:
-        //all the numbers are positive or all are negative, in which case max numbers will be on the right 
-            //end of the sorted array.
-        //some numbers are negative and some are positive, in which case take leftmost 2 (least negative) 
-            //and mutliply with rightmost positive.   
+    //intuition 1: To make the product maximum we have to choose numbers that give max product.
+    //Sort the array, if it has negatives, the smallest numbers (big negatives) will be at extreme
+    //left and the largest numbers (big positives) will be at extreme right. 
 
-        //maxProd will be max of the above two scenarios
+    //So we can compute two different products and return the maximum of them:
+        //Two left extreme nums * 1 right extreme nums 
+        //Three right extreme nums 
 
     public int maximumProduct(int[] nums) {
-        Arrays.sort(nums);
+        Arrays.sort(nums);  
+        int nLen = nums.length;
 
-        //case 1
-        int case1Prod = 1;
-        // for(int i = nums.length; i >= 0; i --){
-        //     case1Prod *= nums[i];
-        // }
-        case1Prod = nums[nums.length - 1] * nums[nums.length - 2] * nums[nums.length - 3];
-
-        //case 2
-        int case2Prod = 1;
-        case2Prod = nums[0] * nums[1] * nums[nums.length - 1];
+        int case1Prod = nums[0] * nums[1] * nums[nLen - 1];
+        int case2Prod = nums[nLen - 1] * nums[nLen - 2] * nums[nLen - 3];
 
         return Math.max(case1Prod, case2Prod);
-
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Solving on 29 Nov 2025:
+
+    // //intuition 1: Sort the array. There could be two scenarios:
+    //     //all the numbers are positive or all are negative, in which case max numbers will be on the right 
+    //         //end of the sorted array.
+    //     //some numbers are negative and some are positive, in which case take leftmost 2 (least negative) 
+    //         //and mutliply with rightmost positive.   
+
+    //     //maxProd will be max of the above two scenarios
+
+    // public int maximumProduct(int[] nums) {
+    //     Arrays.sort(nums);
+
+    //     //case 1
+    //     int case1Prod = 1;
+    //     // for(int i = nums.length; i >= 0; i --){
+    //     //     case1Prod *= nums[i];
+    //     // }
+    //     case1Prod = nums[nums.length - 1] * nums[nums.length - 2] * nums[nums.length - 3];
+
+    //     //case 2
+    //     int case2Prod = 1;
+    //     case2Prod = nums[0] * nums[1] * nums[nums.length - 1];
+
+    //     return Math.max(case1Prod, case2Prod);
+
+    // }
 
 
 
