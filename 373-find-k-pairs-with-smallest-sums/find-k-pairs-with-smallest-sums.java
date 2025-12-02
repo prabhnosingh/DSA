@@ -18,9 +18,10 @@ class Solution{
         //Second go with first inserting all possible combinations of all first array's indices 
             //with second array's first (0) index. This will remove the need of a visited Hashset.
             //Then when we pop the smallest object at any time, we check if idx2 + 1 goes out of 
-            //bounds of second array's length, if no, we insert the object in minHeap
+            //bounds of second array's length, if no, we insert the new object (idx1, idx2 + 1) in minHeap
             //0,0, 1,0, 2,0, 3,0 -> 0,1, 1,1, 2,1, 3,1
         //After each poll, add the list of numbers (2 numbers) to the ans list of k smallest pairs
+
     //major optimization is of choosing minimum from k and nums1.length while inserting combinations 
         //of nums1's all elements array with nums2's first element as we only need k initial pairs 
         //to have our answer
