@@ -1,26 +1,20 @@
 class Solution {
+
+    //Re-solving on 02 Dec 2025:
+
+    //intuition 1: At every step we have two options, either to take 1 step or 2 step. 
+        //If we can take 1 step, add 1 to the total ways
+        //If we can take 2 steps add 1 to the total ways
     public int climbStairs(int n) {
-
-        int one = 1;
-        int two = 1;
-        int temp = 0;
-        int i = n - 1;
-        while(i != 0){
-            temp = one;
-            one = one + two;
-            two = temp;
-            i--;
+        if(n == 1) {
+            return 1;
         }
-        return one;
-
-//*********************************************************** */        
-        // int[] dp = new int[n + 1];
-        // dp[n] = 1;
-        // dp[n - 1] = 1;
-
-        // for(int i = n - 2; i >= 0; i-- ){
-        //     dp[i] = dp[i+1] + dp[i+2];
-        // }
-        // return dp[0];
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int i = 3; i <= n; i ++){
+            dp[i] = dp[i - 1] + dp[i -2];
+        }
+        return dp[n];
     }
 }
