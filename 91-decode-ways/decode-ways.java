@@ -1,5 +1,7 @@
 class Solution {
 
+    //The question is similar to "Climbing stairs" question with extra constraints
+
     //Solving 04 Dec 2025:
 
     //intuition 2 (DP):
@@ -53,7 +55,7 @@ class Solution {
             if(twoDigits >= 10 && twoDigits <= 26){
                 dp[i] += dp[i - 2];
             }
-            
+
 
         }
 
