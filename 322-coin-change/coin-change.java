@@ -4,11 +4,11 @@ class Solution {
     //intuition 2 (DP): 
     //Have a dp array that stores minimum number of coins that add up to the amount of that particular index.
     //To compute a dp[i], go through all the available coins in coins array.
-        //dp[i] = Math.min(1 + dp[i - coins[j]])  
+        //dp[i] = Math.min(dp[i], 1 + dp[i - coins[j]])  
 
     public int coinChange(int[] coins, int amount) {
         //dp[i] will give the minimum number of coins that add upto sum i
-        //therefore we will need dp array of size amount + 1
+        //therefore, we will need dp array of size "amount + 1"
 
         if(amount == 0) return 0;
         int[] dp = new int[amount + 1];
@@ -16,23 +16,37 @@ class Solution {
         //initializing each element in dp array with "amount + 1"
             //this works because "amount" is the max number of coins possible to form a sum of "amount" -> when
                 //each coin is of value 1 => "1 * amount = amount"
-        for(int i = 0; i < amount + 1; i ++){
-            dp[i] = amount + 1;
-        }
+        
+        // for(int i = 0; i < amount + 1; i ++){
+        //     dp[i] = amount + 1;
+        // }
+        Arrays.fill(dp, amount + 1);
 
         dp[0] = 0;
-        for(int i = 1; i <= amount; i ++){
-            for(int coin : coins){
-                int remAmount = i - coin;
+        // for(int i = 1; i <= amount; i ++){
+        //     for(int coin : coins){
+        //         int remAmount = i - coin;
 
-                if(remAmount >= 0){
+        //         if(remAmount >= 0){
+        //             dp[i] = Math.min(dp[i], 1 + dp[remAmount]);
+        //         }
+        
+        //     }
+        // }
+        for(int coin : coins){
+            for(int i = coin; i <= amount; i ++){
+                int remAmount = i - coin;
+                
+                //by changing the order of for loops, we don't need the below if condition as remAmount will never go 
+                    //negative as amount (i) starts from coin itself
+                // if(remAmount >= 0){
                     dp[i] = Math.min(dp[i], 1 + dp[remAmount]);
-                }
+                // }
         
             }
         }
 
-        //in case a certain amount is not possible to form with given coins, the value of that in dp will be amount + 1
+        //in case a certain amount is not possible to form with given coins, the value of that in dp will be "amount + 1"
         return dp[amount] == amount + 1 ? -1 : dp[amount];
     }
 
