@@ -1,18 +1,32 @@
 class Solution {
+
+    //This problem is an "Unbounded Knapsack" problem: "Unbounded knapsack is a DP problem where each item can be chosen
+        //unlimited times (i.e., infinite supply), unlike the 0/1 knapsack where each item can be chosen at most once."
+
+
     //Solving on 06 Dec 2025:
     
-    //intuition 2 (DP): Clean version of intuition 2 
+    //intuition 2 (DP : 1D : Bottom up): Clean version of intuition 2 
     //The main problem is to find the minimum number of coins to form the sum "amount". If we subtract coin[0] from amount,
         //then the subproblem is to find the minimum number of coins to form the sum "amount - coins[0]"
 
     //Have a dp array that stores the minimum number of coins required to form the sum equal to the correspoding index of
         //dp array.  
-    //The recurrence equation will be: dp[i] = Math.min(dp[i], 1 + dp[i - coin]) => 1 in "1 + dp[i - coin]" means current coin
+    //"To compute dp[i], we will consider using each coin"
+    //The recurrence relation will be: dp[i] = Math.min(dp[i], 1 + dp[i - coin]) => 1 in "1 + dp[i - coin]" means current coin
         //and dp[i - coin] represents minimum number of coins required for form the remaining sum "i - coin" after subtracting 
         //current coin value  
     
     //Pre-fill the dp array with "amount + 1" value as that is the upper bound (excluded) that any cell in dp array can have.
         //This is possible when there is coin of value 1, and in that case amount * 1 = amount. 
+
+    //"Fill dp with amount + 1 (a value larger than any possible valid answer).":
+        //"Worst case: using coin = 1, amount coins are needed."
+        //"So amount + 1 is safe as “infinity”."
+
+
+    //TC: O(amount * coins.length) => quadratic
+    //SC: O(amoun) => linear
     public int coinChange(int[] coins, int amount) {
         //dp[i] will represent the minimum number of coins required to compute sum of "i" 
         //Therefore, to get the minimum number of coins to form a sum of "amount" we need an array of size "amount + 1"
