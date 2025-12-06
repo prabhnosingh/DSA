@@ -1,4 +1,26 @@
 class Solution {
+
+
+    //❗ Find minimum moves / minimum jumps / minimum steps
+    // → That is almost always solved with BFS, not DP.
+    
+
+    //🧠 This Problem = Graph + BFS
+
+        // Each position is like a node.
+        // Each valid jump (forward/backward) is like an edge.
+
+        // You perform a BFS shortest path search on an implicit graph.
+
+        // That's why the final solution is BFS with a visited matrix.
+
+        // 💡 So what do we call it formally?
+
+        // This is a shortest-path BFS on implicit graph states.
+        // NOT DP.
+            
+    
+    
     //Solving on 06 Dec 2025: 
 
     //intuition 1 (bfs): 
@@ -22,6 +44,10 @@ class Solution {
             //This works as it gives algo to explore all possibilities to converge towards x after tackling
                 //edge values of forbidden, a and b.
         
+        //BFS ensures the first time we hit x, the number of steps is minimal.
+
+        //TC: O(6000 x 2): BFS explores atmost 6000x2 states
+        //SC: O(6000 x 1): Visited array size
     public int minimumJumps(int[] forbidden, int a, int b, int x) {
         Queue<int[]> queue = new ArrayDeque<>();
         boolean[][] visited = new boolean[6000][2];
