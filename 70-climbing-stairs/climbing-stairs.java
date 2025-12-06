@@ -2,30 +2,57 @@ class Solution {
 
     //Re-solving on 05 Dec 2025:
 
-    //intuition 1 (dp array): 
+    //intuition 2 (dp: space optmized): 
     //Total ways to reach top by taking i steps will be the addition of (total ways to reach i - 1 steps) + (total
         //ways to reach i - 2 steps). Because there are two ways to reach ith step:
             //1. Either jump 1 from step i - 1
             //2. Or jump 2 from step i - 2 (jumpt form "i - 2 to i - 1 to i" is already covered in the total ways to jump from i - 1)
     public int climbStairs(int n) {
-        //dp[i] will represent the total ways to climb to top when steps are i
+        if(n == 1 || n == 2) return n;
 
-        int[] dp = new int[n + 1]; 
 
-        // dp[0] = 1;
-        if(n == 1) return 1;
-        dp[1] = 1;
-        dp[2] = 2;
+        int prevPrevStepWays = 1;
+        int prevStepWays = 2;
 
+        int currStepWays = 0;
         for(int i = 3; i < n + 1; i ++){
-            dp[i] += dp[i - 1];
-            dp[i] += dp[i - 2];
+            currStepWays = prevStepWays + prevPrevStepWays; 
 
+            prevPrevStepWays = prevStepWays;
+            prevStepWays = currStepWays;           
         }
 
-        return dp[n];
-
+        return currStepWays;    
     }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 05 Dec 2025:
+
+    // //intuition 1 (dp: array): 
+    // //Total ways to reach top by taking i steps will be the addition of (total ways to reach i - 1 steps) + (total
+    //     //ways to reach i - 2 steps). Because there are two ways to reach ith step:
+    //         //1. Either jump 1 from step i - 1
+    //         //2. Or jump 2 from step i - 2 (jumpt form "i - 2 to i - 1 to i" is already covered in the total ways to jump from i - 1)
+    // public int climbStairs(int n) {
+    //     //dp[i] will represent the total ways to climb to top when steps are i
+
+    //     int[] dp = new int[n + 1]; 
+
+    //     // dp[0] = 1;
+    //     if(n == 1) return 1;
+    //     dp[1] = 1;
+    //     dp[2] = 2;
+
+    //     for(int i = 3; i < n + 1; i ++){
+    //         dp[i] += dp[i - 1];
+    //         dp[i] += dp[i - 2];
+
+    //     }
+
+    //     return dp[n];
+
+    // }
 
 
 
