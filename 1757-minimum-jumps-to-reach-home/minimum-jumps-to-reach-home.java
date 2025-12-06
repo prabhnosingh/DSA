@@ -1,60 +1,60 @@
 class Solution {
-    //Solving on 04 Dec 2025: 
+    //Solving on 06 Dec 2025: 
 
-    //intuition 2 (bfs): 
-        //Use a queue of int[] type to store the next positions possible from the current positions
-            //int[] = {idx, 0(forwards)/1(backwards} => {idx, 0/1}
+    //intuition 1 (bfs): 
+        //Use a queue of int[] type to store the  {pos, 0/1} (0 means forward and 1 means negative)
+        //Explore all the possibilities at all the positions. 
+        //Start with adding {0,0} to the queue and then adding {0 + a, 0} and {0 - b, 1}
+        //Run the for loop for the current size of queue, and poll one element in each iteration while adding
+            //forward and backward jump (only if valid) back to the queue.
+        //Each level (for loop) is considered one jump. Increment jumps after the for loop.
+        //If at any time in the process currPos[0] becomes equal to x, return the jumps.
 
-        //Use a 2D visited set of boolean type to keep track of forward and backward visits
-
+        //Keep track of visited or forbidden positions by adding them to a 2d boolean visited array
     public int minimumJumps(int[] forbidden, int a, int b, int x) {
-        int n = forbidden.length;
-
+        Queue<int[]> queue = new ArrayDeque<>();
         boolean[][] visited = new boolean[6000][2];
-        if(x == 0) return 0;
-
         int jumps = 0;
 
-        //adding indices in forbidden array to the visited set, to avoid visiting them
-        for(int i = 0; i < n; i ++){
-            visited[forbidden[i]][0] = true; //for avoiding travelling forwards 
-            visited[forbidden[i]][1] = true; //for avoiding travelling backwards 
+        for(int forbidIdx : forbidden){
+            visited[forbidIdx][0] = true; //forbidIdx reached from forward jump is already visited
+            visited[forbidIdx][1] = true; //forbidIdx reaced from backward jump is already visited
         }
 
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[]{0, 0});
+        queue.add(new int[]{0,0});
 
-        //a single position consists of idx and direction of travel (idx, 0/1)
-
-        while(queue.size() > 0){
+        while(!queue.isEmpty()){
             int currQueueSize = queue.size();
 
             for(int i = 0; i < currQueueSize; i ++){
                 int[] currPos = queue.poll();
 
-                //checking if the position is already in visited
-                if(visited[currPos[0]][currPos[1]]) continue;
+                if(currPos[0] == x){
+                    return jumps;
+                }
+
+                if(visited[currPos[0]][currPos[1]]){
+                    continue;
+                }
+
 
                 visited[currPos[0]][currPos[1]] = true;
 
-                if(currPos[0] == x) return jumps;
-
-                //6000 is the max possible value for forward moment
                 if(currPos[0] + a < 6000){
                     queue.add(new int[]{currPos[0] + a, 0});
                 }
 
-                //to restrict double backward movement we add backward movement from currPos[0] as well
-                if(currPos[0] - b >= 0 && currPos[1] != 1){ //do not do backward movement if the currPos is already
-                //created by a backward movement, i.e. its currPos[1] is already 1
+                if(currPos[0] - b >= 0 && currPos[1] != 1){ 
                     queue.add(new int[]{currPos[0] - b, 1});
-
                 }
 
+
             }
-            jumps += 1;
+            jumps += 1; 
         }
+
         return -1;
+
 
     }
 
@@ -86,6 +86,93 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 04 Dec 2025: 
+
+//     //intuition 2 (bfs): 
+//         //Use a queue of int[] type to store the next positions possible from the current positions
+//             //int[] = {idx, 0(forwards)/1(backwards} => {idx, 0/1}
+
+//         //Use a 2D visited set of boolean type to keep track of forward and backward visits
+
+//     public int minimumJumps(int[] forbidden, int a, int b, int x) {
+//         int n = forbidden.length;
+
+//         boolean[][] visited = new boolean[6000][2];
+//         if(x == 0) return 0;
+
+//         int jumps = 0;
+
+//         //adding indices in forbidden array to the visited set, to avoid visiting them
+//         for(int i = 0; i < n; i ++){
+//             visited[forbidden[i]][0] = true; //for avoiding travelling forwards 
+//             visited[forbidden[i]][1] = true; //for avoiding travelling backwards 
+//         }
+
+//         Queue<int[]> queue = new ArrayDeque<>();
+//         queue.add(new int[]{0, 0});
+
+//         //a single position consists of idx and direction of travel (idx, 0/1)
+
+//         while(queue.size() > 0){
+//             int currQueueSize = queue.size();
+
+//             for(int i = 0; i < currQueueSize; i ++){
+//                 int[] currPos = queue.poll();
+
+//                 //checking if the position is already in visited
+//                 if(visited[currPos[0]][currPos[1]]) continue;
+
+//                 visited[currPos[0]][currPos[1]] = true;
+
+//                 if(currPos[0] == x) return jumps;
+
+//                 //6000 is the max possible value for forward moment
+//                 if(currPos[0] + a < 5000){
+//                     queue.add(new int[]{currPos[0] + a, 0});
+//                 }
+
+//                 //to restrict double backward movement we add backward movement from currPos[0] as well
+//                 if(currPos[0] - b >= 0 && currPos[1] != 1){ //do not do backward movement if the currPos is already
+//                 //created by a backward movement, i.e. its currPos[1] is already 1
+//                     queue.add(new int[]{currPos[0] - b, 1});
+
+//                 }
+
+//             }
+//             jumps += 1;
+//         }
+//         return -1;
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     // // Solving on 04 Dec 2025: 
