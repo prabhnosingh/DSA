@@ -11,6 +11,17 @@ class Solution {
         //If at any time in the process currPos[0] becomes equal to x, return the jumps.
 
         //Keep track of visited or forbidden positions by adding them to a 2d boolean visited array
+
+        //We choose 6000 as the upper limit due to upperlimit of the constraints:
+            //1 jump forward: 1999
+            //1 jump backward : -1 (out of bounds)
+            //1 jump forward : 3998
+            //1 jump bacward: 1998 (forbidden)
+            //1 jump forward: 5997
+
+            //This works as it gives algo to explore all possibilities to converge towards x after tackling
+                //edge values of forbidden, a and b.
+        
     public int minimumJumps(int[] forbidden, int a, int b, int x) {
         Queue<int[]> queue = new ArrayDeque<>();
         boolean[][] visited = new boolean[6000][2];
