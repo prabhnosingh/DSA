@@ -1,4 +1,7 @@
-class Solution {
+class Solution {    
+    // If in the problem it was allowed 4-direction movement (no revisits in the same path), it would have become a 
+        //"graph path-finding" problem with visited-state tracking, which is solved with backtracking / DFS.
+
 
     //Solving on 08 Dec 2025:
 
