@@ -6,14 +6,17 @@ class Solution {
     //Looks like Backtracking question. But since you know that this was in DP section how can we solve it using DP?
     
     //After forming and exloring a matrix on paper: To reach [m - 1][n - 1] we should know unique paths possible 
-        //to reach [m - 2][n - 1] (top) and [m - 1][n - 2] (left) and then add them together. Therefore, the recurrence
-        //relation would be dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        //to reach [m - 2][n - 1] (top) and [m - 1][n - 2] (left) and then add them together, because to reach 
+        //(m-1, n-1), you can only come from (m-2, n-1) and (m-1)(n-2). Therefore, the recurrence relation would
+        //be dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
     //Now these form our subproblems.
     //Base cases will be to fill top row and leftmost column with 1s, as there is only 1 way to reach at any of these
-        //cells from start.
+        //cells from start. 
+        //First row -> can come only from the left
+        //First col -> can come only from above
     //Then start nested loop from 1,1
     public int uniquePaths(int m, int n) {
-        //dp[i - 1][j - 1] represents unique paths possible to reach i, j position.
+        //dp[i][j] represents unique paths possible to reach i, j position.
         //Therefore, we need m x n matrix in order to get our answer at dp[m - 1][n - 1]
 
 
