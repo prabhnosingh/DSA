@@ -5,13 +5,18 @@ class Solution {
     //intuition 1: To find number of unique paths possible to reach any index i, j we need to know the number of
         //unique paths possible to reach (i-1, j) and (i, j-1) indices and add them together, as any cell can only
         //be reached from left or top. 
-    //After breaking into subproblems, our recurrence relation is: dp[i][j] = dp[i-1][j] + dp[i][j-1], given that
-        //either of the subproblem position is not an obstacle, in which case do not consider that in our addition.
+    //After breaking into subproblems, our recurrence relation is: dp[i][j] = dp[i-1][j] + dp[i][j-1]
 
-    //Have a dp array of same size of obstacleGrid and fill any obstacles with 0 as that particular cell cannot be reached
-        //due to obstacle. Base case is to fill top row and first col with 1. If any of the cells is an 
+    //Have a dp array of same size of obstacleGrid. 
+    //Any cell in obstacleGrid will be filled with 0 in dp, as technically there are no ways to reach that particular cell,
+        //hence 0. 
+    //Base case is to fill top row and first col with 1. If any of the cells is an 
         //obstacle (i.e. 1 in obstacleGrid), we break the loop as any further cells cannot be reached due to obstacle.
- 
+
+    //While iterating over the dp array, we skip the cells that have an obstacle in obstacleGrid. So these cells will remain
+        //as 0 s and if any other cell tries to use their values in order to compute its own number of ways possible, it
+        //will get 0 from here.
+
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
         
         //dp[i][j] represents unique paths possible to reach i, j position
