@@ -1,32 +1,100 @@
 class Solution {
 
-    //Re-solving on 05 Dec 2025:
+    //Re-solving on 11 Dec 2025:
 
-    //intuition 2 (dp: space optmized): 
-    //Total ways to reach top by taking i steps will be the addition of (total ways to reach i - 1 steps) + (total
-        //ways to reach i - 2 steps). Because there are two ways to reach ith step:
-            //1. Either jump 1 from step i - 1
-            //2. Or jump 2 from step i - 2 (jumpt form "i - 2 to i - 1 to i" is already covered in the total ways to jump from i - 1)
+    //intuition 1 (DP): To compute the number of distinct ways to climb to the n level, we can
+        //use the answers for previous 2 levels (n-1 and n-2) as at any time we can take 1 step or
+        //2 steps to reach to current level, so if we add the number of ways to reach the previous 
+        //levels, we will get the total ways to reach the current level.
     public int climbStairs(int n) {
-        if(n == 1 || n == 2) return n;
+           
+        int prevPrev = 1; //level 0
+        int prev = 1; //level 1
 
+        if(n == 1){
+            return prev;
+        }
+        int curr = 0;
+        for(int i = 2; i <=n ; i ++){
+            curr = prevPrev + prev;
 
-        int prevPrevStepWays = 1;
-        int prevStepWays = 2;
-
-        int currStepWays = 0;
-        for(int i = 3; i < n + 1; i ++){
-            currStepWays = prevStepWays + prevPrevStepWays; 
-
-            prevPrevStepWays = prevStepWays;
-            prevStepWays = currStepWays;           
+            prevPrev = prev;
+            prev = curr;
         }
 
-        return currStepWays;    
+        return curr;
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 05 Dec 2025:
+
+//     //intuition 2 (dp: space optmized): 
+//     //Total ways to reach top by taking i steps will be the addition of (total ways to reach i - 1 steps) + (total
+//         //ways to reach i - 2 steps). Because there are two ways to reach ith step:
+//             //1. Either jump 1 from step i - 1
+//             //2. Or jump 2 from step i - 2 (jumpt form "i - 2 to i - 1 to i" is already covered in the total ways to jump from i - 1)
+//     public int climbStairs(int n) {
+//         if(n == 1 || n == 2) return n;
+
+
+//         int prevPrevStepWays = 1;
+//         int prevStepWays = 2;
+
+//         int currStepWays = 0;
+//         for(int i = 3; i < n + 1; i ++){
+//             currStepWays = prevStepWays + prevPrevStepWays; 
+
+//             prevPrevStepWays = prevStepWays;
+//             prevStepWays = currStepWays;           
+//         }
+
+//         return currStepWays;    
+//     }
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Re-solving on 05 Dec 2025:
 
     // //intuition 1 (dp: array): 
