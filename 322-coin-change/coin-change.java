@@ -36,6 +36,7 @@ class Solution {
 
         int[][] dp = new int[rows][cols];
 
+        //filling first column with 0s as we need minimum 0 coins to make 0 amount
         for(int i = 0; i < rows; i ++){
             dp[i][0] = 0;
         }
@@ -132,9 +133,9 @@ class Solution {
 //         //We will have to fill all the cells in the dp matrix in order to get our answer at the last index dp[coinsLen][amount]
 
 //         //We have two choices, either to pick or not pick the current coin
-//             //If we pick the current coin (i - 1), we have total of i coins and (j - coins[i - 1]) amount to make. So 
+//             //If we pick the current coin (i-1th coin in coins), we have total of i coins and (j - coins[i - 1]) amount to make. So 
 //                 //the recurrence relation in this case will be dp[i][j] = 1 (for choosing current coin) + dp[i][j - coins[i - 1]]
-//             //If we do not pick the current coin (i), we will have i - 1 coins to make j amount. That means dp[i - 1][j]
+//             //If we do not pick the current coin (i), we will have i - 1 coins to make j amount. That means we need dp[i - 1][j]
 //                 //number of coins to make j amount.
 //         //We will chose the minimum from pick and not pick as a value for dp[i][j]
         
@@ -159,7 +160,7 @@ class Solution {
 //                     // i because we are picking the current coin for our calculations
 //                     // j - coins[i - 1] because after picking current coin (at index i - 1 in coins array), we will be left
 //                         //with "j - that_coin's_value" and dp[i][j - coins[i - 1]] will give us the minimum number of coins 
-//                         //required acheive "j - coins[i - 1]" after chosing "i" coins. i here represents the number of coins
+//                         //required acheive "j - coins[i - 1]" amount after chosing "i" coins. i here represents the number of coins
 //                         //choosen from coins array from left to right
                         
 //                 }
@@ -341,7 +342,7 @@ class Solution {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 06 Dec 2025:
     
-    // //intuition 1 (DP):
+    // //intuition 1 (DP): DID NOT WORK
     // //Have a hashmap to know if you have a particular coin or not. 
     // //Have 2 dp arrays, one for modulus and one for division.
     // //In modulus array, store the modulus of each coin with amount
