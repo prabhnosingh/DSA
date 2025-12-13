@@ -8,6 +8,15 @@ class Solution {
             //Doing nothing is one way
         //dp[0][0] is 1
 
+        //Recurrence relation: 
+            //We have two choices, either to pick the current coin or not pick it.
+                //if we pick the current coin we can reuse the coin again but the remaning amount reduces by coin's value
+                    //dp[i][j - coins[i - 1]]
+                //if we do not pick the current coin we can keep the amount unchanged and total combinations from previous
+                    //i with same amount => dp[i - 1][j]
+
+            // Therefore, total number of combinations are dp[i][j] = dp[i][j - coins[i - 1]] + dp[i - 1][j]
+
     public int change(int amount, int[] coins) {
         //dp[i][j] represents the number of ways to form j amount of money with i coins
 
@@ -32,10 +41,10 @@ class Solution {
                     dp[i][j] = dp[i - 1][j]; //cannot choose current coin
                 }
                 else{
-                    int pick = dp[i][j - coins[i - 1]];
-                    int notPick = dp[i - 1][j];
+                    int pick = dp[i][j - coins[i - 1]]; //number of combinations if we pick the coin
+                    int notPick = dp[i - 1][j]; //number of combinations if we don't pick the coin
 
-                    dp[i][j] = pick + notPick;
+                    dp[i][j] = pick + notPick; //total number of ways to form j amount given i coins
                 }
             }
         }
