@@ -32,14 +32,14 @@ class Solution {
 
         //base cases
         //filling first row
-        // for(int j = 0; j < cols; j ++){
-        //     dp[0][j] = 0;
-        // }
+        for(int j = 0; j < cols; j ++){
+            dp[0][j] = 0;
+        }
 
-        // //filling first col
-        // for(int i = 0; i < rows; i ++){
-        //     dp[i][0] = 0;
-        // }
+        //filling first col
+        for(int i = 0; i < rows; i ++){
+            dp[i][0] = 0;
+        }
 
 
         for(int i = 1; i < rows; i ++){
