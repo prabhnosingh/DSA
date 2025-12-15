@@ -2,7 +2,7 @@ class Solution {
 
     //Solving on 14 Dec 2025:
 
-    //intuition 1 (DP : 2D: Bottom-Up Tabulation Solution: DP on strings patter)
+    //intuition 1 (DP : 2D: Bottom-Up Tabulation Solution: DP on strings pattern / DP on prefixes of strings)
         //Base cases:
             //Fill first row with 0: This is true as given 0 length of text1, the 
                 //only possible LCS is an empty string and hence, 0
@@ -13,8 +13,8 @@ class Solution {
                 //to finding LCS from both of the remaining strings after not considering
                 //the matching character. => dp[i][j] = 1 + dp[i-1][j-1]
             //If current character from both the strings does not match, then we have two scenarios:
-                //1. Skip the current character from text1 and look for LCS in remaining text1 with original text2
-                //2. Skip the current character from text2 and look for LCS in remaining text2 with original text1
+                //1. Skip the current character from text1 and look for LCS in remaining text1 (reduced by 1) with original text2
+                //2. Skip the current character from text2 and look for LCS in remaining text2 (reduced by 1) with original text1
                 //And then take the max out of these two as we need LCS
             //=> dp[i][j] = Math.max(dp[i-1][j](reducing text1 length), dp[i][j-1](reducing text2 length))
 
