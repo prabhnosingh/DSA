@@ -31,11 +31,21 @@ class Solution {
         }
 
         int currNum = nums[currIdx];
-        // "+currNum"
-        int positiveCount = dfs(nums, currIdx + 1, currSum + currNum, target);
+        // // "+currNum"
+        // int positiveCount = dfs(nums, currIdx + 1, currSum + currNum, target);
+        
+        // // "-currNum"
+        // int negativeCount = dfs(nums, currIdx + 1, currSum - currNum, target);
+        
+        
+        currSum = currSum + currNum;
+        int positiveCount = dfs(nums, currIdx + 1, currSum, target);
+        currSum = currSum - currNum;
 
-        // "-currNum"
-        int negativeCount = dfs(nums, currIdx + 1, currSum - currNum, target);
+
+        currSum = currSum - currNum;
+        int negativeCount = dfs(nums, currIdx + 1, currSum, target);
+        currSum = currSum + currNum;
 
         return positiveCount + negativeCount;
     }
