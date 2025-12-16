@@ -48,7 +48,7 @@ class Solution {
         dfs(chArray, currIdx + 1, letterCasePerms);
 
         //revertin: restoring the state
-        chArray[currIdx] = tempChar;
+        // chArray[currIdx] = tempChar;
 
        
     }
