@@ -11,6 +11,8 @@ class Solution {
         //recurse
         
         //revert
+
+        //"Backtracking works only if every recursive call leaves the state exactly as it found it."
     public List<String> letterCasePermutation(String s) {
         List<String> letterCasePerms = new ArrayList<>();
 
@@ -31,6 +33,9 @@ class Solution {
         //without mutation: no change branch
         dfs(chArray, currIdx + 1, letterCasePerms);
 
+        //saving the state
+        char tempChar = chArray[currIdx];
+
         if(Character.isLowerCase(chArray[currIdx])){
             chArray[currIdx] = Character.toUpperCase(chArray[currIdx]);
         }
@@ -41,6 +46,9 @@ class Solution {
 
         //changing the case of current character and moving to next character (i + 1)
         dfs(chArray, currIdx + 1, letterCasePerms);
+
+        //revertin: restoring the state
+        chArray[currIdx] = tempChar;
 
        
     }
