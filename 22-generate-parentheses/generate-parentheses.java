@@ -36,25 +36,48 @@ class Solution {
         if(n != openCount){
             //open a parentheses    
             currComb.append('(');
-            openCount += 1;
+            // openCount += 1;
             
-            dfs(n, currComb, combs, openCount, closeCount);
+            dfs(n, currComb, combs, openCount + 1, closeCount);
             
             currComb.setLength(currComb.length() - 1);
-            openCount -= 1;
+            // openCount -= 1;
 
         }
 
         if(n != closeCount && closeCount < openCount){
             currComb.append(')');
-            closeCount += 1;
+            // closeCount += 1;
 
-            dfs(n, currComb, combs, openCount, closeCount);
+            dfs(n, currComb, combs, openCount, closeCount + 1);
         
             currComb.setLength(currComb.length() - 1);
-            closeCount -= 1;
+            // closeCount -= 1;
         
         }
+        
+        // if(n != openCount){
+        //     //open a parentheses    
+        //     currComb.append('(');
+        //     openCount += 1;
+            
+        //     dfs(n, currComb, combs, openCount, closeCount);
+            
+        //     currComb.setLength(currComb.length() - 1);
+        //     openCount -= 1;
+
+        // }
+
+        // if(n != closeCount && closeCount < openCount){
+        //     currComb.append(')');
+        //     closeCount += 1;
+
+        //     dfs(n, currComb, combs, openCount, closeCount);
+        
+        //     currComb.setLength(currComb.length() - 1);
+        //     closeCount -= 1;
+        
+        // }
     }
 
 
