@@ -3,7 +3,9 @@ class Solution {
 
     //intuition 1: Backtracking 
         //We have two options at each stage change the case of current character or skip it without changing the case.
-        //Use dfs backtracking and toggle back the charcter to original case
+        //Use dfs backtracking and toggle back the charcter to original case. 
+        //Numbers should only be backtracked through "no change branch" as there is no case to change in numbers
+        //Letters → 2 choices Digits → 1 choice
 
         //“At index currIdx, what choices do I have?”
         //mutate
@@ -48,7 +50,7 @@ class Solution {
         dfs(chArray, currIdx + 1, letterCasePerms);
 
         //revertin: restoring the state
-        // chArray[currIdx] = tempChar;
+        chArray[currIdx] = tempChar;
 
        
     }
