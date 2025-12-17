@@ -1,1 +1,1 @@
-<h2>unique-paths-ii Notes</h2><hr>[ Time taken: 23 m 17 s ]
+<h2>unique-paths-ii Notes</h2><hr>[ Time taken: 22 m 9 s ]
