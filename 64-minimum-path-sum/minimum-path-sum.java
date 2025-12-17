@@ -1,50 +1,51 @@
 class Solution {
 
-    //Solving on 14 Dec 2025:
+    //Solving on 17 Dec 2025:
 
-    //intuition 1: 2D DP : Bottom up Tabulation : Answer at 0,0
-        //As we can only move down or right, there are only two ways to approach any cell, from top or from left.
+    //intuition 1: 2D DP : Bottom up Tabulation : DP on grid pattern : Answer at 0,0
         
-        //Base cases:
-            //In last row we can only move right and in last col we can only move down, so fill them by adding 
-                //the previous sum stored in dp array.
-             
-        //Recurrence relation: 
-            //dp[i][j] = grid[i][j] + Math.min(dp[i + 1][j](down), dp[i][j + 1](up))
+        //Recurrence relation:
+            //We can only travel right or down, so to find minimum path sum for any cell i,j we
+                //can make the decision to choose one path that is minimum from right or down neighboring
+                //cells from dp grid and add that to the current cell number from original grid.
+            //=> dp[i][j] = grid[i][j] + Math.min(dp[i+1][j](down), dp[i][j+1](right))
+        //Base case:
+            //For last row we can only travel right as down will lead us to out of bounds. So, we just 
+                //add the numbers from right to left, starting from rows-1, cols-1
+            //For last col we can only travel down as right will lead us to out of bounds. So, we just
+                //add the numbers from bottom to top, starting from rows-1, cols-1
 
     public int minPathSum(int[][] grid) {
-        //dp[i][j] represents the minimum path sum possible from i, j to bottom right m-1, n-1
-        //dp[0][0] will represent the minimum path sum possible from 0,0 to bottom right m-1, n-1
-        //Therefore, we need a 2D matrix of size m x n
-        
+        //dp[i][j] represents the minimum path sum from i, j to bottom right while only travelling down and right
+        //dp[0][0] will represent the minimum path sum from 0,0 to bottom right while only travelling down and right
+        //The maximum index cell that we will reach is gridRows-1, gridCols - 1. Therefore, we need a matrix of size
+            //gridRows x gridCols
+
         int rows = grid.length;
         int cols = grid[0].length;
 
         int[][] dp = new int[rows][cols];
 
         //base cases
-        dp[rows - 1][cols - 1] = grid[rows - 1][cols - 1];
+        dp[rows-1][cols-1] = grid[rows-1][cols-1];
 
         //filling last col
-        for(int i = rows - 2; i >=0; i --){
-            dp[i][cols - 1] = dp[i + 1][cols - 1] + grid[i][cols - 1];
-        }
+        for(int i = rows-2; i >= 0; i --){
+            dp[i][cols-1] = grid[i][cols-1] + dp[i+1][cols-1]; 
+        }       
 
         //filling last row
-        for(int j = cols - 2; j >= 0; j --){
-            dp[rows - 1][j] = dp[rows - 1][j + 1] + grid[rows - 1][j];
+        for(int j = cols-2; j >= 0; j --){
+            dp[rows-1][j] = grid[rows-1][j] + dp[rows-1][j+1];
         }
 
-
-        for(int i = rows - 2; i >= 0; i --){
-            for(int j = cols - 2; j >= 0; j --){
-                dp[i][j] = grid[i][j] + Math.min(dp[i + 1][j], dp[i][j + 1]);
+        for(int i = rows-2; i >= 0; i --){
+            for(int j = cols-2; j >= 0; j --){
+                dp[i][j] = grid[i][j] + Math.min(dp[i+1][j], dp[i][j+1]);
             }
-        }
-
+        }   
 
         return dp[0][0];
-
     }
 
 
@@ -75,6 +76,81 @@ class Solution {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 14 Dec 2025:
+
+//     //intuition 1: 2D DP : Bottom up Tabulation : Answer at 0,0
+//         //As we can only move down or right, there are only two ways to approach any cell, from top or from left.
+        
+//         //Base cases:
+//             //In last row we can only move right and in last col we can only move down, so fill them by adding 
+//                 //the previous sum stored in dp array.
+             
+//         //Recurrence relation: 
+//             //dp[i][j] = grid[i][j] + Math.min(dp[i + 1][j](down), dp[i][j + 1](right))
+
+//     public int minPathSum(int[][] grid) {
+//         //dp[i][j] represents the minimum path sum possible from i, j to bottom right m-1, n-1
+//         //dp[0][0] will represent the minimum path sum possible from 0,0 to bottom right m-1, n-1
+//         //Therefore, we need a 2D matrix of size m x n
+        
+//         int rows = grid.length;
+//         int cols = grid[0].length;
+
+//         int[][] dp = new int[rows][cols];
+
+//         //base cases
+//         dp[rows - 1][cols - 1] = grid[rows - 1][cols - 1];
+
+//         //filling last col
+//         for(int i = rows - 2; i >=0; i --){
+//             dp[i][cols - 1] = dp[i + 1][cols - 1] + grid[i][cols - 1];
+//         }
+
+//         //filling last row
+//         for(int j = cols - 2; j >= 0; j --){
+//             dp[rows - 1][j] = dp[rows - 1][j + 1] + grid[rows - 1][j];
+//         }
+
+
+//         for(int i = rows - 2; i >= 0; i --){
+//             for(int j = cols - 2; j >= 0; j --){
+//                 dp[i][j] = grid[i][j] + Math.min(dp[i + 1][j], dp[i][j + 1]);
+//             }
+//         }
+
+
+//         return dp[0][0];
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 10 Dec 2025:
 
     // //intuition 1 (DP: Bottom-Up Solution): 
