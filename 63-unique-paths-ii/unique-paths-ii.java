@@ -32,6 +32,7 @@ class Solution {
 
         //base cases
         if(obstacleGrid[rows-1][cols-1] == 1) return 0;
+        if(obstacleGrid[0][0] == 1) return 0;
 
         dp[rows-1][cols-1] = 1; //there is one way to stay on bottom right cell
 
