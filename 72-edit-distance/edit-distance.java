@@ -1,73 +1,79 @@
 class Solution {
     //Solving on 13 Dec 2025:
 
-    //intuition 1 (DP: Bottom up tabulation: DP on String/DP on prefixes of string pattern)
-        
-        //Base case:
-            //if word1 is empty string, then we need word2.length() operations to make word1 equal to word2 by
-                //adding the characters of word2 in word1, therefore, fill first row with length of word2
-            //if word2 is empty string, then we need word1.length() operations to make word1 equal to word2 by
-                //deleting the characters of word1, therefore, fill first col with length of word1
-        
-        //Recurrence relation:
-        //if(w1.currChar == w2.currChar) then dp[i][j] = dp[i-1][j-1]
-            //reaon: if both the current chars match, then the subproblem is reduced to finding min
-                //operations required to convert word1 - currChar1 to word2 - currChar2
-        //if(w1.currChar != w2.currChar) then we have three options:
-            //1.Replace: If we replace the current chars so that they become equal, it is 1 operation cost
-                //and now the subproblem reduces to finding min ops requrired to covert word1-currChar to
-                //word2-currChar => dp[i][j] = 1 + dp[i-1][j-1]
+    //intuition 1 (DP: Bottom Up Tabulation soultion: DP on strings / DP on prefixes of string pattern)
+        //Recurrence relation: While traversing the dp matrix we have two scenarios
+            //1. The current character of word1 matches with the current character of word2. In this case
+                //we do not need to perform any operation, therefore we take the minimum ops required if 
+                //these matching characters were not added. => dp[i-1][j-1]
             
-            //2.Delete: We can simply delete the current char from word1 in the hope that this will make word1
-                //equal to word2. This will cost 1 operation. Now after reducing word1 length by 1, the subproblem
-                //reduces to finding min ops required to covert word1-currChar to word2. => dp[i][j] = 1 + dp[i-1][j]
-            
-            //3.Insert: We can also insert one character in word1 that is matching with currChar of word2, so that
-                //both currChars become equal. Now after inserting a char in word1, the length of word1 becomes i + 1.
-                //Now as both the currChars of word1 and word2 are same, the subproblem reduces to finding the min
-                //ops required to convert word1-currChar1 to word2-currChar2 => dp[i][j] = 1 + dp[i + 1 - 1][j - 1] 
-                //dp[i][j] = 1 + dp[i][j-1]  
-            
-            //choose the minimum of all three ops at each step
+            //2. The current character of word1 does not match with the current character of word2. In this 
+                //case we have three choices: Replace, Delete, or Insert
+                
+                //i. Replace: If we replace the current char from word1 to match with the current char from
+                    //word2, we use 1 operation. Now in the state after replacing, we have both our current 
+                    //chars matching. Therefore, we can take the min ops required if these matching chars
+                    //were not added. => 1 + dp[i-1][j-1]
+                
+                //ii. Delete: If we delete the current mismatching char from word1, we will be left with word1 
+                    //shorter by 1 length. This leaves us with the subproblem of finding min ops required
+                    //to convert word1 of new length(i-1) to word2 of unchanged length. => 1 + dp[i-1][j]
+                    
+                //iii. Insert: We insert a matching character similar to current char of word2 into word1. Now
+                    //we have our word1 length increased by 1 while word2 remains as it is. Now we also have 
+                    //current chars of both the strings matching. This leaves us with the subproblem of finding
+                    //min ops required to covert word1 to word2 if these matching chars were not added. 
+                    //=> 1 + dp[i+1 - 1][j-1] => 1 + dp[i][j-1]  
+
+                //we take the operation which is minimum 
+
+        //Base cases:
+            //Given an empty word1 and empty word2 strings, we need 0 ops to match them
+            //Given an empty word1 and non-empty word2 strings, we need word2.length() ops to convert word1 to
+                //word2, i.e. by inserting word2 chars into word1.
+            //Given an empty word2 and non-empty word1 strings, we need word1.length() ops to convert word1 to 
+                //word2, i.e. by deleting all word1 chars.
+
     public int minDistance(String word1, String word2) {
-        //dp[i][j] represents minimum number of operations required to convert word1 till length i to 
-            //word2 till length j
-        //dp[word1.length()][word2.length()] will represent minimum number of operations required to 
-            //convert word1 to word2
+        //dp[i][j] represents minimum ops required to convert word1 till length i to word2 till length j
+        //dp[word1.length()][word2.length()] will represent minimum ops required to convert word1 to word2
         //Therefore, we need a 2D matrix of size word1.length()+1 x word2.length()+1
 
         int rows = word1.length() + 1;
         int cols = word2.length() + 1;
-        
+
         int[][] dp = new int[rows][cols];
 
-        //base cases
-        //filling first row
-        for(int j = 0; j < cols; j ++){
+        //Base cases:
+
+        dp[0][0] = 0;
+
+        //filling first row (word1 is empty string)
+        for(int j = 1; j < cols; j ++){
             dp[0][j] = j;
         }
 
-        //filling first col
-        for(int i = 0; i < rows; i ++){
+        //filling first col (word2 is empty string)
+        for(int i = 1; i < rows; i ++){
             dp[i][0] = i;
         }
 
+
         for(int i = 1; i < rows; i ++){
             for(int j = 1; j < cols; j ++){
-                if(word1.charAt(i - 1) == word2.charAt(j - 1)){
-                    dp[i][j] = dp[i - 1][j - 1];
-                }
+                if(word1.charAt(i-1) == word2.charAt(j-1)) dp[i][j] = dp[i-1][j-1];
                 else{
-                    int replaceOp = 1 + dp[i - 1][j - 1];
-                    int deleteOp = 1 + dp[i - 1][j];
-                    int insertOp = 1 + dp[i][j - 1];
+                    int replaceOp = 1 + dp[i-1][j-1];
+                    int deleteOp = 1 + dp[i-1][j];
+                    int insertOp = 1 + dp[i][j-1];
 
                     dp[i][j] = Math.min(Math.min(replaceOp, deleteOp), insertOp);
                 }
             }
         }
-        return dp[rows - 1][cols - 1];
 
+        return dp[rows-1][cols-1];
+        
 
     }
 
@@ -102,6 +108,115 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 13 Dec 2025:
+
+//     //intuition 1 (DP: Bottom up tabulation: DP on String/DP on prefixes of string pattern)
+        
+//         //Base case:
+//             //if word1 is empty string, then we need word2.length() operations to make word1 equal to word2 by
+//                 //adding the characters of word2 in word1, therefore, fill first row with length of word2
+//             //if word2 is empty string, then we need word1.length() operations to make word1 equal to word2 by
+//                 //deleting the characters of word1, therefore, fill first col with length of word1
+        
+//         //Recurrence relation:
+//         //if(w1.currChar == w2.currChar) then dp[i][j] = dp[i-1][j-1]
+//             //reaon: if both the current chars match, then the subproblem is reduced to finding min
+//                 //operations required to convert word1 - currChar1 to word2 - currChar2
+//         //if(w1.currChar != w2.currChar) then we have three options:
+//             //1.Replace: If we replace the current chars so that they become equal, it is 1 operation cost
+//                 //and now the subproblem reduces to finding min ops requrired to covert word1-currChar to
+//                 //word2-currChar => dp[i][j] = 1 + dp[i-1][j-1]
+            
+//             //2.Delete: We can simply delete the current char from word1 in the hope that this will make word1
+//                 //equal to word2. This will cost 1 operation. Now after reducing word1 length by 1, the subproblem
+//                 //reduces to finding min ops required to covert word1-currChar to word2. => dp[i][j] = 1 + dp[i-1][j]
+            
+//             //3.Insert: We can also insert one character in word1 that is matching with currChar of word2, so that
+//                 //both currChars become equal. Now after inserting a char in word1, the length of word1 becomes i + 1.
+//                 //Now as both the currChars of word1 and word2 are same, the subproblem reduces to finding the min
+//                 //ops required to convert word1-currChar1 to word2-currChar2 => dp[i][j] = 1 + dp[i + 1 - 1][j - 1] 
+//                 //dp[i][j] = 1 + dp[i][j-1]  
+
+//             //Other explanation of insert: Inserting a character in word1 makes the last char of word1 match with word2,
+//                 //leaving us with the subproblem of finding minOps to convert word1's initial length to word2 - currChar2.
+//                 //i, j-1
+//             //"Insert: Inserting a character into word1 makes it match word2[j-1].After that, we only need to convert
+//                 //word1[0..i-1] to word2[0..j-2], which is dp[i][j-1]."
+            
+//             //choose the minimum of all three ops at each step
+//     public int minDistance(String word1, String word2) {
+//         //dp[i][j] represents minimum number of operations required to convert word1 till length i to 
+//             //word2 till length j
+//         //dp[word1.length()][word2.length()] will represent minimum number of operations required to 
+//             //convert word1 to word2
+//         //Therefore, we need a 2D matrix of size word1.length()+1 x word2.length()+1
+
+//         int rows = word1.length() + 1;
+//         int cols = word2.length() + 1;
+        
+//         int[][] dp = new int[rows][cols];
+
+//         //base cases
+//         //filling first row
+//         for(int j = 0; j < cols; j ++){
+//             dp[0][j] = j;
+//         }
+
+//         //filling first col
+//         for(int i = 0; i < rows; i ++){
+//             dp[i][0] = i;
+//         }
+
+//         for(int i = 1; i < rows; i ++){
+//             for(int j = 1; j < cols; j ++){
+//                 if(word1.charAt(i - 1) == word2.charAt(j - 1)){
+//                     dp[i][j] = dp[i - 1][j - 1];
+//                 }
+//                 else{
+//                     int replaceOp = 1 + dp[i - 1][j - 1];
+//                     int deleteOp = 1 + dp[i - 1][j];
+//                     int insertOp = 1 + dp[i][j - 1];
+
+//                     dp[i][j] = Math.min(Math.min(replaceOp, deleteOp), insertOp);
+//                 }
+//             }
+//         }
+//         return dp[rows - 1][cols - 1];
+
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 13 Dec 2025:
 
     // //intuition 1 (DP: bottom up tabulation)
