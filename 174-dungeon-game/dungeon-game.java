@@ -201,23 +201,12 @@ class Solution {
 
         //last row
         for(int j = cols - 2; j >= 0; j --){
-            if(dungeon[rows-1][j] > 0 && dungeon[rows-1][j] >= dp[rows-1][j+1]){
-                dp[rows-1][j] = 1; 
-            }
-            else{
-                dp[rows-1][j] = dp[rows-1][j+1] - dungeon[rows-1][j];
-            }
+            dp[rows-1][j] = Math.max(1, dp[rows-1][j+1] - dungeon[rows-1][j]);
         }
 
         //last col
         for(int i = rows - 2; i >= 0; i --){
-            int j = cols - 1;
-            if(dungeon[i][j] > 0 && dungeon[i][j] >= dp[i+1][j]){
-                dp[i][j] = 1;
-            }
-            else{
-                dp[i][j] = dp[i+1][j] - dungeon[i][j];
-            }
+            dp[i][cols-1] = Math.max(1, dp[i+1][cols-1] - dungeon[i][cols-1]);
         }
 
         for(int i = rows - 2; i >= 0; i --){
