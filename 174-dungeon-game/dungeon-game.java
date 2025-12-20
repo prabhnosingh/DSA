@@ -100,17 +100,20 @@ class Solution {
             for(int j = cols - 2; j >= 0; j --){
                 int cellVal = Math.abs(dungeon[i][j]);
                 int nextMinVal = Math.min(dp[i+1][j], dp[i][j+1]);
+                // if(dungeon[i][j] < 0){
+                //     // dp[i][j] = cellVal + (cellVal < nextMinVal ? (nextMinVal - cellVal) : 1);
+                //     if(cellVal < nextMinVal){
+                //         // dp[i][j] = cellVal + (nextMinVal - cellVal);
+                //         dp[i][j] = cellVal + nextMinVal;
+                //     }
+                //     else if(cellVal >= nextMinVal){
+                //         // dp[i][j] = cellVal + 1; //exactly cellVal health to survive and atleast 1 more health to move forward
+                //         dp[i][j] = cellVal + nextMinVal; 
+                //     }
+                //     ///loook into this -> do we need to add 1 or 0
+                // }
                 if(dungeon[i][j] < 0){
-                    // dp[i][j] = cellVal + (cellVal < nextMinVal ? (nextMinVal - cellVal) : 1);
-                    if(cellVal < nextMinVal){
-                        // dp[i][j] = cellVal + (nextMinVal - cellVal);
-                        dp[i][j] = cellVal + nextMinVal;
-                    }
-                    else if(cellVal >= nextMinVal){
-                        // dp[i][j] = cellVal + 1; //exactly cellVal health to survive and atleast 1 more health to move forward
                         dp[i][j] = cellVal + nextMinVal; 
-                    }
-                    ///loook into this -> do we need to add 1 or 0
                 }
                 else{ //dungeon cell value is positive
                     if(dungeon[i][j] >= nextMinVal){
