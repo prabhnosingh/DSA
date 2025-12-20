@@ -2,7 +2,7 @@ class Solution {
 
     //Solving on 20 Dec 2025:
 
-    //intuition 2: (2D: DP: Ad-hoc pattern):
+    //intuition 2: (2D: DP: DP on grid pattern: Solution tracked while filling DP array):
         //Base case: 
             //for first row and first col, fill matrix[i][j] in dp matrix
             //Rationale:
@@ -17,13 +17,19 @@ class Solution {
                 //to determine the side of square that ends at i,j. 
             //Rationale:
                 //Only when all the three neighbors are equal, is when the max side of square will increase by 1.
-                    //=> dp[i][j] = min(top, left, top-left) + 1
+                //=> dp[i][j] = min(top, left, top-left) + 1
+                
+                //"A square of size k can end at i,j only if all three neighboring cells can support a square
+                    //of size at least k-1. Therefore the smallest of the three neighbors limits the growth"
+                //In case of all three neighbors not equal, "growth is limited by the smallest neighbor"
+                //“The square size at (i, j) is limited by the smallest square ending at top, left, or top-left.”
 
         //For any cell that have 0 in matrix, fill 0 in dp as no square containing all 1's can end here.
         //Have a variable tracking the max side of square encountered till now    
 
     public int maximalSquare(char[][] matrix) {
         //dp[i][j] represents maximum side of square possible containing all 1's ending at i,j
+        //"dp[i][j]" represents the maximum side length of a square containing all 1's that ends at cell i,j
         //We will traverse the whole matrix and filling the dp matix along the way till bottom right cell.
         //Therefore, we need a 2D matrix of size matrix.length x matrix[0].length
 
