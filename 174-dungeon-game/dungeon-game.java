@@ -187,7 +187,7 @@ class Solution {
     
     public int calculateMinimumHP(int[][] dungeon) {
         //dp[i][j] represents minimum health requried to reach bottom right from i, j while only travelling down and right
-        //dp[0][0] will represent minimum health required to reach bottom right from 0, 0 whil only travelling down and right
+        //dp[0][0] will represent minimum health required to reach bottom right from 0, 0 while only travelling down and right
         //Therefore, we need a 2D matrix of size dungeon.length x dungeon[0].length
 
         int rows = dungeon.length;
@@ -212,8 +212,6 @@ class Solution {
 
         for(int i = rows - 2; i >= 0; i --){
             for(int j = cols - 2; j >= 0; j --){
-                int cellVal = Math.abs(dungeon[i][j]);
-                int nextMinVal = Math.min(dp[i+1][j], dp[i][j+1]);
                 //"The knight must enter each cell with enough health so that AFTER applying the cell value, his 
                     //health is >= 1 and sufficient for the next cell."
                 dp[i][j] = Math.max(1, Math.min(dp[i+1][j], dp[i][j+1]) - dungeon[i][j]);
