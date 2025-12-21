@@ -1,40 +1,34 @@
 class Solution {
 
-    //intuition 3: DP on lengths (Patience sorting idea) — O(n log n)
-
     //Solving on 21 Dec 2025:
 
-    //intuition 2: 
+    //intuition 2: DP on lengths (Patience sorting idea) — O(n log n)
         //Have an array named dpLIS. dpLIS[i] will be storing the smallest possbile tail of an increasing subsequence
             //of length i+1. Using lowerbound concept, for every element check if there exists a lower bound (first >=) 
-            //of that element in arrLIS using binary search upto current size. If yes, replace  the lowerbound element 
+            //of that element in dpLIS using binary search upto current size. If yes, replace  the lowerbound element 
             //found with the current element. If there is no lower bound of the current element, insert the current
-            //element at the last of arrLIS (size + 1).
+            //element at the last of dpLIS (size + 1).
 
-        //Why “lower bound (≥)” and not “>”
+        //Why “lower bound (≥)” and not “>”, because:
             //-LIS is strictly increasing
             //-Equal elements cannot extend the subsequence
-            //-So equal values must replace, not append
+            //-So equal values must replace existing tail, instead of appending
 
-
-        //TC: O()
-        //SC: O()
+        //Conceptual clarifications:
+            //dpLIS stores optimal tails
+            //its length (currSize) equals LIS length
+            //The actual LIS sequence is not directly recoverable from this array
+        
+        //TC: O(nlogn)
+        //SC: O(n)
     public int lengthOfLIS(int[] nums) {
         //dpLIS[i] represents smallest possible tail (last value) of an increasing subsequence of length i+1.
+        //Maximum possible length of LIS could be of length numsLen with smallest tail at index dpLIS[numsLen-1]
+        //Therefore, we need a dp 1D array of size numsLen.
 
         int numsLen = nums.length;
         int[] dpLIS = new int[numsLen];
         dpLIS[0] = nums[0];
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
-        //forgot to put semicolon at above line : did not proof read your code
         //forgot to put semicolon at above line : did not proof read your code
         int currSize = 1;  
         //currSize tracks how many elements have been inserted in the dpLIS
@@ -56,7 +50,7 @@ class Solution {
 
     }
 
-    //finding the index of first element that is greater than nums
+    //finding the index of first element that is greater than equal to num
     private int findLowerBound(int[] dpLIS, int num, int currSize){
         int start = 0;
         int end = currSize - 1;
