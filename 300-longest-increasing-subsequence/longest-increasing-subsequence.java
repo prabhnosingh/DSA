@@ -25,6 +25,17 @@ class Solution {
         int numsLen = nums.length;
         int[] dpLIS = new int[numsLen];
         dpLIS[0] = nums[0];
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
+        //forgot to put semicolon at above line : did not proof read your code
         int currSize = 1;  
         //currSize tracks how many elements have been inserted in the dpLIS
 
