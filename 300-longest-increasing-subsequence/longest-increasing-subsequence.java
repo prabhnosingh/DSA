@@ -1,81 +1,168 @@
 class Solution {
 
-    //Solving on 21 Dec 2025:
+    //Re-solving on 22 Dec 2025:
 
-    //intuition 2: DP on lengths (Patience sorting idea) — O(n log n)
-        //Have an array named dpLIS. dpLIS[i] will be storing the smallest possbile tail of an increasing subsequence
-            //of length i+1. Using lowerbound concept, for every element check if there exists a lower bound (first >=) 
-            //of that element in dpLIS using binary search upto current size. If yes, replace  the lowerbound element 
-            //found with the current element. If there is no lower bound of the current element, insert the current
-            //element at the last of dpLIS (size + 1).
+    //intuition 1: (1D DP: Longest Increasing Subsequence (LIS) pattern : Patience sort O(nlogn))
+        //Maintain an LIS array while traversing nums array from left to right:
+            //if lower bound of currNum (i.e. first element E to satisfy E >= currNum) is present 
+                //in LIS array, then replace E with currNum  
+            //else, if no lower bound of currNum is present in the current LIS, add the currNum to the 
+                //last of current LIS, increasing the size of LIS
+            //Apply binary search in finding the lower bound of currNum
 
-        //Why “lower bound (≥)” and not “>”, because:
-            //-LIS is strictly increasing
-            //-Equal elements cannot extend the subsequence
-            //-So equal values must replace existing tail, instead of appending
-
-        //Conceptual clarifications:
-            //dpLIS stores optimal tails
-            //its length (currSize) equals LIS length
-            //The actual LIS sequence is not directly recoverable from this array
-        
-        //TC: O(nlogn)
-        //SC: O(n)
     public int lengthOfLIS(int[] nums) {
-        //dpLIS[i] represents smallest possible tail (last value) of an increasing subsequence of length i+1.
-        //Maximum possible length of LIS could be of length numsLen with smallest tail at index dpLIS[numsLen-1]
-        //Therefore, we need a dp 1D array of size numsLen.
+        //dpLIS[i] represent tail element of longest subsequence of length i + 1
+        //dpLIS[numsLen - 1] will represent tail element of longest subsequence of length numsLen
+        //Therefore, we need 1D dp array of length nums.length  
 
         int numsLen = nums.length;
         int[] dpLIS = new int[numsLen];
+
         dpLIS[0] = nums[0];
-        //forgot to put semicolon at above line : did not proof read your code
-        int currSize = 1;  
-        //currSize tracks how many elements have been inserted in the dpLIS
+        int currDPLISSize = 1;
 
         for(int i = 1; i < numsLen; i ++){
-            int lowerBoundIdx = findLowerBound(dpLIS, nums[i], currSize);
+            int lowerBoundIdxInDPLIS = findLowerBoundIdx(nums[i], dpLIS, currDPLISSize);
 
-            if(lowerBoundIdx == -1){//i.e. no lower bound element found in dpLIS. In this case add nums[i] 
-            //at currSize + 1 index in dpLIS
-                dpLIS[currSize ++] = nums[i];
+            if(lowerBoundIdxInDPLIS == -1){ //no lower bound of nums[i] found in dpLIS
+                dpLIS[currDPLISSize ++] = nums[i]; //increase size of dpLIS
             }
-            else{ //a lower bound element was found at lowerBoundIdx. In this case replace nums[i] with
-            //element at dpLIS[lowerBoundIdx]
-                dpLIS[lowerBoundIdx] = nums[i];
+            else{ //replace the element in dpLIS at lower bound idx found with nums[i] 
+                dpLIS[lowerBoundIdxInDPLIS] = nums[i];
             }
         }
-
-        return currSize;
+        return currDPLISSize;
 
     }
 
-    //finding the index of first element that is greater than equal to num
-    private int findLowerBound(int[] dpLIS, int num, int currSize){
+    private int findLowerBoundIdx(int currNum, int[] dpLIS, int currSize){
         int start = 0;
         int end = currSize - 1;
 
-        int lowerBoundIdx = -1;
+        int currLowerBoundIdx = -1;
+
         while(start <= end){
-            int mid = (start + end) / 2;
-            //int mid = end - ((end - start) / 2);
-            if(dpLIS[mid] >= num){
-                lowerBoundIdx = mid; //we have found a probable lowerBound index
-                end = mid - 1; //we know that dpLIS is sorted array and if we have found an element at mid that is
-                //greater than or equal to num, then there is a possibility that there could be some other element
-                //that is greater than or equal to num on the left side of mid, so we do end = mid - 1
+        int mid = (start + end) / 2;
+            if(dpLIS[mid] >= currNum){
+                currLowerBoundIdx = mid; 
+                end = mid - 1; //find more smaller lowerbound of currNum 
             }
-            else{ //if(num > dpLIS[mid]), givent that dpLIS is sorted array, look towards right
+            else{
                 start = mid + 1;
             }
+
         }
-        return lowerBoundIdx;
+        return currLowerBoundIdx;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 21 Dec 2025:
+
+//     //intuition 2: DP on lengths (Patience sorting idea) — O(n log n)
+//         //Have an array named dpLIS. dpLIS[i] will be storing the smallest possbile tail of an increasing subsequence
+//             //of length i+1. Using lowerbound concept, for every element check if there exists a lower bound (first >=) 
+//             //of that element in dpLIS using binary search upto current size. If yes, replace  the lowerbound element 
+//             //found with the current element. If there is no lower bound of the current element, insert the current
+//             //element at the last of dpLIS (size + 1).
+
+//         //Why “lower bound (≥)” and not “>”, because:
+//             //-LIS is strictly increasing
+//             //-Equal elements cannot extend the subsequence
+//             //-So equal values must replace existing tail, instead of appending
+
+//         //Conceptual clarifications:
+//             //dpLIS stores optimal tails
+//             //its length (currSize) equals LIS length
+//             //The actual LIS sequence is not directly recoverable from this array
+        
+//         //TC: O(nlogn)
+//         //SC: O(n)
+//     public int lengthOfLIS(int[] nums) {
+//         //dpLIS[i] represents smallest possible tail (last value) of an increasing subsequence of length i+1.
+//         //Maximum possible length of LIS could be of length numsLen with smallest tail at index dpLIS[numsLen-1]
+//         //Therefore, we need a dp 1D array of size numsLen.
+
+//         int numsLen = nums.length;
+//         int[] dpLIS = new int[numsLen];
+//         dpLIS[0] = nums[0];
+//         //forgot to put semicolon at above line : did not proof read your code
+//         int currSize = 1;  
+//         //currSize tracks how many elements have been inserted in the dpLIS
+
+//         for(int i = 1; i < numsLen; i ++){
+//             int lowerBoundIdx = findLowerBound(dpLIS, nums[i], currSize);
+
+//             if(lowerBoundIdx == -1){//i.e. no lower bound element found in dpLIS. In this case add nums[i] 
+//             //at currSize + 1 index in dpLIS
+//                 dpLIS[currSize ++] = nums[i];
+//             }
+//             else{ //a lower bound element was found at lowerBoundIdx. In this case replace nums[i] with
+//             //element at dpLIS[lowerBoundIdx]
+//                 dpLIS[lowerBoundIdx] = nums[i];
+//             }
+//         }
+
+//         return currSize;
+
+//     }
+
+//     //finding the index of first element that is greater than equal to num
+//     private int findLowerBound(int[] dpLIS, int num, int currSize){
+//         int start = 0;
+//         int end = currSize - 1;
+
+//         int lowerBoundIdx = -1;
+//         while(start <= end){
+//             int mid = (start + end) / 2;
+//             //int mid = end - ((end - start) / 2);
+//             if(dpLIS[mid] >= num){
+//                 lowerBoundIdx = mid; //we have found a probable lowerBound index
+//                 end = mid - 1; //we know that dpLIS is sorted array and if we have found an element at mid that is
+//                 //greater than or equal to num, then there is a possibility that there could be some other element
+//                 //that is greater than or equal to num on the left side of mid, so we do end = mid - 1
+//             }
+//             else{ //if(num > dpLIS[mid]), givent that dpLIS is sorted array, look towards right
+//                 start = mid + 1;
+//             }
+//         }
+//         return lowerBoundIdx;
+//     }
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 21 Dec 2025:
 
     // //intuition 1: (1D DP : LIS pattern)
