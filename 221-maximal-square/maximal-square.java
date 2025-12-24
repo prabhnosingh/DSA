@@ -1,67 +1,48 @@
 class Solution {
 
-    //Solving on 20 Dec 2025:
+    //Solving on 23 Dec 2025:
 
-    //intuition 2: (2D: DP: DP on grid pattern: Solution tracked while filling DP array):
-        //Base case: 
-            //for first row and first col, fill matrix[i][j] in dp matrix
-            //Rationale:
-                //if the cell contains 1, then it is only possible to form a square containing all 1's
-                    //of length 1 that ends at current cell.
-                //if the cell contains 0, then it is not possible to form a square contaning all 1's that 
-                    //end at current cell
-
-
+    //intuition 1: (2D DP: DP On Grids: Bottom - up - is this really bottom up as we are traversing matrix from 
+        //top left to bottom right?)
+        
+        //Base cases: for top row and top col, fill dp matrix with same values as in matrix
         //Recurrence relation: 
-            //For any cell (i,j), given that it is 1, take minimum of top, left and top-left dp cell and add 1 to it
-                //to determine the side of square that ends at i,j. 
-            //Rationale:
-                //Only when all the three neighbors are equal, is when the max side of square will increase by 1.
-                //=> dp[i][j] = min(top, left, top-left) + 1
-                
-                //"A square of size k can end at i,j only if all three neighboring cells can support a square
-                    //of size at least k-1. Therefore the smallest of the three neighbors limits the growth"
-                //In case of all three neighbors not equal, "growth is limited by the smallest neighbor"
-                //“The square size at (i, j) is limited by the smallest square ending at top, left, or top-left.”
-
-        //For any cell that have 0 in matrix, fill 0 in dp as no square containing all 1's can end here.
-        //Have a variable tracking the max side of square encountered till now    
+            //For any cell that is 0, simply put 0(or skip) in dp matrix
+            //For a square to expand, all three previous neighbors(left, top-left, top) should be equal
+            //If all three previous negibors are not equal, then take the minimum of the three and add 1 for current
+                //cell in dp array  
 
     public int maximalSquare(char[][] matrix) {
-        //dp[i][j] represents maximum side of square possible containing all 1's ending at i,j
-        //"dp[i][j]" represents the maximum side length of a square containing all 1's that ends at cell i,j
-        //We will traverse the whole matrix and filling the dp matix along the way till bottom right cell.
-        //Therefore, we need a 2D matrix of size matrix.length x matrix[0].length
+        //dp[i][j] represents side of square containing all 1's ending at i,j
+            //store the maximum square encountered at each dp state to get final answer
+        //At max we can have a maximal square containing all 1's ending at matrix.length, matrix[0].length
+        //Therefore, we need a 2D array of size matrix.length x matrix[0].length
 
         int rows = matrix.length;
         int cols = matrix[0].length;
-
-        int[][] dp = new int[rows][cols];
         int maxSide = 0;
+        int[][] dp = new int[rows][cols];
 
         //base cases
-        //filling first row
-        for(int j = 0; j < cols; j ++){
-            dp[0][j] = matrix[0][j] - '0';
-            maxSide = Math.max(maxSide, dp[0][j]);
-        }
-
         //filling first col
         for(int i = 0; i < rows; i ++){
-            dp[i][0] = matrix[i][0] - '0';
-            maxSide = Math.max(maxSide, dp[i][0]);
+            int j = 0;
+            dp[i][j] = matrix[i][j] - '0';
+            maxSide = Math.max(maxSide, dp[i][j]);
+        }
+
+        //filling first row
+        for(int j = 0; j < cols; j ++){
+            int i = 0;
+            dp[i][j] = matrix[i][j] - '0';
+            maxSide = Math.max(maxSide, dp[i][j]);
         }
 
         for(int i = 1; i < rows; i ++){
             for(int j = 1; j < cols; j ++){
-                if(matrix[i][j] == '0') continue;
+                if(matrix[i][j] == '0') continue;                
+                dp[i][j] = 1 + Math.min(Math.min(dp[i-1][j], dp[i-1][j-1]), dp[i][j-1]);
 
-                int top = dp[i-1][j];
-                int left = dp[i][j-1];
-                int topLeft = dp[i-1][j-1];    
-                
-                dp[i][j] = 1 + Math.min(Math.min(top, left), topLeft); 
-                
                 maxSide = Math.max(maxSide, dp[i][j]);
             }
         }
@@ -69,6 +50,105 @@ class Solution {
         return maxSide * maxSide;
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 20 Dec 2025:
+
+//     //intuition 2: (2D: DP: DP on grid pattern: Solution tracked while filling DP array):
+//         //Base case: 
+//             //for first row and first col, fill matrix[i][j] in dp matrix
+//             //Rationale:
+//                 //if the cell contains 1, then it is only possible to form a square containing all 1's
+//                     //of length 1 that ends at current cell.
+//                 //if the cell contains 0, then it is not possible to form a square contaning all 1's that 
+//                     //end at current cell
+
+
+//         //Recurrence relation: 
+//             //For any cell (i,j), given that it is 1, take minimum of top, left and top-left dp cell and add 1 to it
+//                 //to determine the side of square that ends at i,j. 
+//             //Rationale:
+//                 //Only when all the three neighbors are equal, is when the max side of square will increase by 1.
+//                 //=> dp[i][j] = min(top, left, top-left) + 1
+                
+//                 //"A square of size k can end at i,j only if all three neighboring cells can support a square
+//                     //of size at least k-1. Therefore the smallest of the three neighbors limits the growth"
+//                 //In case of all three neighbors not equal, "growth is limited by the smallest neighbor"
+//                 //“The square size at (i, j) is limited by the smallest square ending at top, left, or top-left.”
+
+//         //For any cell that have 0 in matrix, fill 0 in dp as no square containing all 1's can end here.
+//         //Have a variable tracking the max side of square encountered till now    
+
+//     public int maximalSquare(char[][] matrix) {
+//         //dp[i][j] represents maximum side of square possible containing all 1's ending at i,j
+//         //"dp[i][j]" represents the maximum side length of a square containing all 1's that ends at cell i,j
+//         //We will traverse the whole matrix and filling the dp matix along the way till bottom right cell.
+//         //Therefore, we need a 2D matrix of size matrix.length x matrix[0].length
+
+//         int rows = matrix.length;
+//         int cols = matrix[0].length;
+
+//         int[][] dp = new int[rows][cols];
+//         int maxSide = 0;
+
+//         //base cases
+//         //filling first row
+//         for(int j = 0; j < cols; j ++){
+//             dp[0][j] = matrix[0][j] - '0';
+//             maxSide = Math.max(maxSide, dp[0][j]);
+//         }
+
+//         //filling first col
+//         for(int i = 0; i < rows; i ++){
+//             dp[i][0] = matrix[i][0] - '0';
+//             maxSide = Math.max(maxSide, dp[i][0]);
+//         }
+
+//         for(int i = 1; i < rows; i ++){
+//             for(int j = 1; j < cols; j ++){
+//                 if(matrix[i][j] == '0') continue;
+
+//                 int top = dp[i-1][j];
+//                 int left = dp[i][j-1];
+//                 int topLeft = dp[i-1][j-1];    
+                
+//                 dp[i][j] = 1 + Math.min(Math.min(top, left), topLeft); 
+                
+//                 maxSide = Math.max(maxSide, dp[i][j]);
+//             }
+//         }
+
+//         return maxSide * maxSide;
+
+//     }
 
 
 
