@@ -1,99 +1,220 @@
 class Solution {
-    //intuition 2 (monotonic stack): Maintain two arrays, one for left smaller element and one for right smaller element
-    //Store the indices of elements in these arrays. Maintain two stacks as well for calculating these two arrays which
-    //store the index of an element
-
-    //After calculating the two arrays, run a for loop over heigths while calculating the area for each heights[i] 
-    //by area = (rightSmallerIndex[i] - leftSmallerIndex[i] - 1) * heights[i]
-
-    //Left smaller element algo :
-        //Left -> right traversal
-        //while(stack.peek() >= arr[i]) //we don't like greater elements in the stack
-            //stack.pop()
-        //if stack is not empty 
-            //add stack.peek() to ans
-        //stack.push(arr[i])
-
-    //Right smaller element algo :
-        //Right -> left traversal
-        //while(stack.peek() >= arr[i]) //we don't like greater elements in the stack
-            //stack.pop()
-        //if stack is not empty 
-            //add stack.peek() to ans
-        //stack.push(arr[i])
-
-        //bottom to top increasing stack
     
+    //Re-solving on 24 Dec 2025:
+
+    //intuition 1:(Monotonic Stack)
+        //For finding the largest rectangle area, we traverse all the bars and compute maximum possible area
+            //on both left and right side of that bar and updating the maxArea variable accordingly.
+        //For computing the maximum possible area for each bar, we need height and width. Height will be the
+            //current bar's height (heights[i]) and for finding width, we need to know how much does the current
+            //bar can be extended towards left and right. The extension depends on the first smaller bar encountered.
+        //Eg: if current bar is of 5 height at index 2 (input 1), then first smaller bar on left is 1 (index 1) and
+            //first smaller bar on right is 2 (index 4). Now this denotes that current bar cannot be extended towards left
+            //it but can be extended towards right by 1 unit (as bar at index 3 (height 6) can be used to extend bar of 
+            //height 5).
+
+        //Now to maintain first smaller bar idx on both left and right side, we will maintain two arrays. These arrays
+            //for any i index will store indices of first smaller left bar idx and first smaller right bar idx.
+        //To build these arrays we first fill two strictly increasing monotonic stacks.
+            //leftSmallerIdxStack: this will store the first smaller bar's idx towards left of current bar
+            //rightSmallerIdxStack: this will store the first smaller bar's idx towards right of current bar
+                //algo:
+                    //while(stack.peek() >= currentBar) stack.pop() => we don't like the greater bars
+                    //if stack is empty, store -1 in the respective array(means that there is no smaller bar on left/right side)
+                    //else store the stack.peek() in the respective array
+                    
+                    //push current idx to stack
+
+        //Finally run a for loop over heights array and compute max area possible for each bar:
+            //=> Math.max(maxArea, heights[i] * (firstSmallerRightIdx[i] - firstSmallerLeftIdx[i] - 1)) => why do we do -1 here?
+
+   
     public int largestRectangleArea(int[] heights) {
         
+        int hLen = heights.length;
+
+
+        int[] firstSmallerLeftIdx = new int[hLen];
+        int[] firstSmallerRightIdx = new int[hLen];
+
+        Stack<Integer> leftIdxStack = new Stack<>();
+        Stack<Integer> rightIdxStack = new Stack<>();
+
         int maxArea = 0;
-        int heightsLen = heights.length;
 
-        int[] leftSmallerElementIdx = new int[heightsLen];
-        int[] rightSmallerElementIdx = new int[heightsLen];
-
-        Stack<Integer> leftSmallerElementIdxStack = new Stack<>();
-        Stack<Integer> rightSmallerElementIdxStack = new Stack<>();
-
-
-        for(int i = 0; i < heightsLen; i ++){
+        //filling firstSmallerLeftIdx (left -> right)
+        for(int i = 0; i < hLen; i ++){
             int currHeight = heights[i];
-            while(!leftSmallerElementIdxStack.isEmpty() && heights[leftSmallerElementIdxStack.peek()] >= currHeight){
-                leftSmallerElementIdxStack.pop();
+            firstSmallerLeftIdx[i] = -1; //rectangle extends to full left
+            while(!leftIdxStack.isEmpty() && heights[leftIdxStack.peek()] >= currHeight){
+                leftIdxStack.pop();
             }
-            if(leftSmallerElementIdxStack.isEmpty()){
-                leftSmallerElementIdx[i] = -1; 
-                //why we assign -1?
-                    //basically when leftSmallerElementIdxStack.isEmpty(), we know that there is no height on the left
-                    //that is smaller than the currHeight. This means that the currHeight bar can be extended fully 
-                    //towards extreme left to include first idx ("0").
-
-                    //Therefore, we assign -1 to include first index in the width while calculating the area.
-                        //leftSmallerElementIdx[i] + 1 becomes 0 if leftSmallerElementIdx[i] = -1
-                    //"Rectangle extends fully left"
+            if(!leftIdxStack.isEmpty()){
+                firstSmallerLeftIdx[i] = leftIdxStack.peek();
             }
-            else{
-                leftSmallerElementIdx[i] = leftSmallerElementIdxStack.peek();
+            leftIdxStack.push(i);
+        }        
+
+        //filling firstSmallerRightIdx (right -> left)
+        for(int i = hLen - 1; i >= 0; i --){
+            int currHeight = heights[i];
+            firstSmallerRightIdx[i] = hLen; //rectangle extends to full right
+
+            while(!rightIdxStack.isEmpty() && heights[rightIdxStack.peek()] >= currHeight){
+                rightIdxStack.pop();
             }
 
-            leftSmallerElementIdxStack.push(i);
+            if(!rightIdxStack.isEmpty()){
+                firstSmallerRightIdx[i] = rightIdxStack.peek();
+            }
 
-
+            rightIdxStack.push(i);
+            
         }
 
-        for(int i = heightsLen - 1; i >=0 ; i --){
-            int currHeight = heights[i];
-            while(!rightSmallerElementIdxStack.isEmpty() && heights[rightSmallerElementIdxStack.peek()] >= currHeight){
-                rightSmallerElementIdxStack.pop();
-            }
-            if(rightSmallerElementIdxStack.isEmpty()){
-                // rightSmallerElementIdx[i] = -1;
-                rightSmallerElementIdx[i] = heightsLen; 
-                //why we assign heigthsLen instead of -1?
-                    //basically when rightSmallerElementIdxStack.isEmpty(), we know that there is no height on the right that is
-                    // smaller than the currHeight, and therefore the currHeight could be extened to the last of the 
-                    //heights array. 
-                    //Therefore we assing heightsLen to include the last index in the width while calculating area. 
-                    //"Rectangle extends fully right"
-            }
-            else{
-                rightSmallerElementIdx[i] = rightSmallerElementIdxStack.peek();
-            }
 
-            rightSmallerElementIdxStack.push(i);
+        for(int i = 0; i < hLen; i ++){
 
-
-        }
-        
-
-        for(int i = 0; i < heightsLen; i ++){
-            // maxArea = Math.max(maxArea, Math.max(heights[i], (rightSmallerElementIdx[i] - leftSmallerElementIdx[i] - 1) * heights[i]));
-            maxArea = Math.max(maxArea, (rightSmallerElementIdx[i] - (leftSmallerElementIdx[i] + 1)) * heights[i]);
+            maxArea = Math.max(maxArea, heights[i] * (firstSmallerRightIdx[i] - firstSmallerLeftIdx[i] - 1));
         }
 
         return maxArea;
+        
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //intuition 2 (monotonic stack): Maintain two arrays, one for left smaller element and one for right smaller element
+    // //Store the indices of elements in these arrays. Maintain two stacks as well for calculating these two arrays which
+    // //store the index of an element
+
+    // //After calculating the two arrays, run a for loop over heights while calculating the area for each heights[i] 
+    // //by, area = (rightSmallerIndex[i] - leftSmallerIndex[i] - 1) * heights[i]
+
+    // //Left smaller element algo :
+    //     //Left -> right traversal
+    //     //while(stack.peek() >= arr[i]) //we don't like greater elements in the stack
+    //         //stack.pop()
+    //     //if stack is not empty 
+    //         //add stack.peek() to ans
+    //     //stack.push(arr[i])
+
+    // //Right smaller element algo :
+    //     //Right -> left traversal
+    //     //while(stack.peek() >= arr[i]) //we don't like greater elements in the stack
+    //         //stack.pop()
+    //     //if stack is not empty 
+    //         //add stack.peek() to ans
+    //     //stack.push(arr[i])
+
+    //     //bottom to top increasing stack
+    
+    // public int largestRectangleArea(int[] heights) {
+        
+    //     int maxArea = 0;
+    //     int heightsLen = heights.length;
+
+    //     int[] leftSmallerElementIdx = new int[heightsLen];
+    //     int[] rightSmallerElementIdx = new int[heightsLen];
+
+    //     Stack<Integer> leftSmallerElementIdxStack = new Stack<>();
+    //     Stack<Integer> rightSmallerElementIdxStack = new Stack<>();
+
+
+    //     for(int i = 0; i < heightsLen; i ++){
+    //         int currHeight = heights[i];
+    //         while(!leftSmallerElementIdxStack.isEmpty() && heights[leftSmallerElementIdxStack.peek()] >= currHeight){
+    //             leftSmallerElementIdxStack.pop();
+    //         }
+    //         if(leftSmallerElementIdxStack.isEmpty()){
+    //             leftSmallerElementIdx[i] = -1; 
+    //             //why we assign -1?
+    //                 //basically when leftSmallerElementIdxStack.isEmpty(), we know that there is no height on the left
+    //                 //that is smaller than the currHeight. This means that the currHeight bar can be extended fully 
+    //                 //towards extreme left to include first idx ("0").
+
+    //                 //Therefore, we assign -1 to include first index in the width while calculating the area.
+    //                     //leftSmallerElementIdx[i] + 1 becomes 0 if leftSmallerElementIdx[i] = -1
+    //                 //"Rectangle extends fully left"
+    //         }
+    //         else{
+    //             leftSmallerElementIdx[i] = leftSmallerElementIdxStack.peek();
+    //         }
+
+    //         leftSmallerElementIdxStack.push(i);
+
+
+    //     }
+
+    //     for(int i = heightsLen - 1; i >=0 ; i --){
+    //         int currHeight = heights[i];
+    //         while(!rightSmallerElementIdxStack.isEmpty() && heights[rightSmallerElementIdxStack.peek()] >= currHeight){
+    //             rightSmallerElementIdxStack.pop();
+    //         }
+    //         if(rightSmallerElementIdxStack.isEmpty()){
+    //             // rightSmallerElementIdx[i] = -1;
+    //             rightSmallerElementIdx[i] = heightsLen; 
+    //             //why we assign heigthsLen instead of -1?
+    //                 //basically when rightSmallerElementIdxStack.isEmpty(), we know that there is no height on the right that is
+    //                 // smaller than the currHeight, and therefore the currHeight could be extened to the last of the 
+    //                 //heights array. 
+    //                 //Therefore we assing heightsLen to include the last index in the width while calculating area. 
+    //                 //"Rectangle extends fully right"
+    //         }
+    //         else{
+    //             rightSmallerElementIdx[i] = rightSmallerElementIdxStack.peek();
+    //         }
+
+    //         rightSmallerElementIdxStack.push(i);
+
+
+    //     }
+        
+
+    //     for(int i = 0; i < heightsLen; i ++){
+    //         // maxArea = Math.max(maxArea, Math.max(heights[i], (rightSmallerElementIdx[i] - leftSmallerElementIdx[i] - 1) * heights[i]));
+    //         maxArea = Math.max(maxArea, (rightSmallerElementIdx[i] - (leftSmallerElementIdx[i] + 1)) * heights[i]);
+    //     }
+
+    //     return maxArea;
+
+    // }
 
 
 
