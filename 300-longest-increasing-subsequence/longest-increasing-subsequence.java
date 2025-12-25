@@ -1,59 +1,159 @@
 class Solution {
 
-    //Re-solving on 22 Dec 2025:
+    //Re-solving on 25 Dec 2025:
 
-    //intuition 1: (1D DP: Longest Increasing Subsequence (LIS) pattern : Patience sort O(nlogn))
-        //Maintain an LIS array while traversing nums array from left to right:
-            //if lower bound of currNum (i.e. first element E to satisfy E >= currNum) is present 
-                //in LIS array, then replace E with currNum  
-            //else, if no lower bound of currNum is present in the current LIS, add the currNum to the 
-                //last of current LIS, increasing the size of LIS
-            //Apply binary search in finding the lower bound of currNum
+    //intuition 1: (1D: DP: LIS pattern)
+        //We maintain a DP array that will store the longest increasing subsequence found till now 
+            //while traversing the nums array. For each number currNum in nums, we find if a lower
+            //bound (first element greater than equal to) of currNum exists in the dp array. If we 
+            //find a lower bound of currNum in dp array, we replace it with currNum. This is done in
+            //order to add more increasing numbers in the future.
+        //We find the lower bound idx with binary search (logn)
+        //base case: if nums is of length 1, LIS is of length 1. Have dp[0] = nums[0]
 
     public int lengthOfLIS(int[] nums) {
-        //dpLIS[i] represent tail element of longest subsequence of length i + 1
-        //dpLIS[numsLen - 1] will represent tail element of longest subsequence of length numsLen
-        //Therefore, we need 1D dp array of length nums.length  
+        //dpLIS[i] represent smallest tail possible of increasing subsequence of length i + 1
+        //Length of dpLIS at the end of the algo will give us longest increasing subsequence for nums array
+        //Longest possible subsequence can be of length nums.length.
+        //Therefore, we need a 1D dp array of length nums.length
 
         int numsLen = nums.length;
         int[] dpLIS = new int[numsLen];
 
+        //base case
         dpLIS[0] = nums[0];
-        int currDPLISSize = 1;
-
+        int currLISLength = 1;
         for(int i = 1; i < numsLen; i ++){
-            int lowerBoundIdxInDPLIS = findLowerBoundIdx(nums[i], dpLIS, currDPLISSize);
+            int currNum = nums[i];
+            int lowerBoundIdxInDpLIS = findLowerBoundIdxInDpLIS(dpLIS, currNum, currLISLength);
 
-            if(lowerBoundIdxInDPLIS == -1){ //no lower bound of nums[i] found in dpLIS
-                dpLIS[currDPLISSize ++] = nums[i]; //increase size of dpLIS
+            if(lowerBoundIdxInDpLIS == -1){ //no lower bound found in dpLIS. Add currNum at last of dpLIS,
+                //increasing its size by 1
+                dpLIS[currLISLength ++] = currNum;
             }
-            else{ //replace the element in dpLIS at lower bound idx found with nums[i] 
-                dpLIS[lowerBoundIdxInDPLIS] = nums[i];
+            else{
+                dpLIS[lowerBoundIdxInDpLIS] = currNum;
             }
+        
         }
-        return currDPLISSize;
 
+        return currLISLength;
     }
 
-    private int findLowerBoundIdx(int currNum, int[] dpLIS, int currSize){
+ 
+    private int findLowerBoundIdxInDpLIS(int[] dpLIS, int currNum, int currLISLength){
         int start = 0;
-        int end = currSize - 1;
-
-        int currLowerBoundIdx = -1;
-
+        int end = currLISLength - 1;
+        int lowerBoundIdx = -1;
         while(start <= end){
-        int mid = (start + end) / 2;
-            if(dpLIS[mid] >= currNum){
-                currLowerBoundIdx = mid; 
-                end = mid - 1; //find more smaller lowerbound of currNum 
+            int mid = end - ((end - start) / 2);
+
+            if(dpLIS[mid] >= currNum){ //probable lower bound found
+                lowerBoundIdx = mid;
+                end = mid - 1; //we want the first largest number's idx and since dpLIS is sorted in ascending order
+                    //we move towards left to find the first largest number
             }
             else{
                 start = mid + 1;
             }
-
         }
-        return currLowerBoundIdx;
+
+        return lowerBoundIdx;
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // //Re-solving on 22 Dec 2025:
+
+    // //intuition 1: (1D DP: Longest Increasing Subsequence (LIS) pattern : Patience sort O(nlogn))
+    //     //Maintain an LIS array while traversing nums array from left to right:
+    //         //if lower bound of currNum (i.e. first element E to satisfy E >= currNum) is present 
+    //             //in LIS array, then replace E with currNum.
+    //             //“Replacing keeps subsequence length the same but makes its tail smaller, increasing
+    //                 //the chance of extending it later.”
+    //         //else, if no lower bound of currNum is present in the current LIS, add the currNum to the 
+    //             //last of current LIS, increasing the size of LIS
+    //         //Apply binary search in finding the lower bound of currNum
+
+    //         //“dpLIS does not store the actual LIS.
+    //         //It only stores the smallest possible tail for each subsequence length, which is sufficient
+    //             //to compute the length of LIS.”
+
+    // public int lengthOfLIS(int[] nums) {
+    //     //dpLIS[i] represent tail element of longest subsequence of length i + 1
+    //     //dpLIS[numsLen - 1] will represent tail element of longest subsequence of length numsLen (longest possible)
+    //     //Therefore, we need 1D dp array of length nums.length  
+
+    //     int numsLen = nums.length;
+    //     int[] dpLIS = new int[numsLen];
+
+    //     dpLIS[0] = nums[0];
+    //     int currDPLISSize = 1;
+
+    //     for(int i = 1; i < numsLen; i ++){
+    //         int lowerBoundIdxInDPLIS = findLowerBoundIdx(nums[i], dpLIS, currDPLISSize);
+
+    //         if(lowerBoundIdxInDPLIS == -1){ //no lower bound of nums[i] found in dpLIS
+    //             dpLIS[currDPLISSize ++] = nums[i]; //increase size of dpLIS
+    //         }
+    //         else{ //replace the element in dpLIS at lower bound idx found with nums[i] 
+    //             if(lowerBoundIdxInDPLIS < currDPLISSize - 1){
+    //                 continue; //do not replace the dpLIS[lowerBoudIdxDPLIS] number if lower bound idx is less
+    //                     //than currsize to maintain a valid LIS in dpLIS
+    //             }
+    //             dpLIS[lowerBoundIdxInDPLIS] = nums[i];
+    //         }
+    //     }
+    //     return currDPLISSize;
+
+    // }
+
+    // private int findLowerBoundIdx(int currNum, int[] dpLIS, int currSize){
+    //     int start = 0;
+    //     int end = currSize - 1;
+
+    //     int currLowerBoundIdx = -1;
+
+    //     while(start <= end){
+    //         int mid = (start + end) / 2;
+    //         if(dpLIS[mid] >= currNum){
+    //             currLowerBoundIdx = mid; 
+    //             end = mid - 1; //find more smaller lowerbound of currNum 
+    //         }
+    //         else{
+    //             start = mid + 1;
+    //         }
+
+    //     }
+    //     return currLowerBoundIdx;
+    // }
 
 
 
@@ -152,7 +252,7 @@ class Solution {
 //                 //greater than or equal to num, then there is a possibility that there could be some other element
 //                 //that is greater than or equal to num on the left side of mid, so we do end = mid - 1
 //             }
-//             else{ //if(num > dpLIS[mid]), givent that dpLIS is sorted array, look towards right
+//             else{ //if(num > dpLIS[mid]), given that dpLIS is sorted array, look towards right
 //                 start = mid + 1;
 //             }
 //         }
