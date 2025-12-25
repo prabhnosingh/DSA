@@ -12,6 +12,8 @@ class Solution {
             //order to avoid considering putting same width envelope into other same width envelopes based on just
             //increasing heights (ascending). Then by running LIS on heights we make sure that only smaller height
             //envelopes are put (russian dolled) inside the big envelopes.  
+        //“Sorting equal widths by descending height prevents envelopes with the same width from being considered
+            //part of an increasing subsequence, because LIS requires strictly increasing heights.”
         
         //For running the LIS on heights we will use patience sort (O(nlogn)) with a dpLIS array to maintain
             //smallest possible tail for LIS of length i+1 at dp[i]. We will use binary search for finding lower
@@ -24,20 +26,25 @@ class Solution {
         //Therefore, we need a 1D dpLIS array of length envelopes.length
 
         int envsLen = envelopes.length;
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> {
-            if(a[0] == b[0]){ //same widths
-                return b[1]-a[1]; //sort based on decreasing heights
-            }
-            return a[0]-b[0]; //sort based on increasing widths
+        // PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> {
+        //     if(a[0] == b[0]){ //same widths
+        //         return b[1]-a[1]; //sort based on decreasing heights
+        //     }
+        //     return a[0]-b[0]; //sort based on increasing widths
+        // });
+
+        Arrays.sort(envelopes, (a,b) -> {
+            if(a[0] == b[0]) return b[1] - a[1];
+            return a[0] - b[0];
         });
 
-        for(int[] env : envelopes){
-            minHeap.offer(env);
-        }
+        // for(int[] env : envelopes){
+        //     minHeap.offer(env);
+        // }
 
-        for(int i = 0; i < envsLen; i ++){
-            envelopes[i] = minHeap.poll();
-        }
+        // for(int i = 0; i < envsLen; i ++){
+        //     envelopes[i] = minHeap.poll();
+        // }
 
         int[] heights = new int[envsLen];
 
