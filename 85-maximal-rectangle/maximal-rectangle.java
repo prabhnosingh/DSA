@@ -83,6 +83,7 @@ class Solution {
                     heights[j] = heights[j] + 1;
                 }
             }
+            //after 1 complete row is computed
             maxArea = Math.max(maxArea, findLargestRectInRow(heights));
         }
 
