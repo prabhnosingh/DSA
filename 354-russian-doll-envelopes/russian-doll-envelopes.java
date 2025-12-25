@@ -12,6 +12,7 @@ class Solution {
             //order to avoid considering putting same width envelope into other same width envelopes based on just
             //increasing heights (ascending). Then by running LIS on heights we make sure that only smaller height
             //envelopes are put (russian dolled) inside the big envelopes.  
+
         //“Sorting equal widths by descending height prevents envelopes with the same width from being considered
             //part of an increasing subsequence, because LIS requires strictly increasing heights.”
         
@@ -19,13 +20,17 @@ class Solution {
             //smallest possible tail for LIS of length i+1 at dp[i]. We will use binary search for finding lower
             //bound of any heigth in dpLIS
 
-        //For sorting envelopes we will use piorityqueue(minHeap) with custom comparator
+        //For sorting envelopes we will use piorityqueue(minHeap) or Arrays.sort with custom comparator
+
+        //TC: O(nlogn)
+        //SC: O(n) where n is number of envelopes
     public int maxEnvelopes(int[][] envelopes) {
-        //dpLIS[i] represents smallest possible tail of LIS of length i + 1
+        //dpLIS[i] represents smallest possible tail of an increasing subsequence of length i + 1
         //maximum LIS can be of length envelopes.length
         //Therefore, we need a 1D dpLIS array of length envelopes.length
 
         int envsLen = envelopes.length;
+        if(envsLen == 0) return 0;
         // PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> {
         //     if(a[0] == b[0]){ //same widths
         //         return b[1]-a[1]; //sort based on decreasing heights
@@ -34,8 +39,8 @@ class Solution {
         // });
 
         Arrays.sort(envelopes, (a,b) -> {
-            if(a[0] == b[0]) return b[1] - a[1];
-            return a[0] - b[0];
+            if(a[0] == b[0]) return Integer.compare(b[1], a[1]);
+            return Integer.compare(a[0], b[0]);
         });
 
         // for(int[] env : envelopes){
