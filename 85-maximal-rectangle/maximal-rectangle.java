@@ -1,7 +1,7 @@
 class Solution {
     //Solving on 23 Dec 2025:
 
-    //intuition 2(Space optimization of intuition 1): (2D DP: Bottom up: DP on grids pattern)
+    //intuition 2(Space optimization of intuition 1: Beats 90.36%): (2D DP: Bottom up: DP on grids pattern) 
 
         //For area of a rectangle we need length and breadth
         //A single '1' cell is of area 1
@@ -27,7 +27,7 @@ class Solution {
             //ending at that row.”
 
 
-        //Space optimization:
+        //Space optimization: 
             //Instead of 2D dp matrix have only a single heights array of size cols and get largest rectangle after
                 //computing each row in heights array. Previously we were computing all the possible rows and then
                 //passing each row 1-by-1 into the helper function. This time we save the space by not storing the 
@@ -37,7 +37,7 @@ class Solution {
 
         //TC: O(rows x cols) (Dp build) + O(rows x cols) (finding largest rectangle: per row x cols = rows x cols)
             //=> O(rows x cols)
-        //SC: O(rows x cols)
+        //SC: O(cols) : Heights array + Stack
         
 
 
@@ -122,7 +122,7 @@ class Solution {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 23 Dec 2025:
 
-    // //intuition 1: (2D DP: Bottom up: DP on grids pattern)
+    // //intuition 1(Beats 85.87%): (2D DP: Bottom up: DP on grids pattern) 
 
     //     //For area of a rectangle we need length and breadth
     //     //A single '1' cell is of area 1
