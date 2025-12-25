@@ -2,84 +2,61 @@ class Solution {
     
     //Re-solving on 24 Dec 2025:
 
-    //intuition 1:(Monotonic Stack)
-        //For finding the largest rectangle area, we traverse all the bars and compute maximum possible area
-            //on both left and right side of that bar and updating the maxArea variable accordingly.
-        //For computing the maximum possible area for each bar, we need height and width. Height will be the
-            //current bar's height (heights[i]) and for finding width, we need to know how much does the current
-            //bar can be extended towards left and right. The extension depends on the first smaller bar encountered.
-        //Eg: if current bar is of 5 height at index 2 (input 1), then first smaller bar on left is 1 (index 1) and
-            //first smaller bar on right is 2 (index 4). Now this denotes that current bar cannot be extended towards left
-            //it but can be extended towards right by 1 unit (as bar at index 3 (height 6) can be used to extend bar of 
-            //height 5).
+    //intuition 2:(Monotonic Stack - One pass)
+        //Each bar can be extended towards its right or left in order to form a bigger triangle. 
+        //The extension on left side depends on the closest smaller bar on left side 
+        //The extension on right side depends on the closest smaller bar on right side
+        //By finding the indices of left boundary and right boundary we can find the width along with which the current
+            //bar can be extended. width = rightBoundary - leftBoundary - 1
+        //Then we can find the max area possible by including current bar by: area = currHeight * width
 
-        //Now to maintain first smaller bar idx on both left and right side, we will maintain two arrays. These arrays
-            //for any i index will store indices of first smaller left bar idx and first smaller right bar idx.
-        //To build these arrays we first fill two strictly increasing monotonic stacks.
-            //leftSmallerIdxStack: this will store the first smaller bar's idx towards left of current bar
-            //rightSmallerIdxStack: this will store the first smaller bar's idx towards right of current bar
-                //algo:
-                    //while(stack.peek() >= currentBar) stack.pop() => we don't like the greater bars
-                    //if stack is empty, store -1 in the respective array(means that there is no smaller bar on left/right side)
-                    //else store the stack.peek() in the respective array
-                    
-                    //push current idx to stack
+        //Now to find the boundaries, we use a strictly increasing monotonic stack that stores the indices of bars
+            //based on heights of bars.
+        //We run one for loop and everytime we find that current top idx of stack (peek) have height that is greater than  
+            //current height, this indicates that previous height cannot be extended and we have found the right boundary of
+            //bar at peek() idx. We pop that to compute height for our area formula. For width formula: 
+                //right will be the current idx (i)
+                //left will be current peek() (after poping previous height).
+                //=> this works because the stack will contain indices such that at any time the top index is
+                    //of the largest height in the whole stack. 
+            
+            //To handle bars that have minimum height or the bars that will extend fully towards right, we introduce 
+                //a special condition of making currHeight = 0 for i == heights.length. By doing this we force for 
+                //all indices remaining in the stack to be popped out and hence computing the height accordingly:
+                    //height = heights[stack.pop()]
+                    //right = heights.length
+                    //left = current peek() idx (or -1 if stack is empty)  
 
-        //Finally run a for loop over heights array and compute max area possible for each bar:
-            //=> Math.max(maxArea, heights[i] * (firstSmallerRightIdx[i] - firstSmallerLeftIdx[i] - 1)) => why do we do -1 here?
+        //We keep the track of max area found till now with maxArea variable
 
+    //TC: O(n)
+    //Sc: O(n)
    
     public int largestRectangleArea(int[] heights) {
         
+        Stack<Integer> stack = new Stack<>();
         int hLen = heights.length;
-
-
-        int[] firstSmallerLeftIdx = new int[hLen];
-        int[] firstSmallerRightIdx = new int[hLen];
-
-        Stack<Integer> leftIdxStack = new Stack<>();
-        Stack<Integer> rightIdxStack = new Stack<>();
 
         int maxArea = 0;
 
-        //filling firstSmallerLeftIdx (left -> right)
-        for(int i = 0; i < hLen; i ++){
-            int currHeight = heights[i];
-            firstSmallerLeftIdx[i] = -1; //rectangle extends to full left
-            while(!leftIdxStack.isEmpty() && heights[leftIdxStack.peek()] >= currHeight){
-                leftIdxStack.pop();
-            }
-            if(!leftIdxStack.isEmpty()){
-                firstSmallerLeftIdx[i] = leftIdxStack.peek();
-            }
-            leftIdxStack.push(i);
-        }        
+        for(int idx = 0; idx <= hLen; idx ++){
+            int currHeight = idx == hLen ? -1 : heights[idx];
 
-        //filling firstSmallerRightIdx (right -> left)
-        for(int i = hLen - 1; i >= 0; i --){
-            int currHeight = heights[i];
-            firstSmallerRightIdx[i] = hLen; //rectangle extends to full right
+            while(!stack.isEmpty() && currHeight <= heights[stack.peek()]){
+                int height = heights[stack.pop()];
+                
+                int rightBoundary = idx;
+                int leftBoundary = stack.isEmpty() ? -1 : stack.peek();
 
-            while(!rightIdxStack.isEmpty() && heights[rightIdxStack.peek()] >= currHeight){
-                rightIdxStack.pop();
+                int width = rightBoundary - leftBoundary - 1;
+                
+                maxArea = Math.max(maxArea, height * width);            
             }
 
-            if(!rightIdxStack.isEmpty()){
-                firstSmallerRightIdx[i] = rightIdxStack.peek();
-            }
-
-            rightIdxStack.push(i);
-            
-        }
-
-
-        for(int i = 0; i < hLen; i ++){
-
-            maxArea = Math.max(maxArea, heights[i] * (firstSmallerRightIdx[i] - firstSmallerLeftIdx[i] - 1));
+            stack.push(idx);
         }
 
         return maxArea;
-        
 
     }
 
@@ -120,6 +97,139 @@ class Solution {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 24 Dec 2025:
+
+//     //intuition 1:(Monotonic Stack)
+//         //For finding the largest rectangle area, we traverse all the bars and compute maximum possible area
+//             //on both left and right side of that bar and updating the maxArea variable accordingly.
+//         //For computing the maximum possible area for each bar, we need height and width. Height will be the
+//             //current bar's height (heights[i]) and for finding width, we need to know how much does the current
+//             //bar can be extended towards left and right. The extension depends on the first smaller bar encountered.
+//         //Eg: if current bar is of 5 height at index 2 (input 1), then first smaller bar on left is 1 (index 1) and
+//             //first smaller bar on right is 2 (index 4). Now this denotes that current bar cannot be extended towards left
+//             //it but can be extended towards right by 1 unit (as bar at index 3 (height 6) can be used to extend bar of 
+//             //height 5).
+
+//         //Now to maintain first smaller bar idx on both left and right side, we will maintain two arrays. These arrays
+//             //for any i index will store indices of first smaller left bar idx and first smaller right bar idx. 
+//         //"Basically, for each bar, we compute the nearest smaller bar on both sides using monotonic increasing stacks,
+//             //which gives us the maximum width that current bar can span to."
+
+//         //“The bar can extend between the first smaller bars on the left and right; all bars in between have 
+//             //height ≥ current height.”
+        
+//         //To build these arrays we first fill two strictly increasing monotonic stacks.
+//             //“We maintain a strictly increasing monotonic stacks of indices based on bar heights.”
+//             //leftSmallerIdxStack: this will store the first smaller bar's idx towards left of current bar
+//             //rightSmallerIdxStack: this will store the first smaller bar's idx towards right of current bar
+//                 //algo:
+//                     //while(stack.peek() >= currentBar) stack.pop() => we don't like the greater bars
+//                     //if stack is empty, store -1 in the respective array(means that there is no smaller bar on left/right side)
+//                     //else store the stack.peek() in the respective array
+                    
+//                     //push current idx to stack
+
+//         //Finally run a for loop over heights array and compute max area possible for each bar:
+//             //=> Math.max(maxArea, heights[i] * (firstSmallerRightIdx[i] - firstSmallerLeftIdx[i] - 1)) => why do we do -1 here?
+//                 //We do -1 here because both left and right indices point to bars that are smaller than current bars and hence
+//                     //cannot be included in the width calculation. "The usable width is strictly between them" 
+
+//     //TC: O(n)
+//     //Sc: O(n)
+   
+//     public int largestRectangleArea(int[] heights) {
+        
+//         int hLen = heights.length;
+
+
+//         int[] firstSmallerLeftIdx = new int[hLen];
+//         int[] firstSmallerRightIdx = new int[hLen];
+
+//         Stack<Integer> leftIdxStack = new Stack<>();
+//         Stack<Integer> rightIdxStack = new Stack<>();
+
+//         int maxArea = 0;
+
+//         //filling firstSmallerLeftIdx (left -> right)
+//         for(int i = 0; i < hLen; i ++){
+//             int currHeight = heights[i];
+//             firstSmallerLeftIdx[i] = -1; //rectangle extends to full left
+//             //Why -1? => "It makes the width formula work uniformly, without extra conditions." 
+//                 //"width = rightIdx - (-1) - 1 => rightIdx"
+//             while(!leftIdxStack.isEmpty() && heights[leftIdxStack.peek()] >= currHeight){
+//                 leftIdxStack.pop();
+//             }
+//             if(!leftIdxStack.isEmpty()){
+//                 firstSmallerLeftIdx[i] = leftIdxStack.peek();
+//             }
+//             leftIdxStack.push(i);
+//         }        
+
+//         //filling firstSmallerRightIdx (right -> left)
+//         for(int i = hLen - 1; i >= 0; i --){
+//             int currHeight = heights[i];
+//             firstSmallerRightIdx[i] = hLen; //rectangle extends to full right
+//             //Just give an example of why we need hLen in the interview if asked
+//             while(!rightIdxStack.isEmpty() && heights[rightIdxStack.peek()] >= currHeight){
+//                 rightIdxStack.pop();
+//             }
+
+//             if(!rightIdxStack.isEmpty()){
+//                 firstSmallerRightIdx[i] = rightIdxStack.peek();
+//             }
+
+//             rightIdxStack.push(i);
+            
+//         }
+
+
+//         for(int i = 0; i < hLen; i ++){
+
+//             maxArea = Math.max(maxArea, heights[i] * (firstSmallerRightIdx[i] - firstSmallerLeftIdx[i] - 1));
+//         }
+
+//         return maxArea;
+        
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //intuition 2 (monotonic stack): Maintain two arrays, one for left smaller element and one for right smaller element
     // //Store the indices of elements in these arrays. Maintain two stacks as well for calculating these two arrays which
     // //store the index of an element
