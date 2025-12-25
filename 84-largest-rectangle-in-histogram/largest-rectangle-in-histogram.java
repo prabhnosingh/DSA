@@ -34,13 +34,14 @@ class Solution {
    
     public int largestRectangleArea(int[] heights) {
         
-        Stack<Integer> stack = new Stack<>();
+        // Stack<Integer> stack = new Stack<>();
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
         int hLen = heights.length;
 
         int maxArea = 0;
 
         for(int idx = 0; idx <= hLen; idx ++){
-            int currHeight = idx == hLen ? -1 : heights[idx];
+            int currHeight = idx == hLen ? 0 : heights[idx];
 
             while(!stack.isEmpty() && currHeight <= heights[stack.peek()]){
                 int height = heights[stack.pop()];
