@@ -80,7 +80,7 @@ class Solution {
         //filling first col: zero sum and non-zero nums
         for(int i = 1; i < rows; i ++){
             int j = 0;
-            dp[i][j] = false;
+            dp[i][j] = true;
         }
 
 
