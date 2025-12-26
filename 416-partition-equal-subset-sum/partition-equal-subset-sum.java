@@ -11,13 +11,15 @@ class Solution {
             //knapsack DP, where each number is either taken or skipped exactly once"
  
     public boolean canPartition(int[] nums) {
-        //d[s] reperesents whether we can form a sum s using some of the numbers processed so far (true/false)
+        //d[i] reperesents whether we can form a sum 'i' using some of the numbers processed so far (true/false)
         
-        int totalSum = 0;
+        // int totalSum = 0;
 
-        for(int num : nums){
-            totalSum += num;
-        }
+        // for(int num : nums){
+        //     totalSum += num;
+        // }
+
+        int totalSum = Arrays.stream(nums).sum();
 
         if(totalSum % 2 != 0){
             return false;
@@ -31,7 +33,8 @@ class Solution {
         dp[0] = true;
 
         for(int num : nums){
-            if(num > targetSum) return false;
+            if(num > targetSum) return false; //if a single num is greater than targetSum, it is not possible to divide
+                //the full array in two subsets of equal sum
             for(int sum = targetSum; sum >= num; sum --){ 
                 if(dp[sum]){ //if a sum already exists, i.e., dp[sum] is already true, skip adding the current number (num)
                     continue;
