@@ -11,12 +11,12 @@ class Solution {
         //Currently we have two choices:
             //move to 3: now the sub-problem reduces to finding min path sum from 3 to bottom level
             //move to 4: now the sub-problem reduces to finding the path sum from 4 to bottom level
-        //We traverse each branch till bottom level and then compare them all to come up with the least sum
+        //We traverse each branch till bottom level and then compare them along the way to choose the least cost path
         
         //We compare and choose the minimum pathSum returned from two branches. 
 
 
-    //intuition 3 (recursion: State DP): Top down approach + memoization
+    //intuition 3 (recursion: State DP: beats 10.9%): Top down approach + memoization
         //To avoid TLE, we need to store the minPathSum computed for states in order to avoid re-calculations.
         //Each state can be uniquely identified as level of triangle and index in the level.
         //We can use a hashMap that uniquely identifies a state and stores the minSum from that state to the bottom.
@@ -26,7 +26,9 @@ class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
         int minPathSum = Integer.MAX_VALUE;
 
-        HashMap<String, Integer> dpMap = new HashMap<>(); 
+        int m = triangle.size();
+        // HashMap<String, Integer> dpMap = new HashMap<>(); 
+        Integer[][] dpMap = new Integer[m][m]; 
 
         minPathSum = Math.min(minPathSum, traverse(triangle, 0, 0, dpMap));
         
@@ -34,12 +36,14 @@ class Solution {
 
     }
 
-    private int traverse(List<List<Integer>> triangle, int currLevel, int currIdx, HashMap<String, Integer> dpMap){
+    private int traverse(List<List<Integer>> triangle, int currLevel, int currIdx, Integer[][] dpMap){
         String key = currLevel + "," + currIdx; 
-        if(dpMap.containsKey(key)){
-            // System.out.println(key);
-            return dpMap.get(key);
+        if(dpMap[currLevel][currIdx] != null){
+            return dpMap[currLevel][currIdx];
         }
+        // if(dpMap.containsKey(key)){
+        //     return dpMap.get(key);
+        // }
 
         if(currLevel == triangle.size() - 1){   
             return triangle.get(currLevel).get(currIdx);
@@ -56,10 +60,33 @@ class Solution {
 
         //induction (deciding results and sending upwards)
         int minPathSum = currNodeCost + Math.min(iPathSum, iPlusOnePathSum);
-        dpMap.put(key, minPathSum);
+        dpMap[currLevel][currIdx] = minPathSum;
+        // dpMap.put(key, minPathSum);
 
         return minPathSum;
     }   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 27 Dec 2025:
