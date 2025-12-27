@@ -27,8 +27,8 @@ class Solution {
         int minPathSum = Integer.MAX_VALUE;
 
         int m = triangle.size();
-        // HashMap<String, Integer> dpMap = new HashMap<>(); 
-        Integer[][] dpMap = new Integer[m][m]; 
+        // HashMap<String, Integer> dpMap = new HashMap<>(); //beats 10.9%
+        Integer[][] dpMap = new Integer[m][m]; //beats 21.11%
 
         minPathSum = Math.min(minPathSum, traverse(triangle, 0, 0, dpMap));
         
