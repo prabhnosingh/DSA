@@ -11,7 +11,7 @@ class Solution {
             //Base is when m and n become 0 or strs array is fully traversed
             //We do not traverse the branch if it is causing m or n go negative
         
-    //Intuition 3 (2D DP: Bottom up solution: 0/1 Knapsack pattern / DP on sums/capacities):
+    //Intuition 3 (2D DP: Bottom up solution: 0/1 Knapsack pattern / DP on capacities):
         //For each string we pre-compute the zeroes and ones in that string 
         //Then we iterate over each string in strs (with pre-computed zeroOnes)
 
@@ -28,25 +28,38 @@ class Solution {
                 
                 //Now, we take max of these two options to get largest subset possible
                 //=> dp[i][j] = Math.max(dp[i][j], 1 + dp[i-iz][j-jo])
-            
-        //Base cases: ???
+        //We travel backwards from totalZeroes -> currZeroes and from totalOnes -> currOnes because the 
+            //problem is 0/1 Knapsack and we can use a single string at most once.
+        //We would have taken forward loops if the problem was unbounded knapsack.
+        //"Backward loop ensure dp[i-zeros][j-ones] is from the previous iteration (previous strings), so 
+            //the current string is not reused (0/1 property)" -> This explains how we could use the same
+            //string twice in the current iteration.
+        //Base cases: 
+            //"With 0 strings processed, best we can do for any i,j is 0 picked strings" 
+            //Therefore, initialize whole dp matrix with 0s
 
-        //TC:
-        //SC:
+        //TC: O(strs.length x m x n) 
+        //SC: O(strs.length + m x n) => O(m x n) => O(x^2)
     public int findMaxForm(String[] strs, int m, int n) {
-        //dp[i][j] represents max strings possible in subset given at most i 0's and j 1's
-        //dp[m][n] will represents max strings possible in subset given at most m 0's and n 1's 
+        //dp[i][j] represents max strings we can pick using at most i zeros and j ones from strings processed
+            //so far
+        //dp[m][n] will represents max strings we can pick using at most m zeros and n ones from strings
+            //processed so far 
         //Therefore, we need a 2D DP matrix of size m+1 x n+1
 
         int[][] dp = new int[m+1][n+1];
 
-        int[][] zeroOnes = new int[strs.length][2];
-        int idx = 0;
-        for(String str : strs){
-            zeroOnes[idx ++] = findZeroOnes(str);
-        }  
+        // int[][] zeroOnes = new int[strs.length][2];
+        // int idx = 0;
+        // for(String str : strs){
+        //     zeroOnes[idx ++] = findZeroOnes(str);
+        // }  
 
-        for(int[] zeroOne : zeroOnes){ //technically iterating over strs array
+        // for(int[] zeroOne : zeroOnes){ //technically iterating over strs array
+        for(String str : strs){ 
+            // int zeroes = zeroOne[0];
+            // int ones = zeroOne[1];
+            int[] zeroOne = findZeroOnes(str);
             int zeroes = zeroOne[0];
             int ones = zeroOne[1];
 
