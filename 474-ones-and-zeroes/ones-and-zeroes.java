@@ -20,7 +20,7 @@ class Solution {
                 //i. Choose the string to be added to the subset: 
                     //In this case we add 1 for adding current string. Given iz 0's and jo 1's in current 
                         //string, the subproblem now reduces to finding the max strings possible in subset
-                        //given i-iz 0's and j-jo 1's, i.e. dp[i-iz][j-jo]. 
+                        //given atmost i-iz 0's and j-jo 1's from strings processed so far, i.e. dp[i-iz][j-jo]. 
                         //=> 1 + dp[i-iz][j-jo]
                 //ii. Do not choose the string to be added to the subset:
                     //In this case we do not reduce our available 0's and 1's
@@ -34,12 +34,15 @@ class Solution {
         //"Backward loop ensure dp[i-zeros][j-ones] is from the previous iteration (previous strings), so 
             //the current string is not reused (0/1 property)" -> This explains how we could use the same
             //string twice in the current iteration.
+        //"This guarantees when computing dp[i][j], the value dp[i - cz][j - co] still refers to the result 
+            //before current string was applied, so the current string is not reused."
         //Base cases: 
             //"With 0 strings processed, best we can do for any i,j is 0 picked strings" 
+            //"with no strings chosen, max subset size is 0 for all capacities."
             //Therefore, initialize whole dp matrix with 0s
 
         //TC: O(strs.length x m x n) 
-        //SC: O(strs.length + m x n) => O(m x n) => O(x^2)
+        //SC: O(strs.length + m x n) => O(m x n)
     public int findMaxForm(String[] strs, int m, int n) {
         //dp[i][j] represents max strings we can pick using at most i zeros and j ones from strings processed
             //so far
