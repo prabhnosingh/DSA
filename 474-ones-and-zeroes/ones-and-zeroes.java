@@ -11,26 +11,35 @@ class Solution {
             //Base is when m and n become 0 or strs array is fully traversed
             //We do not traverse the branch if it is causing m or n go negative
         
-    //Intuition 1 (recursion: memoization):
+    //Intuition 2 (recursion: memoization: beats 5%):
         //There are two options for each string in the strs array
             //1. we pick it for our subset:
                 //In this case we reduce the number of 1's and 0's in currString from our m and n and add 1 
                     //to our choose variable for selecting one string
             //2. we do not pick it for our subset:
                 //In this case m and n remain the same
-            //Base is when m and n become 0 or strs array is fully traversed
+            //Base is strs array is fully traversed
             //We do not traverse the branch if it is causing m or n go negative
 
         //memoization: What is the repeated state that can be memoized?
-            //"If a value is carried downward, it must appear in the memo key"
+            //"If a variable value is carried downward, it must appear in the memo key"
             //Create a hasmap to store key of string currIdx + zeroes + ones and store largest 
                 //subset possible
 
+        //Precomputing zeroOnes to avoid recomputing zeroOnes for the same string multiple times
+
     public int findMaxForm(String[] strs, int m, int n) {
-        return traverse(strs, 0, m, n, new HashMap<>());
+        int[][] allZeroOnes = new int[strs.length][2];
+
+        int i = 0;
+        for(String str : strs){
+            allZeroOnes[i ++] = findZeroOnes(str);
+        }
+
+        return traverse(strs, 0, m, n, new HashMap<>(), allZeroOnes);
     }
 
-    private int traverse(String[] strs, int currIdx, int zeroes, int ones, HashMap<String, Integer> map){
+    private int traverse(String[] strs, int currIdx, int zeroes, int ones, HashMap<String, Integer> map, int[][] allZeroOnes){
         if(currIdx == strs.length){
             return 0;
         }
@@ -41,21 +50,22 @@ class Solution {
         }
 
 
-        int[] zeroOnes = findZeroOnes(strs[currIdx]);
+        int[] zeroOnes = allZeroOnes[currIdx];
         int choose = 0;
        
 
         if(!((zeroes - zeroOnes[0] < 0) || (ones - zeroOnes[1] < 0))){
-            choose = 1 + traverse(strs, currIdx + 1, zeroes - zeroOnes[0], ones - zeroOnes[1], map);
+            choose = 1 + traverse(strs, currIdx + 1, zeroes - zeroOnes[0], ones - zeroOnes[1], map, allZeroOnes);
         }
         
         
         //do not choose current string at currIdx, skip to next idx -> zeroes and ones remain same
-        int doNotChoose = traverse(strs, currIdx + 1, zeroes, ones, map);
+        int doNotChoose = traverse(strs, currIdx + 1, zeroes, ones, map, allZeroOnes);
 
-        map.put(key, Math.max(choose, doNotChoose));
+        int retVal = Math.max(choose, doNotChoose);
+        map.put(key, retVal);
         
-        return Math.max(choose, doNotChoose);
+        return retVal;
 
     } 
 
