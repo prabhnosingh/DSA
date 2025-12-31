@@ -2,9 +2,12 @@ class Solution {
     
     //Re-Solving on 23 Dec 2025:
 
-    //intuition 1: (2D DP: DP on grids pattern: Answer at 0,0) 
+    //intuition 1: (Bottom-up: 2D DP: DP on grids pattern: Answer at 0,0) 
         //We will build our answer from bottom to top. Minimum health required to survive after reaching princess
             //cell will be 1.
+
+        //"The knight must enter each cell with enough health so that AFTER applying the cell value, his 
+            //health is >= 1 and sufficient for the next cell."
         
         //Recurrence relation:
             //If a cell have a positive value, then only additional health required is
@@ -19,13 +22,30 @@ class Solution {
 
             //if currCellVal is negative, the negative sign in Math.max(1, Math.min(right, down) - currCellVal), will
                 //automatically become positive. So we can just use 1 equation for both the scenarios. 
+            
+            //"The knight must enter each cell with enough health so that AFTER applying the cell value, his 
+                //health is >= 1 and sufficient for the next cell."
+
+            //"From cell (i, j), the knight must go either right or down. He should choose the path that requires
+                //less health to survive, i.e. min(dp[i+1][j], dp[i][j+1])."
+                //"To safely enter (i, j), his health before entering must be:"
+                    //"requiredNextHealth − dungeon[i][j]"
+                //"But since health can never drop below 1:"
+                    //"dp[i][j] = max(1, requiredNextHealth − dungeon[i][j])"
+
+            //"Direction of DP:
+                //Bottom-right → top-left is correct.
+                //Reason: future requirement (right/down) determines current requirement."
+                    //"We fill from bottom-right to top-left because each cell depends on right and down neighbors."
         //Base cases:  
-            //for last row the knight can only move left to right, therefore dp[i][j] = Math.max(1, right - currCellVal)
-            //for last row the knight can only move top to down, therefore dp[i][j] = Math.max(1, down - currCellVal) 
+            //for last row the knight can only move right, therefore dp[i][j] = Math.max(1, right - currCellVal)
+            //for last row the knight can only move down, therefore dp[i][j] = Math.max(1, down - currCellVal) 
 
     public int calculateMinimumHP(int[][] dungeon) {
         //dp[i][j] represents minimum health required to reach bottom right cell from i,j while only travelling down
             //and right.
+        //"dp[i][j] represents the minimum health the knight must have before entering cell (i, j) to safely reach 
+            //the princess."
         //dp[0][0] will represent minimum health required to reach bottom right cell from 0,0 cell while only travelling
             //down and right
         //Therefore, we need a 2D matrix of size dungeon.length x dungeon[0].length 
