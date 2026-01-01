@@ -1,14 +1,19 @@
 class Solution {
     //Solving on 01 Jan 2026
 
-    //intuition 1: Graph : DFS
+    //intuition 1: Graph (DFS: Flood fill pattern)
         //Traverse the whole grid with DFS. At each cell travel in all 4 directions. To make sure
             //we do not travel on the same node again, we mark each visited cell as 2. 
         //Base case will be when we encounter 0 or go out of bound
         //We run a for loop over the whole grid and call dfs on every 1 encountered.
             //For each 1 encountered, increase the island count by 1. DFS will make sure to update
                 //all adjacent 1's of this 1 to 2 (all of which form one island)
+            //“When DFS returns, the entire connected component (island) of that starting cell is marked visited.”
             //After the for loop we return number of islands  
+        
+    //TC: O(m * n) : Each cell is visited at most once
+    //SC: O(m * n): worst-case recursion stack (all land) space
+    //here m and n are rows and cols respectively 
 
     public int numIslands(char[][] grid) {
         
