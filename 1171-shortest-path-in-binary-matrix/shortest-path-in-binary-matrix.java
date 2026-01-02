@@ -33,7 +33,7 @@ class Solution {
         int rows = grid.length;
         int cols = grid[0].length;
 
-        Queue<int[]> queue = new LinkedList<>();
+        Queue<int[]> queue = new ArrayDeque<>();
 
         //if top left cell is 1 or bottom right cell is 1, just return -1
         if(grid[0][0] == 1 || grid[rows-1][cols-1] == 1) return -1; 
