@@ -64,7 +64,7 @@ class Solution {
                 for(int[] dir : directions){
                     int newX = x + dir[0];
                     int newY = y + dir[1];
-                    // if(newX == rows - 1 && newY == cols - 1) return currLevel + 1; //bottom right reached
+                    if(newX == rows - 1 && newY == cols - 1) return currLevel + 1; //bottom right reached
                     if(newX >= 0 && newY >= 0 && newX < rows && newY < cols && grid[newX][newY] == 0){
                         //marking newX, newY as visited
                         grid[newX][newY] = 2;
