@@ -1,7 +1,7 @@
 class Solution {
     //Solving on 02 Jan 2026
 
-    //intuiton 2 (optimizing intuition 1): Graph : BFS
+    //intuiton 2 (optimizing intuition 1): Graph : BFS on grid
         //Have a queue of type int[] array. Make each entry size of 3. For each polled entry
             //offer all 8 neighboring valid (0 and in-bounds of grid) cells back to queue. The
             //0 and 1 index of each entry will specify the x and y coordinates and 2 index will
@@ -14,7 +14,8 @@ class Solution {
             //length and do not need to traverse other options available, hence we return the 
             //path length as soon as we reach bottom right
 
-        //Getting TLE: Do we need to traverse all the paths from the queue?
+        //Getting TLE: Do we need to traverse all the paths from the queue? -> yes in worst case BFS can
+            //traverse all possible paths. This is expected.
             //Learning: "A node must be marked visited at the moment it is enqueued, not when it is dequeued."
         
         //Optimization: We do not need to track an extra integer (currPathSum) in int[] array as each level of 
@@ -23,12 +24,16 @@ class Solution {
         //"BFS level = path length (in unweighted graphs)."
         //“In an unweighted graph, BFS explores nodes by increasing distance from the source, so the first time 
             //we reach the target is the shortest path.”
+
+    //TC: O(m*n)
+    //SC: O(m*n)
+    //Where m and n are the rows and cols respectively
     public int shortestPathBinaryMatrix(int[][] grid) { 
         
         int rows = grid.length;
         int cols = grid[0].length;
 
-        Queue<int[]> queue = new ArrayDeque<>();
+        Queue<int[]> queue = new LinkedList<>();
 
         //if top left cell is 1 or bottom right cell is 1, just return -1
         if(grid[0][0] == 1 || grid[rows-1][cols-1] == 1) return -1; 
