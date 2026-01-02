@@ -32,21 +32,22 @@ class Solution {
 
         //if top left cell is 1 or bottom right cell is 1, just return -1
         if(grid[0][0] == 1 || grid[rows-1][cols-1] == 1) return -1; 
+        if(rows == 1 && cols == 1 && grid[0][0] == 0) return 1;
         
         int currLevel = 0;
         queue.offer(new int[]{0, 0});
         grid[0][0] = 2;
 
-                int[][] directions = {
-                {1,0}, //down 
-                {-1,0}, //up
-                {0,1}, //right
-                {0,-1}, //left
-                {-1,-1}, //top-left
-                {-1,1}, //top-right
-                {1,1}, //down-right
-                {1,-1} //down-left
-                }; 
+        int[][] directions = {
+        {1,0}, //down 
+        {-1,0}, //up
+        {0,1}, //right
+        {0,-1}, //left
+        {-1,-1}, //top-left
+        {-1,1}, //top-right
+        {1,1}, //down-right
+        {1,-1} //down-left
+        }; 
         while(!queue.isEmpty()){
             int currQSize = queue.size();
             currLevel += 1;
@@ -54,7 +55,7 @@ class Solution {
                 int[] currCell = queue.poll();
                 int x = currCell[0];
                 int y = currCell[1];
-                if(x == rows - 1 && y == cols - 1) return currLevel; //bottom right reached
+                // if(x == rows - 1 && y == cols - 1) return currLevel; //bottom right reached
                 
                 //The below code is causing TLE as we are marking a cell as visited too late with this block
                 //Instead we should mark any cell visited as soon as we offer it to the queue.
@@ -67,7 +68,7 @@ class Solution {
                 for(int[] dir : directions){
                     int newX = x + dir[0];
                     int newY = y + dir[1];
-                    // if(newX == rows - 1 && newY == cols - 1) return currLevel + 1; //bottom right reached
+                    if(newX == rows - 1 && newY == cols - 1) return currLevel + 1; //bottom right reached
                     if(newX >= 0 && newY >= 0 && newX < rows && newY < cols && grid[newX][newY] == 0){
                         //marking newX, newY as visited
                         grid[newX][newY] = 2;
@@ -83,7 +84,7 @@ class Solution {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 02 Jan 2026
 
-    // //intuiton 1: Graph : BFS : beats 27.66%
+    // //intuiton 1: Graph : BFS : beats 27.66% (directions array was inside the while loop and was being reinitialized with each poll)
     //     //Have a queue of type int[] array. Make each entry size of 3. For each polled entry
     //         //offer all 8 neighboring valid (0 and in-bounds of grid) cells back to queue. The
     //         //0 and 1 index of each entry will specify the x and y coordinates and 2 index will
