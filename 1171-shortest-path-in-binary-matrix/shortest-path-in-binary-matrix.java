@@ -95,6 +95,9 @@ class Solution {
 
         //Getting TLE: Do we need to traverse all the paths from the queue?
             //Learning: "A node must be marked visited at the moment it is enqueued, not when it is dequeued."
+    
+    //TC: O(m*nx8) = O(m*n): Each node is traversed exactly once
+    //SC: O(m*n): "the queue can hold O(m*n) cells in the worst case"
     public int shortestPathBinaryMatrix(int[][] grid) { 
         
         int rows = grid.length;
@@ -110,7 +113,7 @@ class Solution {
 
         while(!queue.isEmpty()){
             // int currQSize = queue.size();
-            // for(int i = 0; i < currQSize; i ++){
+            // for(int i = 0; i < currQSize; i ++){ //no need of for loop as we are already tracking currPathLen
                 int[] currCell = queue.poll();
                 int x = currCell[0];
                 int y = currCell[1];
