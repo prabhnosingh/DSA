@@ -2,12 +2,12 @@ class Solution {
     //Solving on 28 Dec 2025:
 
     //intuition 2(brainstorming): 
-        //It is a DP on grids pattern problem.
+        //It is a DP on grids / DP on strings pattern problem.
         //We need "every character of s3 to be consumed in order while choosing from s1 or s2 at each step"
         //"So we need to know how many chars we've used from s1 and s2 together, not independently" (like
             //in intuition 1)
 
-    //intuiton 2: (2D DP: DP on grids pattern: Parent problem unique paths)
+    //intuiton 2: (2D DP: DP on grids pattern("prefix-consumption DP"): Parent problem: Unique paths)
        
             
         //Recurrence relation:
@@ -40,10 +40,12 @@ class Solution {
             //dp[0][0] = True => given first 0 chars of s1 and first 0 chars of s2 we can form first 0 chars of s3
 
             //Given 0 chars of s1, the dp state completely depends on s2 chars. Therefore for i=0, any j starting
-                //from 1, dp[i][j] depends on s3.charAt(j) == s2.charAt(j) => first row
+                //from 1, dp[i][j] depends on previous dp state (dp[i][j-1]) and s3.charAt(j) == s2.charAt(j) => first row
+                //As the chars from s2 should match as it is with s3 from left to right
             
             //Given 0 chars of s2, the dp state completely depends on s1 chars. Therefore for j=0, any i starting
-                //from 1, dp[i][j] depends on s3.charAt(i) == s1.charAt(i) => first col
+                //from 1, dp[i][j] depends on previous dp state (dp[i-1][j]) and s3.charAt(i) == s1.charAt(i) => first col
+                //As the chars from s1 should match as it is with s3 from top to bottom
 
             //If s1.length() + s2.length() != s3.length() => return false
 
@@ -71,7 +73,6 @@ class Solution {
             dp[i][j] = dp[i][j-1] && (s2.charAt(j-1) == s3.charAt(j-1));
         }
 
-        //Rectify base case to consider previous 
         //filling first col
         for(int i = 1; i < rows; i ++){
             int j = 0; 
