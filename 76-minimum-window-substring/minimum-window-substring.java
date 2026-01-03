@@ -21,15 +21,7 @@ class Solution {
 
         if(t.length() == 0) return "";
 
-        if(s.length() == 1 && t.length() == 1){
-            if(s.charAt(0) == t.charAt(0)){
-                return s;
-            }
-            else{
-                return "";
-            }
-        
-        } 
+      
 
         if(s.equals(t)) return s;    
 
