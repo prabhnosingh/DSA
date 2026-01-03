@@ -13,6 +13,10 @@ class Solution {
             //In this scenario take the substring from left-1 to right (inclusive) and store
             //it as a probable answer.
 
+        
+        //decrement count in map when expanding window
+        //increment count in map when shrinking window
+
 
 
     public String minWindow(String s, String t) {
@@ -20,8 +24,6 @@ class Solution {
         if(s.length() < t.length()) return "";
 
         if(t.length() == 0) return "";
-
-      
 
         if(s.equals(t)) return s;    
 
@@ -40,10 +42,10 @@ class Solution {
         //we have found all chars from t string when currSubStringLen == t.length()
         while(right < s.length()){
 
-            char currChar = s.charAt(right ++);
-            if(map.containsKey(currChar)){
-                map.put(currChar, map.get(currChar) - 1);
-                if(map.get(currChar) >= 0){ //negative means access elements
+            char currCharRight = s.charAt(right ++);
+            if(map.containsKey(currCharRight)){
+                map.put(currCharRight, map.get(currCharRight) - 1);
+                if(map.get(currCharRight) >= 0){ //negative means access elements
                     currSubStringLen += 1;
                 }
             }
