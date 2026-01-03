@@ -1,19 +1,12 @@
 class Solution {
-    //Solving on 01 Jan 2026
+    //Re-Solving on 02 Jan 2026
 
-    //intuition 1: Graph (DFS: Flood fill pattern)
-        //Traverse the whole grid with DFS. At each cell travel in all 4 directions. To make sure
-            //we do not travel on the same node again, we mark each visited cell as 2. 
-        //Base case will be when we encounter 0 or go out of bound
-        //We run a for loop over the whole grid and call dfs on every 1 encountered.
-            //For each 1 encountered, increase the island count by 1. DFS will make sure to update
-                //all adjacent 1's of this 1 to 2 (all of which form one island)
-            //“When DFS returns, the entire connected component (island) of that starting cell is marked visited.”
-            //After the for loop we return number of islands  
-        
-    //TC: O(m * n) : Each cell is visited at most once
-    //SC: O(m * n): worst-case recursion stack (all land) space
-    //here m and n are rows and cols respectively 
+    //intuition 1: BFS : Graphs
+        //Have a helper function that takes in the index of starting node of each island. Only pass
+            //index of cell that is '1'.
+        //Inside this function run bfs starting from this cell. Add to queue all the surrounding cells
+            //that are '1'. Before adding to queue, change each cell as '2' to mark it as visited and 
+            //avoid future duplicate considerations. 
 
     public int numIslands(char[][] grid) {
         
@@ -21,30 +14,52 @@ class Solution {
         int cols = grid[0].length;
 
         int numIslands = 0;
-        
+
         for(int i = 0; i < rows; i ++){
             for(int j = 0; j < cols; j ++){
                 if(grid[i][j] == '1'){
                     numIslands += 1;
-                    dfs(grid, i, j);
+                    bfs(i, j, grid);
                 }
             }
         }
         return numIslands;
-    }
-    
-    private void dfs(char[][] grid, int row, int col){
-        if(row < 0 || col < 0 || row >= grid.length || col >= grid[0].length) return;
-        if(grid[row][col] != '1') return;
 
+    }
+
+    private void bfs(int row, int col, char[][] grid){
+        Queue<int[]> queue = new ArrayDeque<>();
+
+        queue.offer(new int[]{row, col});
         grid[row][col] = '2';
 
+        int[][] directions = {{1,0}, {0,1}, {-1,0}, {0,-1}};
 
-        dfs(grid, row + 1, col); //down
-        dfs(grid, row - 1, col); //top
-        dfs(grid, row, col + 1); //right
-        dfs(grid, row, col - 1); //left
+        while(!queue.isEmpty()){
+            int currQSize = queue.size();
+
+            for(int i = 0; i < currQSize; i ++){
+                int[] currCell = queue.poll();
+
+                int x = currCell[0];
+                int y = currCell[1];
+
+                for(int[] dir : directions){
+                    int newX = x + dir[0];
+                    int newY = y + dir[1];
+
+                    if(newX >= 0 && newY >= 0 && newX < grid.length && newY < grid[0].length && grid[newX][newY] == '1'){
+                        grid[newX][newY] = '2'; //marking visited
+                        queue.offer(new int[]{newX, newY});
+                    }
+                }
+
+            }
+
+        }
     }
+    
+
 
 
 
@@ -89,6 +104,96 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 01 Jan 2026
+
+//     //intuition 1: Graph (DFS: Flood fill pattern)
+//         //Traverse the whole grid with DFS. At each cell travel in all 4 directions. To make sure
+//             //we do not travel on the same node again, we mark each visited cell as 2. 
+//         //Base case will be when we encounter 0 or go out of bound
+//         //We run a for loop over the whole grid and call dfs on every 1 encountered.
+//             //For each 1 encountered, increase the island count by 1. DFS will make sure to update
+//                 //all adjacent 1's of this 1 to 2 (all of which form one island)
+//             //“When DFS returns, the entire connected component (island) of that starting cell is marked visited.”
+//             //After the for loop we return number of islands  
+        
+//     //TC: O(m * n) : Each cell is visited at most once
+//     //SC: O(m * n): worst-case recursion stack (all land) space
+//     //here m and n are rows and cols respectively 
+
+//     public int numIslands(char[][] grid) {
+        
+//         int rows = grid.length;
+//         int cols = grid[0].length;
+
+//         int numIslands = 0;
+        
+//         for(int i = 0; i < rows; i ++){
+//             for(int j = 0; j < cols; j ++){
+//                 if(grid[i][j] == '1'){
+//                     numIslands += 1;
+//                     dfs(grid, i, j);
+//                 }
+//             }
+//         }
+//         return numIslands;
+//     }
+    
+//     private void dfs(char[][] grid, int row, int col){
+//         if(row < 0 || col < 0 || row >= grid.length || col >= grid[0].length) return;
+//         if(grid[row][col] != '1') return;
+
+//         grid[row][col] = '2';
+
+
+//         dfs(grid, row + 1, col); //down
+//         dfs(grid, row - 1, col); //top
+//         dfs(grid, row, col + 1); //right
+//         dfs(grid, row, col - 1); //left
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////////////
