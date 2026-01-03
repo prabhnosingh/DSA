@@ -21,7 +21,7 @@ class Solution {
 
     public int[] maxSlidingWindow(int[] nums, int k) {
 
-        if(k == 1) return nums;
+        // if(k == 1) return nums;
 
         Deque<Integer> queue = new ArrayDeque<>();
         int[] maxWindow = new int[nums.length - k + 1];
@@ -38,12 +38,12 @@ class Solution {
             }
             if(queue.peekFirst() <= i - k) queue.pollFirst(); //making sure outdated element is not at the front of queue
 
-            if(!queue.isEmpty() && currNum > nums[queue.peekLast()]){ //a greater element has been found, poll all the smaller elements
+            // if(!queue.isEmpty() && currNum > nums[queue.peekLast()]){ //a greater element has been found, poll all the smaller elements
                 while(!queue.isEmpty() && currNum > nums[queue.peekLast()]){
                     queue.pollLast();
                 }
                 // queue.offerLast(i);
-            }
+            // }
             // else{
             //     queue.offerLast(i);
             // }
@@ -100,8 +100,8 @@ class Solution {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //24 Oct 2025: intuition 3 (deque): Use a deque to store the indices of the elements of nums.
 //     //Our result of maximum window will be at the front of the queue. We will maintain the queue
-//     //in such a way that if any bigger number is encountered, we remove all the indices of smaller 
-//     //numbers from the queue.
+//     //in such a way that if any bigger number is encountered compared to peekLast, we remove all 
+//     //the indices of smaller numbers from the queue.
 
 //     //When we move towards right, we will have to make sure that front of the queue does not contain
 //     //the i - k index as that will be an outdated element, given that we have moved towards right.
