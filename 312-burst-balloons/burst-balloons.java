@@ -6,13 +6,15 @@ class Solution {
             //and then trying all combinations and so on. TC: O(n^n);
 
         //DP way: We will be looking at which balloon gives max coins in total if it is popped at last as
-            //only then its neighbors will be fixed
+            //only then its neighbors will be fixed.
+            //“Pick the last balloon in each interval because only then its neighbors are fixed; try all
+                //k in an interval as last, and build dp by increasing interval length.”
 
         //Recurrence relation:
             //Given an interval i, j:
                 //If k is the balloon that is popped at last, then all other balloons in subarrays (i,k) and
                     //(k,j) are already gone. So when k bursts its neighbors are fixed, i.e. i and j
-                    //Therefore, coins gained by bursting kth balloon with be => nums[i] + nums[k] + nums[j]
+                    //Therefore, coins gained by bursting kth balloon with be => nums[i] * nums[k] * nums[j]
 
                 //Plus the left side total coins, which is => dp[i][k] 
                 //Plus the right side total coins, which is => dp[k][j]
@@ -27,7 +29,8 @@ class Solution {
         //Base case:
             //If there are no balloons between i and j, i.e. j = i + 1 or i = j + 1 (adjacent boundaries).
                 //=> |i-j| = 1
-            //This represents that the interval is empty, hence there are 0 coins earned
+            //This represents that the interval is empty, hence there are 0 coins earned. This is the reason
+                //why we start with interval of length 2
 
         //Filling dp array:
             //As dp[i][j] depends on smaller intervals dp[i][k] and dp[k][j], we must fill by increasing
@@ -39,17 +42,24 @@ class Solution {
                 //j = i + len
 
         
+        //TC: O(n^3)
+        //SC: O(n^2)
+
+        
     public int maxCoins(int[] nums) {
         //dp[i][j] represents maximum coins possible to collect by popping balloons within 
             //subarray starting from i index and ending at j index where i and j are not included
         //dp[0][nums.length + 1] will represent maximum coins possible to collect by popping 
             //all balloons within nums array.
-        //Therefore, we need a 2D matrix of size nums.length+2 x nums.length+2
+        //Therefore, we need a 2D matrix of size nums.length+2 x nums.length+2 with extreme left and
+            //extreme right appended with 1's as boundaries to nums array resulting in a new nums array.
+            //"Sentinels make every burst have two neighbors, removing edge cases.”
         
-        //dp[i][j] = maximum coins obtainable by bursting all balloons strictly between i and j
+        //"dp[i][j] = max coins by bursting all balloons strictly between i and j (i and j are
+            //boundaries, not burst inside this state)."
 
         int[] numsNew = new int[nums.length + 2];
-        for(int i = 0; i < nums.length + 2; i ++){
+        for(int i = 0; i < numsNew.length; i ++){
             if(i == 0 || i == nums.length + 1){
                 numsNew[i] = 1; //adding 1 on both the boundaries 
                 continue;
@@ -68,7 +78,6 @@ class Solution {
 
                 //now we have our interval's left and right boundaries. we now check for all k's between
                     //i and j
-
                 for(int k = i + 1; k < j; k ++){
                     int kCoins = numsNew[i] * numsNew[k] * numsNew[j];
                     kCoins += dp[i][k] + dp[k][j];
@@ -79,7 +88,7 @@ class Solution {
             }
         }
 
-        return dp[0][nums.length + 1];
+        return dp[0][numsNew.length - 1];
 
 
 
