@@ -11,6 +11,10 @@ class Solution {
         //After each level complete, all the rotten oranges would have infected their respective
             //adjacent fresh oranges
 
+
+        //TC: O(rows * cols) : We traverse each cell once
+        //SC: O(rows * cols): In worst call all the cells could be in queue
+
     public int orangesRotting(int[][] grid) {
         
         int rows = grid.length;
@@ -21,7 +25,8 @@ class Solution {
         
         Queue<int[]> queue = new ArrayDeque<>();
 
-        int freshOrangeCount = 0;
+        int freshOrangeCount = 0; //this avoids rescanning grid after bfs traversal to find 
+            //any remaining fresh oranges
 
         //intializing queue with rotten oranges
         for(int i = 0; i < rows; i ++){
@@ -31,6 +36,9 @@ class Solution {
             }
         }   
 
+        if(freshOrangeCount == 0){
+            return 0;
+        }
         while(!queue.isEmpty()){
             int currQSize = queue.size();
             boolean freshOrangeFound = false;
