@@ -4,12 +4,15 @@ class Solution {
 
 
     
-    //intuition 2: Graph: BFS
+    //intuition 2: Graph: multi-source BFS
         //Add all rotten oranges to a queue and start polling all of the them one by one and 
             //offer back teh newly affected oranges to the queue. Each level will signify one
             //minute.
         //After each level complete, all the rotten oranges would have infected their respective
             //adjacent fresh oranges
+
+        //“All oranges in the queue at the start of a BFS level rot their neighbors in the
+            //same minute. So after processing exactly queue.size() nodes, we’ve completed one minute.”
 
 
         //TC: O(rows * cols) : We traverse each cell once
@@ -62,9 +65,14 @@ class Solution {
             }
             //do not increase time if none of the rotten oranges were able to infect any fresh oranges
                 //due unavailability of fresh oranges
-            if(freshOrangeFound){
-                freshOrangeFound = false;
-                minTime += 1;
+            // if(freshOrangeFound){
+            //     minTime += 1;
+            // }
+
+            //alternate to the above if condition
+            if(queue.size() > 0){ //time gets incremented only when any fresh orange was infected and 
+                //added to queue
+                minTime += 1; 
             }
         }
 
