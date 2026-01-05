@@ -21,10 +21,13 @@ class Solution {
         
         Queue<int[]> queue = new ArrayDeque<>();
 
+        int freshOrangeCount = 0;
+
         //intializing queue with rotten oranges
         for(int i = 0; i < rows; i ++){
             for(int j = 0; j < cols; j ++){
                 if(grid[i][j] == 2) queue.offer(new int[]{i, j});
+                if(grid[i][j] == 1) freshOrangeCount += 1;
             }
         }   
 
@@ -43,26 +46,28 @@ class Solution {
 
                     if(newX >= 0 && newY >= 0 && newX < rows && newY < cols && grid[newX][newY] == 1){
                         freshOrangeFound = true;
+                        freshOrangeCount -= 1;
                         grid[newX][newY] = 2;
                         queue.offer(new int[]{newX, newY});
                     }
                 } 
             }
-            if(freshOrangeFound){//if none of the rotten oranges were able to infect any fresh oranges
+            //do not increase time if none of the rotten oranges were able to infect any fresh oranges
                 //due unavailability of fresh oranges
+            if(freshOrangeFound){
                 freshOrangeFound = false;
                 minTime += 1;
             }
         }
 
-        //checking for any fresh oranges
-        for(int i = 0; i < rows; i ++){
-            for(int j = 0; j < cols; j ++){
-                if(grid[i][j] == 1) return -1;
-            }
-        }
+        // //checking for any fresh oranges
+        // for(int i = 0; i < rows; i ++){
+        //     for(int j = 0; j < cols; j ++){
+        //         if(grid[i][j] == 1) return -1;
+        //     }
+        // }
         
-        return minTime;
+        return freshOrangeCount > 0 ? -1 : minTime;
 
     }
 
