@@ -7,6 +7,8 @@ class Solution {
             //boolean visited array
         //This way we visit each cell exactly once
 
+    //TC: O(rows*cols) (each cell enqueued once)
+    //SC: O(rows*cols) (queue worst case + visited)
 
     public int[][] updateMatrix(int[][] mat) {
         int rows = mat.length;
@@ -20,6 +22,7 @@ class Solution {
         for(int i = 0; i < rows; i ++){
             for(int j = 0; j < cols; j ++){
                 if(mat[i][j] == 0){
+                    visited[i][j] = true;
                     queue.offer(new int[]{i, j});
                 }
             }
