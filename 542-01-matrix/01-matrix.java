@@ -7,6 +7,8 @@ class Solution {
             //boolean visited array
         //This way we visit each cell exactly once
 
+        //“When we expand from a cell (x,y), any unvisited neighbor gets distance = dist[x][y] + 1.”
+
         //Space-optimization:
             //We can mark all 1s as -1 initially while filling 0 positions in queue.
             //By doing this we remove the need of visited array as a -1 will signify an unvisited
@@ -14,7 +16,7 @@ class Solution {
                 //shortest distance from a zero
 
     //TC: O(rows*cols) (each cell enqueued once)
-    //SC: O(rows*cols) (queue worst case + visited)
+    //SC: O(rows*cols) (queue worst case)
 
     public int[][] updateMatrix(int[][] mat) {
         int rows = mat.length;
