@@ -62,14 +62,15 @@ class Solution {
                     costArr[neiCity][currCityStops] = neiCost + currCityCost;
                     // System.out.println("city- " + neiCity + " stops- " + currCityStops + " = " + 
                     // costArr[neiCity][currCityStops]);
+                    if(neiCity == dst) cheapestPrice = Math.min(cheapestPrice, neiCost + currCityCost);
                     minHeap.offer(new int[]{neiCost + currCityCost, neiCity, currCityStops + 1});
                 }
             }
         }
 
-        for(int i = 0; i < k + 1; i ++){
-            cheapestPrice = Math.min(cheapestPrice, costArr[dst][i]);
-        }
+        // for(int i = 0; i < k + 1; i ++){
+        //     cheapestPrice = Math.min(cheapestPrice, costArr[dst][i]);
+        // }
 
         return cheapestPrice == Integer.MAX_VALUE ? -1 : cheapestPrice;
        
