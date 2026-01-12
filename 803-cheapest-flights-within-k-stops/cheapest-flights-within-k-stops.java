@@ -60,16 +60,14 @@ class Solution {
 
                 if(costArr[neiCity][currCityStops] > neiCost + currCityCost){
                     costArr[neiCity][currCityStops] = neiCost + currCityCost;
-                    System.out.println("city- " + neiCity + " stops- " + currCityStops + " = " + 
-                    costArr[neiCity][currCityStops]);
-
+                    // System.out.println("city- " + neiCity + " stops- " + currCityStops + " = " + 
+                    // costArr[neiCity][currCityStops]);
                     minHeap.offer(new int[]{neiCost + currCityCost, neiCity, currCityStops + 1});
                 }
             }
         }
 
         for(int i = 0; i < k + 1; i ++){
-            System.out.println(costArr[dst][k]);
             cheapestPrice = Math.min(cheapestPrice, costArr[dst][i]);
         }
 
