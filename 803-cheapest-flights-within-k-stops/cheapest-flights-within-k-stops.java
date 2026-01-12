@@ -1,88 +1,65 @@
 class Solution {
     //Solving on 11 Jan 2026
     
-    //intuition 1 (optimization): Graph : Dijkstra with state pattern
+    //intuition 3 (intuition 2 optimization: beats %): Graph : Dijkstra with state pattern
         //Run Dijkstra algorithm from src to all other nodes. 
-        //Every time a dst node is encountered, save its cost along with the 
-            //number of stops(nodes in between) in a hashmap
+        //Use a simple queue with int[] array type for cost, city, stops
 
-        //Use a 2D cost array to track the cost to reach a city + stops 
-            //cost[i][j] represents cost to reach city i from src with j stops
+        //optimization from intuition 2
+            //Have a dist[] array to track the cost
+            //use simple queue instead of prioirty queue
 
         //Using List<int[]>[] as adjList
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
 
+        List<int[]>[] adjList = new ArrayList[n];
 
-        int[][] costArr = new int[n][k + 1];
+        //initializing adjList 
+        for(int i = 0; i < n; i ++) adjList[i] = new ArrayList<>();
 
-        List<int[]>[] adjList = new ArrayList[n]; //array of "list of array" type
-            //An array where each element is a List that contains int[] objects
-
-        //initializing adjList
-        for(int i = 0; i < n; i ++){
-            adjList[i] = new ArrayList<>();
-        }
-            
-        //filling adjacency list with flights 
         for(int[] flight : flights){
             int city1 = flight[0];
             int city2 = flight[1];
             int cost = flight[2];
-            
+
             adjList[city1].add(new int[]{cost, city2});
         }
 
-        //tracks the cheapest price within k stops
+        int[] cost = new int[n];
+
+        for(int i = 0; i < n; i ++) cost[i] = Integer.MAX_VALUE;
         int cheapestPrice = Integer.MAX_VALUE;
+        
+        Queue<int[]> queue = new ArrayDeque<>();
 
-        //currStops tracks number of stops
-        int currStops = 0;
+        cost[src] = 0;
+        queue.offer(new int[]{0, src, 0}); //cost, city, stops
 
+        while(!queue.isEmpty()){
+            int[] currElement = queue.poll();
 
-        //filling cost array with max value
-        for(int i = 0; i < n; i ++){
-            for(int j = 0; j < k + 1; j ++){
-                costArr[i][j] =  Integer.MAX_VALUE;
-
-            }
-        }
-
-        costArr[src][0] = 0; //cost of src from src is 0
-
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare(a[0],b[0]));
-        minHeap.offer(new int[]{0, src, currStops});
-
-        while(!minHeap.isEmpty()){
-            int[] currElement = minHeap.poll();
             int currCityCost = currElement[0];
             int currCity = currElement[1];
             int currCityStops = currElement[2];
 
             if(currCityStops > k) continue;
+            // if(adjList[currCity] == null) continue;
 
-            if(adjList[currCity] == null) continue;
-            for(int[] neiCon : adjList[currCity]){ //adjList[currCity] contains list of int[] arrays
+            for(int[] neiCon : adjList[currCity]){
                 int neiCost = neiCon[0];
                 int neiCity = neiCon[1];
 
-                if(costArr[neiCity][currCityStops] > neiCost + currCityCost){
-                    costArr[neiCity][currCityStops] = neiCost + currCityCost;
-                    // System.out.println("city- " + neiCity + " stops- " + currCityStops + " = " + 
-                    // costArr[neiCity][currCityStops]);
-                    if(neiCity == dst) cheapestPrice = Math.min(cheapestPrice, neiCost + currCityCost);
-                    minHeap.offer(new int[]{neiCost + currCityCost, neiCity, currCityStops + 1});
+                if(cost[neiCity] > neiCost + currCityCost){
+                    cost[neiCity] = neiCost + currCityCost;
+                    queue.offer(new int[]{neiCost + currCityCost, neiCity, currCityStops + 1});
                 }
             }
-        }
 
-        // for(int i = 0; i < k + 1; i ++){
-        //     cheapestPrice = Math.min(cheapestPrice, costArr[dst][i]);
-        // }
+        } 
+        
+        return cost[dst] == Integer.MAX_VALUE ? -1 : cost[dst];
 
-        return cheapestPrice == Integer.MAX_VALUE ? -1 : cheapestPrice;
-       
-
-
+    
 
 
 
@@ -105,6 +82,112 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 11 Jan 2026
+    
+//     //intuition 2 (intuition 1 optimization: beats 5.83%): Graph : Dijkstra with state pattern
+//         //Run Dijkstra algorithm from src to all other nodes. 
+//         //Every time a dst node is encountered, save its cost along with the 
+//             //number of stops(nodes in between) in a hashmap
+
+//         //Use a 2D cost array to track the cost to reach a city + stops 
+//             //cost[i][j] represents cost to reach city i from src with j stops
+
+//         //Using List<int[]>[] as adjList
+//     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+
+
+//         int[][] costArr = new int[n][k + 1];
+
+//         List<int[]>[] adjList = new ArrayList[n]; //array of "list of array" type
+//             //An array where each element is a List that contains int[] objects
+
+//         //initializing adjList
+//         for(int i = 0; i < n; i ++){
+//             adjList[i] = new ArrayList<>();
+//         }
+            
+//         //filling adjacency list with flights 
+//         for(int[] flight : flights){
+//             int city1 = flight[0];
+//             int city2 = flight[1];
+//             int cost = flight[2];
+            
+//             adjList[city1].add(new int[]{cost, city2});
+//         }
+
+//         //tracks the cheapest price within k stops
+//         int cheapestPrice = Integer.MAX_VALUE;
+
+//         //currStops tracks number of stops
+//         int currStops = 0;
+
+
+//         //filling cost array with max value
+//         for(int i = 0; i < n; i ++){
+//             for(int j = 0; j < k + 1; j ++){
+//                 costArr[i][j] =  Integer.MAX_VALUE;
+
+//             }
+//         }
+
+//         costArr[src][0] = 0; //cost of src from src is 0
+
+//         PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare(a[0],b[0]));
+//         minHeap.offer(new int[]{0, src, currStops});
+
+//         while(!minHeap.isEmpty()){
+//             int[] currElement = minHeap.poll();
+//             int currCityCost = currElement[0];
+//             int currCity = currElement[1];
+//             int currCityStops = currElement[2];
+
+//             if(currCityStops > k) continue;
+
+//             if(adjList[currCity] == null) continue;
+//             for(int[] neiCon : adjList[currCity]){ //adjList[currCity] contains list of int[] arrays
+//                 int neiCost = neiCon[0];
+//                 int neiCity = neiCon[1];
+
+//                 if(costArr[neiCity][currCityStops] > neiCost + currCityCost){
+//                     costArr[neiCity][currCityStops] = neiCost + currCityCost;
+//                     // System.out.println("city- " + neiCity + " stops- " + currCityStops + " = " + 
+//                     // costArr[neiCity][currCityStops]);
+//                     if(neiCity == dst) cheapestPrice = Math.min(cheapestPrice, neiCost + currCityCost);
+//                     minHeap.offer(new int[]{neiCost + currCityCost, neiCity, currCityStops + 1});
+//                 }
+//             }
+//         }
+
+//         // for(int i = 0; i < k + 1; i ++){
+//         //     cheapestPrice = Math.min(cheapestPrice, costArr[dst][i]);
+//         // }
+
+//         return cheapestPrice == Integer.MAX_VALUE ? -1 : cheapestPrice;
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//     }
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Solving on 11 Jan 2026
     
 //     //intuition 1 (beats 5.09%): Graph : Dijkstra with state pattern
