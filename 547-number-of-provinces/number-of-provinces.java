@@ -78,6 +78,8 @@ class Solution {
         for(int i = 0; i < numOfNodes; i ++){
             for(int j = 0; j < numOfNodes; j ++){
                 if(isConnected[i][j] == 1){ //only if i and j are connected
+                    isConnected[j][i] = 0; //marking the counterpart of this edge
+                        //as 0, to avoid traversing it again
                     if(dsu.unite(i, j)){
                         provinces -= 1;
                     }
