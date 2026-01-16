@@ -6,6 +6,12 @@ class Solution {
         //traverse the cells from first row, first col, last row and last col and for O's encountered 
             //and dfs traverse on them marking them as 'A'. The traverse the board and mark all remaining
             //O's as X's as these O's are the ones that are surrounded
+
+        //“Any 'O' that can reach the border is NOT surrounded, so we mark all border-reachable 'O's as safe.”
+    
+    //TC: O(rows * cols) each cell is visited once
+    //SC: O(rows * cols) height of recursive stack : "worst-case recursion/queue in case all cells are 
+        //'O' (DFS recursion stack or BFS queue)"
     public void solve(char[][] board) {
         
         int rows = board.length;
