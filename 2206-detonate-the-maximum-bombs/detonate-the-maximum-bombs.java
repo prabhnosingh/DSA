@@ -85,10 +85,11 @@ class Solution {
         long r2 = bomb2[2];
 
         //if distBetweenBombs is less than equal to either of the bomb's radius, then they are connected
-        double distBetweenBombs = Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
+        // double distBetweenBombs = Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
+        double distBetweenBombs = (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2);
 
         // if(distBetweenBombs <= r1 || distBetweenBombs <= r2){
-        if(distBetweenBombs <= r1){
+        if(distBetweenBombs <= r1 * r1){
             return true;
         }
         return false;
