@@ -6,8 +6,8 @@
         //How to fetch edges: 
             //Have to make Adjacency matrix/list based on the radius of each bomb
             //Go with adjacency list
-            //For each bomb b1 check if it falls under the radius of any other bomb b2, if yes then
-                //there should be a directed edge between b2 -> b1.
+            //For each bomb b1 check if any other bomb b2 falls under the radius of b1, if yes then
+                //there should be a directed edge between b1 -> b2.
             
             //How to know if a point lies inside a circle:
                 //find the distance of the point from the center of the circle 
@@ -15,13 +15,14 @@
                     //then the point lies on or inside the circle
             
         //After forming an adjList, we can use DSU to find the largest cluster by finding the maximum
-            //number of nodes having same ultimate parent
+            //number of nodes having same ultimate parent 
+        //Or we can use DFS to traverse over all bombs and tracking maximum depth from a single bomb,
+            //i.e. the number of bombs that a single bomb can detonate
 
 
         
         //DSU: DSU does not work in this question. DSU works good in unidrected graph problems. This is directed.
-            //rank
-                //initialized to 0
+            //rank: initialized to 0
             //finding ultimate parent
             //storing parents in parent array
                 //intialized to nodes themselves
@@ -29,8 +30,20 @@
         //DFS:
             //We can also run dfs on the adjList and find maximum nodes traversed in a single 
                 //dfs run by adding 1 to the count for each valid dfs call
+            //“We need max reachable nodes starting from any bomb.”
 
 
+        //TC:
+            //Building adjList: check all pairs => O(n^2)
+            //DFS from every node:
+                //Each DFS is (n + E), where E is number of edges that can be worst-case E = O(n^2)
+                //DFS runs n times => O(n*(n + E)) => O(n^3)
+            //TC: O(n^3)
+        //SC:
+            //Adj List: O(E) => O(n^2) worst case (each bomb can affect all others)
+            //visited array => O(n)
+            //DFS recursion stack: O(n)
+            //SC: O(n^2)
 
 class Solution {
     public int maximumDetonation(int[][] bombs) {
@@ -39,10 +52,12 @@ class Solution {
 
         List<Integer>[] adjList = new ArrayList[numOfBombs];
 
+        //initializing adjList
         for(int i = 0; i < numOfBombs; i ++){
             adjList[i] = new ArrayList<>();
         }
 
+        //building adjList
         for(int i = 0; i < numOfBombs; i ++){
             for(int j = 0; j < numOfBombs; j ++){
                 if(i == j) continue;
@@ -85,11 +100,11 @@ class Solution {
 
         long x2 = bomb2[0];
         long y2 = bomb2[1];
-        long r2 = bomb2[2];
+        // long r2 = bomb2[2];
 
-        //if distBetweenBombs is less than equal to either of the bomb's radius, then they are connected
+        //if distBetweenBombs is less than equal to bomb1's radius, then bomb1 can detonate bomb2
         // double distBetweenBombs = Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
-        double distBetweenBombs = (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2);
+        long distBetweenBombs = (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2);
 
         // if(distBetweenBombs <= r1 || distBetweenBombs <= r2){
         if(distBetweenBombs <= r1 * r1){
