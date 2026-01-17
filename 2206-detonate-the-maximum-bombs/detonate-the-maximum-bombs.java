@@ -1,7 +1,7 @@
     //Solving on 14, 15 Jan 2026
 
-    //intuition 2 (dfs : cleaned version: Optimization): Graphs : Directed graph reachability + “run DFS/BFS from every node” 
-        //(aka “max reachable nodes in directed graph”)
+    //intuition 2 (dfs : cleaned version: Optimization): Graphs : Directed graph reachability + “run DFS/BFS 
+        //from every node” (aka “max reachable nodes in directed graph”)
         //The problem is to find maximum number of bombs in a single cluster
         //How to fetch edges: 
             //Have to make Adjacency matrix/list based on the radius of each bomb
@@ -34,11 +34,13 @@
 
 class Solution {
     public int maximumDetonation(int[][] bombs) {
-        HashMap<Integer, List<Integer>> adjList = new HashMap<>();
 
         int numOfBombs = bombs.length;
+
+        List<Integer>[] adjList = new ArrayList[numOfBombs];
+
         for(int i = 0; i < numOfBombs; i ++){
-            adjList.put(i, new ArrayList<>());
+            adjList[i] = new ArrayList<>();
         }
 
         for(int i = 0; i < numOfBombs; i ++){
@@ -46,7 +48,7 @@ class Solution {
                 if(i == j) continue;
 
                 if(checkIfConnected(bombs, i, j)){ //if bombs are connected, form an edge in adjList
-                    adjList.get(i).add(j); //i -> j directed edge
+                    adjList[i].add(j); //i -> j directed edge
                 }
 
             }
@@ -96,9 +98,9 @@ class Solution {
         return false;
     }
 
-    private int dfs(int bomb, HashMap<Integer, List<Integer>> adjList, boolean[] visited){
+    private int dfs(int bomb, List<Integer>[] adjList, boolean[] visited){
         int nodesTraversed = 0;
-        for(int childBomb : adjList.get(bomb)){
+        for(int childBomb : adjList[bomb]){
             if(!visited[childBomb]){
                 visited[childBomb] = true;
                 nodesTraversed += dfs(childBomb, adjList, visited);
