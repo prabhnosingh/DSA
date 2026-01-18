@@ -38,10 +38,9 @@ class Solution {
         minHeap.offer(new int[]{0, k});
         dist[k] = 0;    
 
-        boolean[] finalized = new boolean[n+1];
-        int finalizedCount = 0;
-        // finalized[k] = true;
-        // visited.add(k);
+        //this does not make any differece in time complexity
+        // boolean[] finalized = new boolean[n+1];
+        // int finalizedCount = 0;
 
         while(minHeap.size() != 0){
             int[] currElement = minHeap.poll();
@@ -54,25 +53,23 @@ class Solution {
 
             //In djikstra a node is finalized with its distance only when it is polled from minHeap
                 //with its shortest distance (i.e. dist[node] == polledDistance) 
-            if(finalized[currNode]) continue;
-            finalized[currNode] = true;
-            finalizedCount += 1;
+            // if(finalized[currNode]) continue;
+            // finalized[currNode] = true;
+            // finalizedCount += 1;
 
-            if(finalizedCount == n) break;
+            // if(finalizedCount == n) break;
 
             for(int[] neiEdge : adjList[currNode]){
                 int neiEdgeWeight = neiEdge[0];
                 int neiNode = neiEdge[1];
-                // visited.add(neiNode);
+
 
                 int newNeiEdgeWeight = currNodeWeight + neiEdgeWeight;
                 if(dist[neiNode] > newNeiEdgeWeight){
                     dist[neiNode] = newNeiEdgeWeight;
                     minHeap.offer(new int[]{newNeiEdgeWeight, neiNode});
                 }
-                // if(visited.size() == n) break;
             }
-            // if(visited.size() == n) break;
         }
 
         int maxDist = 0;
