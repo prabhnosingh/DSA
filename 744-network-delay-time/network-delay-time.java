@@ -8,9 +8,15 @@ class Solution {
 
         //Apply djikstra algo and fill the dist array with smallest distances from source to
             //all other nodes. The max distance is our answer.
+    
+        //TC: O((V+E)logV)
+        //SC: O(V+E) : adjList O(V) + minHeap O(E)
+        //in worst case E can be equal to V^2
+        
     public int networkDelayTime(int[][] times, int n, int k) {
         
-        List<List<Integer>>[] adjList = new ArrayList[n + 1];
+        // List<List<Integer>>[] adjList = new ArrayList[n + 1];
+        List<int[]>[] adjList = new ArrayList[n + 1];
 
         //intializing adjList 
         for(int i = 0; i < n + 1; i ++){
@@ -23,14 +29,17 @@ class Solution {
             int node2 = edge[1];
             int weight = edge[2];
 
-            adjList[node1].add(new ArrayList<>(Arrays.asList(weight, node2)));
+            adjList[node1].add(new int[]{weight, node2});
         }
 
         PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b) -> Integer.compare(a[0], b[0]));
         int[] dist = new int[n + 1];
         Arrays.fill(dist, Integer.MAX_VALUE);
         minHeap.offer(new int[]{0, k});
-        dist[k] = 0;
+        dist[k] = 0;    
+
+        // HashSet<Integer> visited = new HashSet<>();
+        // visited.add(k);
 
         while(minHeap.size() != 0){
             int[] currElement = minHeap.poll();
@@ -41,16 +50,19 @@ class Solution {
             //avoiding traversing stale currNode weight
             if(dist[currNode] != currNodeWeight) continue;
 
-            for(List<Integer> neiEdge : adjList[currNode]){
-                int neiEdgeWeight = neiEdge.get(0);
-                int neiNode = neiEdge.get(1);
+            for(int[] neiEdge : adjList[currNode]){
+                int neiEdgeWeight = neiEdge[0];
+                int neiNode = neiEdge[1];
+                // visited.add(neiNode);
 
                 int newNeiEdgeWeight = currNodeWeight + neiEdgeWeight;
                 if(dist[neiNode] > newNeiEdgeWeight){
                     dist[neiNode] = newNeiEdgeWeight;
                     minHeap.offer(new int[]{newNeiEdgeWeight, neiNode});
                 }
+                // if(visited.size() == n) break;
             }
+            // if(visited.size() == n) break;
         }
 
         int maxDist = 0;
