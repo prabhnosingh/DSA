@@ -45,6 +45,8 @@ class Solution {
                     //lead to a valid entry to the minheap again, so we can skip it
                 if(currEdgeWeight != dist[currNode]) continue;
 
+                if(currEdgeWeight > distanceThreshold) continue;
+
                 for(List<Integer> neiEdge : adjList[currNode]){
                     int neiEdgeWeight = neiEdge.get(0);
                     int neiNode = neiEdge.get(1);
@@ -53,6 +55,7 @@ class Solution {
 
                     if(dist[neiNode] > neiEdgeWeight + currEdgeWeight){
                         dist[neiNode] = neiEdgeWeight + currEdgeWeight;
+                        //
                         if(dist[neiNode] >= distanceThreshold) continue;
                         minHeap.offer(new int[]{dist[neiNode], neiNode});
                     }
