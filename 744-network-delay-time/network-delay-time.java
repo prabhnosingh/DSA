@@ -32,8 +32,6 @@ class Solution {
         minHeap.offer(new int[]{0, k});
         dist[k] = 0;
 
-        boolean[] nodesReached = new boolean[n + 1];
-        nodesReached[k] = true;
         while(minHeap.size() != 0){
             int[] currElement = minHeap.poll();
 
@@ -47,8 +45,6 @@ class Solution {
                 int neiEdgeWeight = neiEdge.get(0);
                 int neiNode = neiEdge.get(1);
 
-                nodesReached[neiNode] = true;
-
                 int newNeiEdgeWeight = currNodeWeight + neiEdgeWeight;
                 if(dist[neiNode] > newNeiEdgeWeight){
                     dist[neiNode] = newNeiEdgeWeight;
@@ -58,17 +54,15 @@ class Solution {
         }
 
         int maxDist = 0;
-        // System.out.println(nodesReached[4]);
-        boolean allNodesReached = true;
         for(int i = 1; i < n + 1; i ++){
-            // allNodesReached = allNodesReached && nodesReached[i];
-            if(dist[i] == Integer.MAX_VALUE) return -1;
+            if(dist[i] == Integer.MAX_VALUE) return -1; //if any node has an infinity distance, that means
+                //this node can not be reached by the source node and hence the signal can also not 
+                //reach this node.
             maxDist = Math.max(maxDist, dist[i]);
 
         }
 
-        // System.out.println(allNodesReached);
-        // return allNodesReached ? maxDist : -1;
+
         return maxDist;
 
     }   
