@@ -53,6 +53,7 @@ class Solution {
 
                     if(dist[neiNode] > neiEdgeWeight + currEdgeWeight){
                         dist[neiNode] = neiEdgeWeight + currEdgeWeight;
+                        if(dist[neiNode] > distanceThreshold) continue;
                         minHeap.offer(new int[]{dist[neiNode], neiNode});
                     }
                 } 
