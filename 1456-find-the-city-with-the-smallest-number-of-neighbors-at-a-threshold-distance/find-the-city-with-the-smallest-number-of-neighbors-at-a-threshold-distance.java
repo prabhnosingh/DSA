@@ -45,25 +45,24 @@ class Solution {
                     //lead to a valid entry to the minheap again, so we can skip it
                 if(currEdgeWeight != dist[currNode]) continue;
 
-                if(currEdgeWeight > distanceThreshold) continue;
 
                 for(List<Integer> neiEdge : adjList[currNode]){
                     int neiEdgeWeight = neiEdge.get(0);
                     int neiNode = neiEdge.get(1);
 
-                    // int newNeiDist = neiEdgeWeight + currEdgeWeight
-
-                    if(dist[neiNode] > neiEdgeWeight + currEdgeWeight){
-                        dist[neiNode] = neiEdgeWeight + currEdgeWeight;
-                        //
-                        // if(dist[neiNode] >= distanceThreshold) continue;
+                    int newNeiDist = neiEdgeWeight + currEdgeWeight;
+                    
+                    //stopping exploration once the threshold is reached
+                    if(dist[neiNode] > newNeiDist && newNeiDist <= distanceThreshold){
+                        dist[neiNode] = newNeiDist;
+                        
                         minHeap.offer(new int[]{dist[neiNode], neiNode});
                     }
                 } 
             }
 
             for(int i = 0; i < n; i ++){
-                if(dist[i] <= distanceThreshold){
+                if(i != city && dist[i] <= distanceThreshold){
                     neiCityCount[city] += 1;
                 }
             }
