@@ -117,16 +117,16 @@ class Solution {
             }
         }
 
-        int[] parent = dsu.returnParent();
-        HashSet<Integer> set = new HashSet<>();
+        // int[] parent = dsu.returnParent();
+        // HashSet<Integer> set = new HashSet<>();
 
-        for(int i = 0; i < totalStones; i ++){
-            System.out.print(parent[i] + " ") ;
-            set.add(parent[i]);
-        }
+        // for(int i = 0; i < totalStones; i ++){
+        //     // System.out.print(parent[i] + " ") ;
+        //     set.add(parent[i]);
+        // }
         // connectedComponents = set.size();
-        System.out.println("totalStones = " + totalStones);
-        System.out.println("connectedComponents = " + connectedComponents);
+        // System.out.println("totalStones = " + totalStones);
+        // System.out.println("connectedComponents = " + connectedComponents);
 
         return totalStones - connectedComponents;
     }
