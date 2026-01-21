@@ -13,7 +13,7 @@ class DSU{
         }
     }
 
-    private int findUltimateParent(int node){
+    public int findUltimateParent(int node){
         if(parent[node] != node){
             return findUltimateParent(parent[node]);
         }
@@ -46,6 +46,9 @@ class DSU{
     }
     public int[] returnParent(){
         return parent;
+    }
+    public int[] returnRank(){
+        return rank;
     }
 }
 
@@ -111,6 +114,7 @@ class Solution {
 
                 if(parStoneX == neiStoneX || parStoneY == neiStoneY){ //connected nodes
                     if(dsu.unite(parStoneId, neiStoneId)){
+                        // System.out.println("node1 = " + parStoneId + " node2 = " + neiStoneId);
                         connectedComponents -= 1;
                     }
                 }
@@ -118,15 +122,14 @@ class Solution {
         }
 
         // int[] parent = dsu.returnParent();
-        // HashSet<Integer> set = new HashSet<>();
+        HashSet<Integer> set = new HashSet<>();
 
-        // for(int i = 0; i < totalStones; i ++){
-        //     // System.out.print(parent[i] + " ") ;
-        //     set.add(parent[i]);
-        // }
-        // connectedComponents = set.size();
-        // System.out.println("totalStones = " + totalStones);
-        // System.out.println("connectedComponents = " + connectedComponents);
+        for(int i = 0; i < totalStones; i ++){
+            int ultParent = dsu.findUltimateParent(i);
+            System.out.print(ultParent + " ") ;
+            set.add(ultParent);
+        }
+        connectedComponents = set.size();
 
         return totalStones - connectedComponents;
     }
