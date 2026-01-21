@@ -55,7 +55,7 @@ class DSU{
 class Solution {
     //Solving on 19 Jan 2026
 
-    //intuition 1: Graphs: Graph Connected Componenets / DSU on Row-Column Connectivity
+    //intuition 1 (beats 15.48%): Graphs: Graph Connected Componenets / DSU on Row-Column Connectivity
         //brute force will be to pick each stone and then remove it and see how many more 
             //stones we were able to remove
         
@@ -122,14 +122,14 @@ class Solution {
         }
 
         // int[] parent = dsu.returnParent();
-        HashSet<Integer> set = new HashSet<>();
+        // HashSet<Integer> set = new HashSet<>();
 
-        for(int i = 0; i < totalStones; i ++){
-            int ultParent = dsu.findUltimateParent(i);
-            // System.out.print(ultParent + " ") ;
-            set.add(ultParent);
-        }
-        connectedComponents = set.size();
+        // for(int i = 0; i < totalStones; i ++){
+        //     int ultParent = dsu.findUltimateParent(i);
+        //     // System.out.print(ultParent + " ") ;
+        //     // set.add(ultParent);
+        // }
+        // connectedComponents = set.size();
 
         return totalStones - connectedComponents;
     }
