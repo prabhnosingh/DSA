@@ -126,7 +126,7 @@ class Solution {
 
         for(int i = 0; i < totalStones; i ++){
             int ultParent = dsu.findUltimateParent(i);
-            System.out.print(ultParent + " ") ;
+            // System.out.print(ultParent + " ") ;
             set.add(ultParent);
         }
         connectedComponents = set.size();
