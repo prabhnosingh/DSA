@@ -14,11 +14,18 @@ class DSU{
     }
 
     public int findUltimateParent(int node){
+        // if(parent[node] != node){
+        //     return findUltimateParent(parent[node]);
+        // }
+
+        // return node;
+        
+        //path compression
         if(parent[node] != node){
-            return findUltimateParent(parent[node]);
+            parent[node] = findUltimateParent(parent[node]);
         }
 
-        return node;
+        return parent[node];
     }
 
     public boolean unite(int node1, int node2){
@@ -104,7 +111,8 @@ class Solution {
             int parStoneId = i;
 
             // for(int j = 0; j < totalStones; j ++){
-            for(int j = i + 1; j < totalStones; j ++){
+            for(int j = i + 1; j < totalStones; j ++){ //values less than i + 1 will anyways give dsu.unite
+                // as false, as (if applicable) the dsu would have already proccessed them (beats 16.23% -> 49.49%)
                 if(i == j) continue;
                 int[] neiStoneIdx = stones[j];
                 int neiStoneX = neiStoneIdx[0]; 
