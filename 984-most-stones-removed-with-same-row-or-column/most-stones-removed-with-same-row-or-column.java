@@ -55,7 +55,7 @@ class DSU{
 class Solution {
     //Solving on 19 Jan 2026
 
-    //intuition 1 (beats 15.48%): Graphs: Graph Connected Componenets / DSU on Row-Column Connectivity
+    //intuition 1 (beats 16.23%): Graphs: Graph Connected Componenets / DSU on Row-Column Connectivity
         //brute force will be to pick each stone and then remove it and see how many more 
             //stones we were able to remove
         
@@ -103,7 +103,8 @@ class Solution {
             // int parStoneId = parStoneX * cols + parStoneY;
             int parStoneId = i;
 
-            for(int j = 0; j < totalStones; j ++){
+            // for(int j = 0; j < totalStones; j ++){
+            for(int j = i + 1; j < totalStones; j ++){
                 if(i == j) continue;
                 int[] neiStoneIdx = stones[j];
                 int neiStoneX = neiStoneIdx[0]; 
