@@ -115,9 +115,7 @@ class Solution {
             int parStoneY = parStoneIdx[1];
 
             if(rMap.containsKey(parStoneX)){
-                if(dsu.unite(i, rMap.get(parStoneX))) connectedComponents -= 1;
-
-                // continue;
+                if(dsu.unite(i, rMap.get(parStoneX)))connectedComponents -= 1;
             }
             else{
                 rMap.put(parStoneX, i);
