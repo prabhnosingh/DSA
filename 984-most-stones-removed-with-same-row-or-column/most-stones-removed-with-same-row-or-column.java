@@ -62,7 +62,7 @@ class DSU{
 class Solution {
     //Solving on 19 Jan 2026
 
-    //intuition 2 (Optimization : beats %): Graphs: Graph Connected Componenets / DSU on Row-Column Connectivity
+    //intuition 2 (Optimization : beats 86.98%): Graphs: Graph Connected Componenets / DSU on Row-Column Connectivity
         //brute force will be to pick each stone and then remove it and see how many more 
             //stones we were able to remove
         
@@ -93,14 +93,11 @@ class Solution {
             //Instead of running two loops and comparing all indices, have two hashMaps with keys of rows/cols
                 //and values as index of stones. 
         
-        //TC: O(n^2 log n) or (n^2 alpha(n)) => O(n^2) with path compression    
+        //TC: O(n log n) or (n alpha(n)) => O(n) with path compression    
             //alpha = amortized
         //Sc: O(n)
     public int removeStones(int[][] stones) {
         int totalStones = stones.length;
-
-        //rows = stones.length
-        int cols = 2;
 
         HashMap<Integer, Integer> rMap = new HashMap<>();
         HashMap<Integer, Integer> cMap = new HashMap<>();
