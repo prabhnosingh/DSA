@@ -39,7 +39,6 @@ class DSU{
         }
         return true;
     }
-
 }
 
 class Solution {
@@ -61,7 +60,13 @@ class Solution {
             char equality2 = equation.charAt(2);
             char variable2 = equation.charAt(3);
 
-            String equality = equality1 + "" + equality2 + "";
+            // String equality = equality1 + "" + equality2 + "";
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(equality1);
+            sb.append(equality2);
+            String equality = sb.toString();
+
             if(equality.equals("==")){
                 dsu.unite(variable1 - 'a', variable2 - 'a');
             }
@@ -74,7 +79,12 @@ class Solution {
             char equality2 = equation.charAt(2);
             char variable2 = equation.charAt(3);
 
-            String equality = equality1 + "" + equality2 + "";
+            // String equality = equality1 + "" + equality2 + "";
+            StringBuilder sb = new StringBuilder();
+            sb.append(equality1);
+            sb.append(equality2);
+            String equality = sb.toString();
+
             if(equality.equals("!=")){
                 int parent1 = dsu.findUltimateParent(variable1-'a');
                 int parent2 = dsu.findUltimateParent(variable2-'a');
