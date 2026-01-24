@@ -57,17 +57,19 @@ class Solution {
         for(String equation : equations){
             char variable1 = equation.charAt(0);
             char equality1 = equation.charAt(1);
-            char equality2 = equation.charAt(2);
+            // char equality2 = equation.charAt(2);
             char variable2 = equation.charAt(3);
 
-            // String equality = equality1 + "" + equality2 + "";
+            // StringBuilder sb = new StringBuilder();
+            // sb.append(equality1);
+            // sb.append(equality2);
+            // String equality = sb.toString();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(equality1);
-            sb.append(equality2);
-            String equality = sb.toString();
+            // if(equality.equals("==")){
+            //     dsu.unite(variable1 - 'a', variable2 - 'a');
+            // }
 
-            if(equality.equals("==")){
+            if(equality1 == '='){
                 dsu.unite(variable1 - 'a', variable2 - 'a');
             }
         }
@@ -76,18 +78,23 @@ class Solution {
         for(String equation : equations){
             char variable1 = equation.charAt(0);
             char equality1 = equation.charAt(1);
-            char equality2 = equation.charAt(2);
+            // char equality2 = equation.charAt(2);
             char variable2 = equation.charAt(3);
 
-            // String equality = equality1 + "" + equality2 + "";
-            StringBuilder sb = new StringBuilder();
-            sb.append(equality1);
-            sb.append(equality2);
-            String equality = sb.toString();
+            // StringBuilder sb = new StringBuilder();
+            // sb.append(equality1);
+            // sb.append(equality2);
+            // String equality = sb.toString();
 
-            if(equality.equals("!=")){
-                int parent1 = dsu.findUltimateParent(variable1-'a');
-                int parent2 = dsu.findUltimateParent(variable2-'a');
+            // if(equality.equals("!=")){
+            //     int parent1 = dsu.findUltimateParent(variable1-'a');
+            //     int parent2 = dsu.findUltimateParent(variable2-'a');
+            //     if(parent1 == parent2) return false;
+            // }
+
+            if(equality1 == '!'){
+                int parent1 = dsu.findUltimateParent(variable1 - 'a');
+                int parent2 = dsu.findUltimateParent(variable2 - 'a');
                 if(parent1 == parent2) return false;
             }
         }
