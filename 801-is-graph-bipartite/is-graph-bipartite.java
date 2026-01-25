@@ -14,6 +14,11 @@ class Solution {
             //At each iteration of BFS it is expected that the neighbor nodes are either not visited
                 //or assigned to different set other than currNode's set. If not, return false
 
+        //"A graph is bipartite if we can 2-color it so every edge connects nodes of opposite colors.
+        // Use color[]: 0 = uncolored, 1 and -1 are the two sets.
+        // For each uncolored node (graph may be disconnected), BFS and assign opposite color to neighbors.
+        // If we ever see an edge where both endpoints have the same color -> not bipartite."
+
         //TC: O(E + V) :
             //Because each edge is enqueued at most once
             //And each edge is processed at most twice (undirected) / once per adjacency entry
