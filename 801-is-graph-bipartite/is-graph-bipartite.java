@@ -20,6 +20,7 @@ class Solution {
         int[] visited = new int[numOfNodes];
         Arrays.fill(visited, 0);
         
+        //running explicit for loop as it is mentioned that the graph can be disconnected graph as well
         for(int i = 0; i < numOfNodes; i ++){
             if(visited[i] != 0) continue;
             queue.offer(i);
@@ -31,6 +32,9 @@ class Solution {
 
                 for(int neiNode : graph[currNode]){
                     int neiNodeSet = visited[neiNode];
+                    if(neiNodeSet == currNodeSet){ //in case both currNode and neiNode have same set
+                            return false;
+                        }
                     if(neiNodeSet == 0){ //if neiNode is not already visited
                         visited[neiNode] = currNodeSet * -1; //assigning neiNode to opposite set other than currNodeSet
                         queue.offer(neiNode);
