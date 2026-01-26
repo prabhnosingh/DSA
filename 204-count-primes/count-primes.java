@@ -1,7 +1,7 @@
 class Solution {
     //Solving on 26 Jan 2026
 
-    //intuition 2 (optimizing and cleaning intuition 1) (beats 89.35%): (Sieve of Eratosthenes)
+    //intuition 2 (optimizing and cleaning intuition 1) (beats 96.26%): (Sieve of Eratosthenes)
         //In this we iteratively mark the multiples of primes as composite.
         //Then starting from 2 each unmarked number is identified as prime.
         //This process continues till sqrt(n), leaving only prime numbers    
@@ -15,7 +15,7 @@ class Solution {
         //TC: O(nlog logn): We visit all the numbers exactly once
         //SC: O(n): isComposite boolean array
     public int countPrimes(int n) {
-        if(n == 0 || n == 1) return 0;
+        if(n <= 2) return 0;
 
         boolean[] isComposite = new boolean[n]; //mark composites as true and leave primes as false
             //boolean arrays are more space efficient than int[]
