@@ -1,20 +1,26 @@
 class Solution {
     //Solving on 26 Jan 2026
 
-    //intuition 2 (optimizing and cleaning intuition 1): (Sieve of Eratosthenes)
+    //intuition 2 (optimizing and cleaning intuition 1) (beats 89.35%): (Sieve of Eratosthenes)
         //In this we iteratively mark the multiples of primes as composite.
         //Then starting from 2 each unmarked number is identified as prime.
         //This process continues till sqrt(n), leaving only prime numbers    
 
-        //TC: O(n): We visit all the numbers exactly once
-        //SC: O(n): primes
+
+        //"Intuition (Sieve of Eratosthenes):
+        // Maintain an array isComposite[0..n-1]. Initially all false.
+        // For each i from 2 to sqrt(n), if i is not composite, mark all multiples of i starting from i*i as composite.
+        // Finally, count numbers from 2..n-1 that are not composite."
+        
+        //TC: O(nlog logn): We visit all the numbers exactly once
+        //SC: O(n): isComposite boolean array
     public int countPrimes(int n) {
         if(n == 0 || n == 1) return 0;
 
         boolean[] isComposite = new boolean[n]; //mark composites as true and leave primes as false
             //boolean arrays are more space efficient than int[]
-        isComposite[0] = true;
-        isComposite[1] = true;
+        // isComposite[0] = true;
+        // isComposite[1] = true;
 
         for(int i = 2; i*i < n; i ++){
             if(isComposite[i]) continue;
@@ -33,7 +39,7 @@ class Solution {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 26 Jan 2026
 
-    // //intuition 1: (Sieve of Eratosthenes)
+    // //intuition 1 (beats 49.79%): (Sieve of Eratosthenes)
     //     //In this we iteratively mark the multiples of primes as composite.
     //     //Then starting from 2 each unmarked number is identified as prime.
     //     //This process continues till sqrt(n), leaving only prime numbers    
