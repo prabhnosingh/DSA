@@ -13,8 +13,13 @@ class Solution {
         // Finally, count numbers from 2..n-1 that are not composite."
 
         //Why are we starting from i*i?
-            //Any multiple of i smaller than i*i must be i*k where k < i, and that number must have been already marked
-                //when we processed k.
+            //Any multiple of i smaller than i*i must be i*k where k < i, and that number must have been already
+                //marked when we processed k.
+            //So when you're at prime i:
+                //2*i, 3*i, ..., (i-1)*i are not new composiites (as these have been already marked as composites
+                    //by smaller factors (2,3,...., i-1))
+                //The first "new" mulitiple that hasn't been guaranteed marked yet is i*i. Therefore we start from
+                    //i*i
         
         //TC: O(nlog logn): We visit all the numbers exactly once
         //SC: O(n): isComposite boolean array
