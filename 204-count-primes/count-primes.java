@@ -11,6 +11,10 @@ class Solution {
         // Maintain an array isComposite[0..n-1]. Initially all false.
         // For each i from 2 to sqrt(n), if i is not composite, mark all multiples of i starting from i*i as composite.
         // Finally, count numbers from 2..n-1 that are not composite."
+
+        //Why are we starting from i*i?
+            //Any multiple of i smaller than i*i must be i*k where k < i, and that number must have been already marked
+                //when we processed k.
         
         //TC: O(nlog logn): We visit all the numbers exactly once
         //SC: O(n): isComposite boolean array
