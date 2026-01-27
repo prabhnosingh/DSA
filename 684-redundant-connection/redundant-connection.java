@@ -12,18 +12,10 @@ class DSU{
     }   
 
     protected int findUltimateParent(int node){
-        // if(parent[node] != node){
-        //     parent[node] = findUltimateParent(parent[node]);
-        // }
-        // return parent[node];
-
-        int nodeParent = parent[node];
-        while(nodeParent != parent[nodeParent]){
-            parent[nodeParent] = parent[parent[nodeParent]];
-            nodeParent = parent[nodeParent];
+        if(parent[node] != node){
+            parent[node] = findUltimateParent(parent[node]);
         }
-
-        return nodeParent;
+        return parent[node];
     }
 
     protected boolean unite(int node1, int node2){
