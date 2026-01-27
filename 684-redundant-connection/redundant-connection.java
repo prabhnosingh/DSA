@@ -65,7 +65,8 @@ class Solution {
             int node2 = edge[1];
 
             if(!dsu.unite(node1, node2)){
-                redundantEdges.add(edge);
+                return edge;
+                // redundantEdges.add(edge);
             }
         }
 
