@@ -55,22 +55,26 @@ class Solution {
         //Store the edge that returned false in an Arraylist and return the last element 
     public int[] findRedundantConnection(int[][] edges) {
         
-        List<int[]> redundantEdges = new ArrayList<>();
+        // List<int[]> redundantEdges = new ArrayList<>();
 
         int numOfNodes = edges.length + 1;
         DSU dsu = new DSU(numOfNodes);
+
+        int[] redundantEdge = new int[2];
 
         for(int[] edge : edges){
             int node1 = edge[0];
             int node2 = edge[1];
 
-            if(!dsu.unite(node1, node2)){
-                return edge;
+            if(!dsu.unite(node1, node2)){ 
+                redundantEdge = edge; //we do not need an additional array to maintain as there is only 1 redundant edge and 
+                    //whenever we find that, we just return that
                 // redundantEdges.add(edge);
             }
         }
 
-        return redundantEdges.get(redundantEdges.size() - 1);
+        // return redundantEdges.get(redundantEdges.size() - 1);
+        return redundantEdge;
 
 
     }
