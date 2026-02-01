@@ -2,51 +2,91 @@ class Solution {
 
     //Re-solving on 01 Feb 2026
 
-    //intuition 1: Graphs :
-        //This is a directed graph problem
-        //If a node i is a town just, then it should not have any children
-        //We need to build an adjacency list
+    //intuition 2: Graphs
+        //Have a trustArr array that tracks the trust value of each person at its index
+        //Now as the judge do not trust anyone and is trusted by everyone else, it should
+            //have trust value of exactly n-1
 
-        //Traverse the trust list from 
     public int findJudge(int n, int[][] trust) {
-        List<Integer>[] adjList = new ArrayList[n + 1];
-
-        for(int i = 1; i < n + 1; i ++){
-            adjList[i] = new ArrayList<>();
+        
+        if(n == 1 && trust.length == 0){
+            return 1;
         }
+
+        int[] trustArr = new int[n+1];
 
         for(int[] trustNode : trust){
             int node1 = trustNode[0];
             int node2 = trustNode[1];
 
-            adjList[node1].add(node2);
+            trustArr[node1] -= 1; //trust value of node1 is decreased by 1
+            trustArr[node2] += 1; //trust value of node2 is increased by 1
         }
 
-
         for(int i = 1; i < n + 1; i ++){
-            List<Integer> childNodes = adjList[i];
-
-            if(childNodes.size() == 0){ //i node do not trust anyone. Now check if i node is trusted by everyone
-                if(isJudge(i, adjList, n)){
-                    return i;
-                }
-            }
+            if(trustArr[i] == n - 1) return i;
         }
 
         return -1;
-        
     }
 
 
-    private boolean isJudge(int probableJudge, List<Integer>[] adjList, int n){
-        for(int j = 1; j < n + 1; j ++){
-            if(j == probableJudge) continue;
-            if(!adjList[j].contains(probableJudge)){
-                return false;
-            }
-        }
-        return true;
-}
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 01 Feb 2026
+
+//     //intuition 1: Graphs :
+//         //This is a directed graph problem
+//         //If a node i is a town just, then it should not have any children
+//         //We need to build an adjacency list
+
+//         //Traverse the trust list from 
+
+//         //TC: O(n^2)
+//         //SC: O(n)
+//     public int findJudge(int n, int[][] trust) {
+//         List<Integer>[] adjList = new ArrayList[n + 1];
+
+//         for(int i = 1; i < n + 1; i ++){
+//             adjList[i] = new ArrayList<>();
+//         }
+
+//         for(int[] trustNode : trust){
+//             int node1 = trustNode[0];
+//             int node2 = trustNode[1];
+
+//             adjList[node1].add(node2);
+//         }
+
+
+//         for(int i = 1; i < n + 1; i ++){
+//             List<Integer> childNodes = adjList[i];
+
+//             if(childNodes.size() == 0){ //i node do not trust anyone. Now check if i node is trusted by everyone
+//                 if(isJudge(i, adjList, n)){
+//                     return i;
+//                 }
+//             }
+//         }
+
+//         return -1;
+        
+//     }
+
+
+//     private boolean isJudge(int probableJudge, List<Integer>[] adjList, int n){
+//         for(int j = 1; j < n + 1; j ++){
+//             if(j == probableJudge) continue;
+//             if(!adjList[j].contains(probableJudge)){
+//                 return false;
+//             }
+//         }
+//         return true;
+// }
 
 
 
@@ -128,7 +168,7 @@ class Solution {
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    //intuition 2: store trust in an array where its indices represent people's labels
+    // // intuition 2: store trust in an array where its indices represent people's labels
     // public int findJudge(int n, int[][] trust) {
     //     if(trust.length == 0){
     //         if(n == 1){
@@ -154,7 +194,7 @@ class Solution {
     //     return -1;
     // }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     // static{
     //     int i=0;
     //     while(i<500){
