@@ -8,7 +8,12 @@ class Solution {
         //if a room is already visited then return 
         //at last check if all the rooms are visited
          
+        //“Each key is a directed edge from current room to that room.” 
 
+        //TC: O(n + k) : where n is no. of rooms and k is total number of keys. 
+            //We visit each room and key once at max
+        //SC: O(n) : max depth of recrusive stack (in case where there is a chain-like
+            //reachability) + visited array
     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
         
         int numOfRooms = rooms.size();
