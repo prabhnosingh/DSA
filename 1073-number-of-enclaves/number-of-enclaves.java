@@ -1,13 +1,17 @@
 class Solution {
     //intuition 1: Graphs : DFS
-        //Start from all the boundary cells (first row, frist col, last row, last col) and run
+        //Start from all the boundary cells (first row, first col, last row, last col) and run
             //dfs on 1's encountered. 
         //During the dfs, mark all the 1's as 0's.
 
         //Last run a grid traversal and count the number of 1's remaining, this is our answer.
 
-        //TC: O(m x n) : Visiting each grid cell exactly once
-        //SC: O(m x n) : Depth of the recursive stack
+        //“Any land cell reachable from the boundary cannot be an enclave.”
+
+        //TC: O(m x n) : Visiting each grid cell exactly 2 times
+            //"Each cell is visited at most once during DFS and once during the final scan"
+        //SC: O(m x n) : Depth of the recursive stack in worst case when the entire grid is land
+            //in once connected component.
 
     public int numEnclaves(int[][] grid) {
 
