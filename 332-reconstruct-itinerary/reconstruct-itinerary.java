@@ -16,8 +16,17 @@ class Solution {
         //"Because we must use every ticket once, it's an Euler path problem; we keep
             //walking via smallest edges and only commit a city to the answer when it 
             //has no outgoing edges left"
-        
 
+        //In adjacency list, we use priority queue as key for storing the neigboring cities
+            //of a city.
+        //We use linkedlist to store the final route.
+        //We run dfs starting from JFK, then we iterate over its neiCities and dfs each of them
+            //until the priority queue becomes empty. After which we add using addFirst to the 
+            //linkedlist
+        //We only add a node to route when no outgoing edges are left to traverse
+        
+        //TC: O(E log E) : Each edge polled once from heap = E heap pops
+        //SC: O(E)
     public List<String> findItinerary(List<List<String>> tickets) {
         HashMap<String, PriorityQueue<String>> adjList = new HashMap<>();
 
