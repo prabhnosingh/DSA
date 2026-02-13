@@ -12,10 +12,10 @@ class Solution {
         
         //Before applying prim's algo, construct an adjacency list
             //Each point will have an edge with another point.
-            //Adjacency list should be like x, y, z where x and y are points and z is 
+            //Adjacency list should be like x -> (z, y) where x and y are points and z is 
                 //the distance between them
             //We can use index of each point in points array to map them together
-            //Use a hashmap
+            //Use a hashmap for adjList
     public int minCostConnectPoints(int[][] points) {
         
         if(points.length == 1) return 0;
@@ -56,6 +56,8 @@ class Solution {
             minCost += currWeight;
 
             for(int[] edge : adjList.get(currNode)){
+                int nextNode = edge[1];
+                if(visited[nextNode]) continue;
                 minHeap.offer(edge);
             }
         }
