@@ -7,18 +7,22 @@ class Solution {
         //in [1,0], 0 is the parent of 1
         //in [[1,0], [0,1]] there is a cycle 
 
-        //starting from 0 run a dfs
+        //starting from 0 run a 3-color dfs
+
+        //TC: O(E+V)
+        //SC: O(E+V) : E+V for adjList, V for visited and V for dfs recursive stack
+
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         List<Integer>[] adjList = new ArrayList[numCourses];
 
         //intializing adjList
-        for(int i = 0; i < numCourses; i ++){
+        for(int i = 0; i < numCourses; i ++){ //O(V) : no. of vertices 
             adjList[i] = new ArrayList<>(); 
         }
 
         //filling adjList
-        for(int[] preReq : prerequisites){
+        for(int[] preReq : prerequisites){ //O(E) : no. of edges
             int childCourse = preReq[0];
             int parentCourse = preReq[1];
             
@@ -34,7 +38,9 @@ class Solution {
             //1 if the course is visited
             //2 if the course is in traversal
         //looping over all courses and some might not have any dependency
-        for(int course = 0; course < numCourses; course ++){
+        for(int course = 0; course < numCourses; course ++){ //O(E+V) : (E+V) for all dfs calls due
+            //to memoization. "each node becomes visiting once and then done once → O(V)" and 
+            //"each edge is explored once in the for (parentCourse : adjList[currCourse]) loops overall → O(E)"
             // boolean[] visited = new boolean[numCourses];
             if(adjList[course].size() != 0){ //traverse only if the course have dependency
                 if(!dfs(course, adjList, visited)){
