@@ -37,16 +37,16 @@ class Solution {
             //0 if the course is not visited
             //1 if the course is visited
             //2 if the course is in traversal
-        //looping over all courses and some might not have any dependency
+        //looping over all courses as some might not have any dependency and might be not connected
         for(int course = 0; course < numCourses; course ++){ //O(E+V) : (E+V) for all dfs calls due
             //to memoization. "each node becomes visiting once and then done once → O(V)" and 
             //"each edge is explored once in the for (parentCourse : adjList[currCourse]) loops overall → O(E)"
             // boolean[] visited = new boolean[numCourses];
-            if(adjList[course].size() != 0){ //traverse only if the course have dependency
+            // if(adjList[course].size() != 0){ //traverse only if the course have dependency
                 if(!dfs(course, adjList, visited)){
                     return false;
                 }
-            }
+            // }
         }
 
         return true;
