@@ -2,79 +2,77 @@ class Solution {
     
     //Re-solving on 13 Feb 2026
 
-    //intuition 1: Graphs : 
-        //prerequisites array is like an adjList
-        //in [1,0], 0 is the parent of 1
-        //in [[1,0], [0,1]] there is a cycle 
-
-        //starting from 0 run a 3-color dfs
-
-        //TC: O(E+V)
-        //SC: O(E+V) : E+V for adjList, V for visited and V for dfs recursive stack
-
+    //intuition 2: Graphs : Topological sort (falied 1 testcase) : Too complex for this question, go for DFS 3-color
+        //We will find the toplogical sort order of the courses based on prerequisites
+        //Topological order algo
+            //build an adjacency list
+            //have stack and visited array and run dfs
+            //push each node to stack after traversing all its children
+            //have two int arrays, topoOrder and position
+            //pop all the elements from the stack and add to topoOrder and position while keeping
+                //a track of position with k variable
+        //At last see if the topoOrder is valid, if yes, return true, else, return false
+            //to check topoOrder is valid or not, run nested for loop for each node and its
+                //children and see if any parent node's position is greater than its child node's
+                //position, if yes, then the topological sort order is invalid
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
         List<Integer>[] adjList = new ArrayList[numCourses];
 
-        //intializing adjList
-        for(int i = 0; i < numCourses; i ++){ //O(V) : no. of vertices 
-            adjList[i] = new ArrayList<>(); 
+        //intializing adjList with empty arraylist
+        for(int i = 0; i < numCourses; i ++){
+            adjList[i] = new ArrayList<>();
         }
 
         //filling adjList
-        for(int[] preReq : prerequisites){ //O(E) : no. of edges
-            int childCourse = preReq[0];
+        for(int[] preReq : prerequisites){
+            int dependantCourse = preReq[0];
             int parentCourse = preReq[1];
-            
-            //childCourse -> parentCourse
 
-            adjList[childCourse].add(parentCourse);
+            adjList[dependantCourse].add(parentCourse);
         }
 
+        Stack<Integer> stack = new Stack<>();
+        boolean[] visited = new boolean[numCourses];
+        for(int i = 0; i < numCourses; i ++){
+            dfs(i, adjList, stack, visited);
+        }
 
+        int[] topoSort = new int[numCourses];
+        int[] position = new int[numCourses];
 
-        int[] visited = new int[numCourses]; //(3-color DFS)
-            //0 if the course is not visited
-            //1 if the course is visited
-            //2 if the course is in traversal
-        //looping over all courses as some might not have any dependency and might be not connected
-        for(int course = 0; course < numCourses; course ++){ //O(E+V) : (E+V) for all dfs calls due
-            //to memoization. "each node becomes visiting once and then done once → O(V)" and 
-            //"each edge is explored once in the for (parentCourse : adjList[currCourse]) loops overall → O(E)"
-            // boolean[] visited = new boolean[numCourses];
-            // if(adjList[course].size() != 0){ //traverse only if the course have dependency
-                if(!dfs(course, adjList, visited)){
-                    return false;
-                }
-            // }
+        int k = 0;
+        while(!stack.isEmpty()){
+            int currCourse = stack.pop();
+            topoSort[k] = currCourse;
+            position[currCourse] = k;
+
+            k += 1;
+        }
+
+        for(int i = 0; i < numCourses; i ++){
+            for(int parentCourse : adjList[i]){
+                if(position[i] >= position[parentCourse]) return false; //parent courses should be
+                //done before i courses and hence should appear after i in topological sort, else return false
+            }
         }
 
         return true;
-    
 
     }
 
+    private void dfs(int currCourse, List<Integer>[] adjList, Stack<Integer> stack, boolean[] visited){
+        if(visited[currCourse]) return;
 
-    //return false when a cycle is detected
-    private boolean dfs(int currCourse, List<Integer>[] adjList, int[] visited){
+        visited[currCourse] = true;
 
-        if(visited[currCourse] == 2) return false; //cycle detected; the course is already in traversal
-            //and is being encountered again before finishing its recursive call 
-        if(visited[currCourse] == 1) return true; //course already completed
-
-        visited[currCourse] = 2; //marking a course as visiting
         for(int parentCourse : adjList[currCourse]){
-            if(!dfs(parentCourse, adjList, visited)) return false;
+            dfs(parentCourse, adjList, stack, visited);
         }
 
-        visited[currCourse] = 1;
-        return true;
+        stack.push(currCourse); //pushing currCourse after traversing all its children
     }
-
-
-
-
-
 
 
 
@@ -104,6 +102,110 @@ class Solution {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 13 Feb 2026
+
+//     //intuition 1: Graphs : DFS 3-color
+//         //prerequisites array is like an adjList
+//         //in [1,0], 0 is the parent of 1
+//         //in [[1,0], [0,1]] there is a cycle 
+
+//         //starting from 0 run a 3-color dfs
+
+//         //TC: O(E+V)
+//         //SC: O(E+V) : E+V for adjList, V for visited and V for dfs recursive stack
+
+
+//     public boolean canFinish(int numCourses, int[][] prerequisites) {
+//         List<Integer>[] adjList = new ArrayList[numCourses];
+
+//         //intializing adjList
+//         for(int i = 0; i < numCourses; i ++){ //O(V) : no. of vertices 
+//             adjList[i] = new ArrayList<>(); 
+//         }
+
+//         //filling adjList
+//         for(int[] preReq : prerequisites){ //O(E) : no. of edges
+//             int childCourse = preReq[0];
+//             int parentCourse = preReq[1];
+            
+//             //childCourse -> parentCourse
+
+//             adjList[childCourse].add(parentCourse);
+//         }
+
+
+
+//         int[] visited = new int[numCourses]; //(3-color DFS)
+//             //0 if the course is not visited
+//             //1 if the course is visited
+//             //2 if the course is in traversal
+//         //looping over all courses as some might not have any dependency and might be not connected
+//         for(int course = 0; course < numCourses; course ++){ //O(E+V) : (E+V) for all dfs calls due
+//             //to memoization. "each node becomes visiting once and then done once → O(V)" and 
+//             //"each edge is explored once in the for (parentCourse : adjList[currCourse]) loops overall → O(E)"
+//             // boolean[] visited = new boolean[numCourses];
+//             // if(adjList[course].size() != 0){ //traverse only if the course have dependency
+//                 if(!dfs(course, adjList, visited)){
+//                     return false;
+//                 }
+//             // }
+//         }
+
+//         return true;
+    
+
+//     }
+
+
+//     //return false when a cycle is detected
+//     private boolean dfs(int currCourse, List<Integer>[] adjList, int[] visited){
+
+//         if(visited[currCourse] == 2) return false; //cycle detected; the course is already in traversal
+//             //and is being encountered again before finishing its recursive call 
+//         if(visited[currCourse] == 1) return true; //course already completed
+
+//         visited[currCourse] = 2; //marking a course as visiting
+//         for(int parentCourse : adjList[currCourse]){
+//             if(!dfs(parentCourse, adjList, visited)) return false;
+//         }
+
+//         visited[currCourse] = 1;
+//         return true;
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //inuition 1: draw the graph (prequisites) on paper and consider different examples and draw different paths
     //in this false is when we have a cicular graph
     //if all the node's combined sum of neighborCount is 0, then it is not possible to finish
