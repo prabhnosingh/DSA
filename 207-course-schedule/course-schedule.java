@@ -16,7 +16,7 @@ class Solution {
                 //children and see if any parent node's position is greater than its child node's
                 //position, if yes, then the topological sort order is invalid
 
-        //TC: O(E*V)
+        //TC: O(E+V)
         //SC: O(E+V)
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
