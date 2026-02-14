@@ -16,17 +16,20 @@ class Solution {
                 //children and see if any parent node's position is greater than its child node's
                 //position, if yes, then the topological sort order is invalid
 
+        //TC: O(E*V)
+        //SC: O(E+V)
+
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         
         List<Integer>[] adjList = new ArrayList[numCourses];
 
         //intializing adjList with empty arraylist
-        for(int i = 0; i < numCourses; i ++){
+        for(int i = 0; i < numCourses; i ++){ //O(V)
             adjList[i] = new ArrayList<>();
         }
 
         //filling adjList
-        for(int[] preReq : prerequisites){
+        for(int[] preReq : prerequisites){ //O(E)
             int dependantCourse = preReq[0];
             int parentCourse = preReq[1];
 
@@ -34,8 +37,8 @@ class Solution {
         }
 
         Stack<Integer> stack = new Stack<>();
-        boolean[] visited = new boolean[numCourses];
-        for(int i = 0; i < numCourses; i ++){
+        boolean[] visited = new boolean[numCourses]; 
+        for(int i = 0; i < numCourses; i ++){ //O(E+V)
             dfs(i, adjList, stack, visited);
         }
 
@@ -43,7 +46,7 @@ class Solution {
         int[] position = new int[numCourses];
 
         int k = 0;
-        while(!stack.isEmpty()){
+        while(!stack.isEmpty()){ //O(V)
             int currCourse = stack.pop();
             topoSort[k] = currCourse;
             position[currCourse] = k;
@@ -51,7 +54,7 @@ class Solution {
             k += 1;
         }
 
-        for(int i = 0; i < numCourses; i ++){
+        for(int i = 0; i < numCourses; i ++){ //O(E) => iterating over all adjacency list once in total
             for(int parentCourse : adjList[i]){
                 if(position[i] >= position[parentCourse]) return false; //parent courses should be
                 //done before i courses and hence should appear after i in topological sort, else return false
