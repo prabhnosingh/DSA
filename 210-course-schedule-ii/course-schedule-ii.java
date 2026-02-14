@@ -1,6 +1,23 @@
 class Solution {
 
+    //Re-solving on 13 Feb 2026
 
+    //intuition 1: Graphs : Topological sort
+        //We will find the toplogical sort order of the courses based on prerequisites
+        //Topological order algo
+            //build an adjacency list
+            //have stack and visited array and run dfs
+            //push each node to stack after traversing all its children
+            //have two int arrays, topoOrder and position
+            //pop all the elements from the stack and add to topoOrder and position while keeping
+                //a track of position with k variable
+        //At last see if the topoOrder is valid, if yes, return true, else, return false
+            //to check topoOrder is valid or not, run nested for loop for each node and its
+                //children and see if any parent node's position is greater than its child node's
+                //position, if yes, then the topological sort order is invalid
+
+        //TC: O(E+V)
+        //SC: O(E+V)
 
 
     public int[] findOrder(int numCourses, int[][] prerequisites) {
