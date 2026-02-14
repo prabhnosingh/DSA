@@ -2,7 +2,7 @@ class Solution {
     
     //Re-solving on 13 Feb 2026
 
-    //intuition 2: Graphs : Topological sort (falied 1 testcase) : Too complex for this question, go for DFS 3-color
+    //intuition 2: Graphs : Topological sort
         //We will find the toplogical sort order of the courses based on prerequisites
         //Topological order algo
             //build an adjacency list
