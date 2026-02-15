@@ -1,39 +1,41 @@
 class Solution {
-    //Re-solving on 11 Dec 2025:
+    //Re-solving on 15 Feb 2026:
 
-    //intuition 1 (DP: Array): 
-        //We can use 1D DP array to solve this problem. 
-        //Basically to find the max robbed money till the last house (n), we need to know what was the collection
-            //till n-1 and n-2 houses. After that we have two decisions:
-                //1. Rob the current house (n) including money robbed till (n-2) house and leave the n-1 house. In this
-                    //case we will have "n house money + money till n-2 house"
-                //2. Do not rob the current house (n) and continue with collection till previous house (n-1) instead. 
+    //intuition 1: DP : 1D DP
+        //The target is that robber should have most money after going through the whole house
+        //At any point the robber have two choices, either to rob the current house or not rob
+            //the current house and take forward the current  money he has robbed.
+        //This decision is made based on past two states:   
+            //For any state i, i.e. for any house i, the robber have two options:
+                //Either to rob i house, in which case the total will be dp[i-2] + nums[i]
+                    //because no two adjacent houses can be robbed
+                //Or, to not rob ith house, in which case the total will be dp[i-1]
 
-        
-        //Recurrence relation:
-            //dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
+        //We take the max of both of these choices 
 
     public int rob(int[] nums) {
-        //dp[i] will represent the maximum sum of money robbed till ith house(0 indexed) 
+        //dp[i] represents maximum money stolen till house i
+        //dp[totalHouses - 1] will represent maximum money stolen till end of street
+        //Therefore, we need a dp array of size totalHouses
         
-        int numsLen = nums.length;
 
-        int[] dp = new int[numsLen];
+        int totalHouses = nums.length;
+
+        if(totalHouses == 1) return nums[0];
+
+        int[] dp = new int[totalHouses];
 
         dp[0] = nums[0];
-        if(numsLen == 1){
-            return dp[0];
-        }    
+          
         dp[1] = Math.max(nums[0], nums[1]);
 
-        for(int i = 2; i < numsLen; i ++){
-            dp[i] = Math.max(dp[i - 1], nums[i] + dp[i - 2]);
-        }   
+        for(int i = 2; i < totalHouses; i ++){
+            dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
+        }
 
-        return dp[numsLen - 1];
-    }
+        return dp[totalHouses - 1];
 
-
+    } 
 
 
 
@@ -64,11 +66,76 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 11 Dec 2025:
+
+//     //intuition 1 (DP: Array): 
+//         //We can use 1D DP array to solve this problem. 
+//         //Basically to find the max robbed money till the last house (n), we need to know what was the collection
+//             //till n-1 and n-2 houses. After that we have two decisions:
+//                 //1. Rob the current house (n) including money robbed till (n-2) house and leave the n-1 house. In this
+//                     //case we will have "n house money + money till n-2 house"
+//                 //2. Do not rob the current house (n) and continue with collection till previous house (n-1) instead. 
+
+        
+//         //Recurrence relation:
+//             //dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
+
+//     public int rob(int[] nums) {
+//         //dp[i] will represent the maximum sum of money robbed till ith house(0 indexed) without alreting the police
+        
+//         int numsLen = nums.length;
+
+//         int[] dp = new int[numsLen];
+
+//         dp[0] = nums[0];
+//         if(numsLen == 1){
+//             return dp[0];
+//         }    
+//         dp[1] = Math.max(nums[0], nums[1]);
+
+//         for(int i = 2; i < numsLen; i ++){
+//             dp[i] = Math.max(dp[i - 1], nums[i] + dp[i - 2]);
+//         }   
+
+//         return dp[numsLen - 1];
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Re-solving on 06 Dec 2025:
 
 //     //intuition 1 (dp: space optmized): 
 //     //Maintain a dp array that tracks the money stolen till now. At each step we have two choices, either to steal the 
-//         //house or not steal the house in order and continue with the current money we have stolen. Eg: In case of 
+//         //house or not steal the house in order to continue with the current money we have stolen. Eg: In case of 
 //         //nums = [2, 1, 1, 2], after stealing nums[0] we have 2 money, now if we want to steal nums[1] we will have 1
 //         //money and in that case we will have to drop nums[0] money (2) to avoid alarming the police, so in this case
 //         //we will simply not steal the house nums[1] and keep the nums[0] money with us. So max money till now is 2.
