@@ -2,7 +2,7 @@ class Solution {
 
     //Resolving on 15 Feb 2026
 
-    //intuition 1: DP : 1D DP
+    //intuition 2 (Space optimized): DP : 1D DP
         //Distinct ways to climb to the top will depend on previous two states.
             //Eg, to reach nth step (top) we have two options, either to jump two steps from
                 //n-2th step or jump 1 step from n-1th step.
@@ -19,17 +19,58 @@ class Solution {
         if(n == 2) return 2; //there are two ways to reach 2nd step, i.e. to take 2 steps from 
             //0th level or take 1 step to 1st level and then from there 1 step to 2nd level 
 
-        int[] dp = new int[n + 1];
-        dp[1] = 1;
-        dp[2] = 2;
+        // int[] dp = new int[n + 1];
+        // dp[1] = 1;
+        // dp[2] = 2;
 
+        int prev = 2;
+        int prevPrev = 1;
+        int curr = 0;
         for(int i = 3; i < n+1; i ++){
-            dp[i] = dp[i-2] + dp[i-1];
+            curr = prev + prevPrev;
+
+            prevPrev = prev; 
+            prev = curr;
         }
 
-        return dp[n];
+        return prev;
 
     }
+
+
+
+
+
+    // //Resolving on 15 Feb 2026
+
+    // //intuition 1: DP : 1D DP
+    //     //Distinct ways to climb to the top will depend on previous two states.
+    //         //Eg, to reach nth step (top) we have two options, either to jump two steps from
+    //             //n-2th step or jump 1 step from n-1th step.
+    //         //In first way total number will be number of ways to reach n-2th step
+    //         //In second way total number will be number of ways to reach n-1th step
+    //         //Therefore total number of ways to reach nth step is dp[n-2] + dp[n-1]
+    // public int climbStairs(int n) {
+    //     //dp[i] will represent number of ways to reach ith level
+    //     //Our answer will lie at dp[n], therefore we need a dp array of size n + 1
+
+    //     if(n == 1) return 1; //there is only 1 way to reach 1st step, i.e. to take 1 step from
+    //         //0th level
+        
+    //     if(n == 2) return 2; //there are two ways to reach 2nd step, i.e. to take 2 steps from 
+    //         //0th level or take 1 step to 1st level and then from there 1 step to 2nd level 
+
+    //     int[] dp = new int[n + 1];
+    //     dp[1] = 1;
+    //     dp[2] = 2;
+
+    //     for(int i = 3; i < n+1; i ++){
+    //         dp[i] = dp[i-2] + dp[i-1];
+    //     }
+
+    //     return dp[n];
+
+    // }
 
 
 
