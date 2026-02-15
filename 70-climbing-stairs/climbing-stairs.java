@@ -1,28 +1,34 @@
 class Solution {
 
-    //Re-solving on 11 Dec 2025:
+    //Resolving on 15 Feb 2026
 
-    //intuition 1 (DP): To compute the number of distinct ways to climb to the n level, we can
-        //use the answers for previous 2 levels (n-1 and n-2) as at any time we can take 1 step or
-        //2 steps to reach to current level, so if we add the number of ways to reach the previous 
-        //levels, we will get the total ways to reach the current level.
+    //intuition 1: DP : 1D DP
+        //Distinct ways to climb to the top will depend on previous two states.
+            //Eg, to reach nth step (top) we have two options, either to jump two steps from
+                //n-2th step or jump 1 step from n-1th step.
+            //In first way total number will be number of ways to reach n-2th step
+            //In second way total number will be number of ways to reach n-1th step
+            //Therefore total number of ways to reach nth step is dp[n-2] + dp[n-1]
     public int climbStairs(int n) {
-           
-        int prevPrev = 1; //level 0
-        int prev = 1; //level 1
+        //dp[i] will represent number of ways to reach ith level
+        //Our answer will lie at dp[n], therefore we need a dp array of size n + 1
 
-        if(n == 1){
-            return prev;
+        if(n == 1) return 1; //there is only 1 way to reach 1st step, i.e. to take 1 step from
+            //0th level
+        
+        if(n == 2) return 2; //there are two ways to reach 2nd step, i.e. to take 2 steps from 
+            //0th level or take 1 step to 1st level and then from there 1 step to 2nd level 
+
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+
+        for(int i = 3; i < n+1; i ++){
+            dp[i] = dp[i-2] + dp[i-1];
         }
-        int curr = 0;
-        for(int i = 2; i <=n ; i ++){
-            curr = prevPrev + prev;
 
-            prevPrev = prev;
-            prev = curr;
-        }
+        return dp[n];
 
-        return curr;
     }
 
 
@@ -68,13 +74,84 @@ class Solution {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 11 Dec 2025:
+
+//     //intuition 1 (DP : bottom up : space optimized): To compute the number of distinct ways to climb to the n level, we can
+//         //use the answers for previous 2 levels (n-1 and n-2) as at any time we can take 1 step or
+//         //2 steps to reach to current level, so if we add the number of ways to reach the previous 
+//         //levels, we will get the total ways to reach the current level.
+        
+//         //This way we will break the problem into subproblems
+//     public int climbStairs(int n) {
+//         //curr will represent the number of ways to reach the top level
+
+//         int prevPrev = 1; //level 0
+//         int prev = 1; //level 1
+
+//         if(n == 1){
+//             return prev;
+//         }
+//         int curr = 0;
+//         for(int i = 2; i <=n ; i ++){
+//             curr = prevPrev + prev;
+
+//             prevPrev = prev;
+//             prev = curr;
+//         }
+
+//         return curr;
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Re-solving on 05 Dec 2025:
 
 //     //intuition 2 (dp: space optmized): 
 //     //Total ways to reach top by taking i steps will be the addition of (total ways to reach i - 1 steps) + (total
 //         //ways to reach i - 2 steps). Because there are two ways to reach ith step:
 //             //1. Either jump 1 from step i - 1
-//             //2. Or jump 2 from step i - 2 (jumpt form "i - 2 to i - 1 to i" is already covered in the total ways to jump from i - 1)
+//             //2. Or jump 2 from step i - 2 (jump form "i - 2 to i - 1 to i" is already covered in the total ways to jump from i - 1)
 //     public int climbStairs(int n) {
 //         if(n == 1 || n == 2) return n;
 
