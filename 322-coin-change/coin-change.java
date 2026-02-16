@@ -1,73 +1,186 @@
 class Solution {
 
-
-    //Re-solving on 11 Dec 2025:
+    //Re-solving on 16 Feb 2026:
     
-    //intuition 1(DP : 2D array):
-        //We can solve this problem with a 2D DP matrix
-        //Given all the coins and amount, we can find the minimum number of coins needed to form the final amount
-            //at bottom right of the matrix.
-        //At each step we have two options, either to pick the current coin or not pick the current coin
-            //If we Pick current coin then min number of coins will be 1 + dp[i][j - coin[i - 1]] where i is 
-                //the number of coins and j - coins[i - 1] is the remaining amount after picking current coin.
-                //Here dp[i][j - coin[i - 1]] represent the min number of coins required to form "j - coin[i - 1]" amount.
-            //If we don't pick the current coin and proceed with the previous coin, then min number of coins will be
-                //dp[i-1][j]
+    //intuition 1: DP : 0/1 Knapsack : 2D DP
+        //We can solve this by using a 2D dp matrix with columns as amount starting from 
+            //0 to 'amount' and rows with the index of coins from coins array
 
-        //Also if the current coin is bigger than the amount, we cannot pick that coin. In which case that state in 
-            //dp is defined by notPick option
-        //Our answer for current state will be the minimum of pick and notPick
-
-        //Base case:
-            //Fill first row and with INF and first col with 0 to avoid boundary checks
+        //Base cases:
+            //we need 0 coins to form 0 amount, so dp[0][0] = 0
+            //for 0 coins and non-zero amount, we need +INF coins to form that amount
+                //thefore fill first row from 1st column with +INF
+            //for non-zero coins and 0 amount, we need 0 coins to form 0 amount
+                //therefore fill first col from 1st row with 0
         
         //Recurrence relation:
-            //dp[i][j] = Math.min(1 + dp[i][j - coins[i - 1]], dp[i - 1][j])
+            //Now for every coin we have two options, either to include in current sum
+                //or skip.
+            //We can only include current coin (i) if the it is less than equal to current
+                //amount (j)
+            //Inclusion:
+                //now as a new coin has been included, the amount decreases relatively 
+                    //as per denomination of the coin included, which us with an amount of
+                    //amount - coin[i-1]. Now as coins are infinite, number of available coins
+                    //remain same (i). This leaves us with a state of i, remAmount. Now
+                    //we can get this state from dp[i][remAmount]
+                
+            //Exclusion:
+                //if we totally skip the current coin, then the amount remains unchanged 
+                    //and as we choose to skip the current coin (i) it leaves us with 1 
+                    //less coin (i-1) to choose from. This leaves us with a state 
+                    //of i-1, amount. We can get this state from dp[i-1][amount]
+
+            //We will take minimum of both of these states in order to find minimum number
+                //of coins
 
     public int coinChange(int[] coins, int amount) {
-        //dp[i][j] represents minimum number of coins required from i coins to form j amount.
-        //This means, our answer will be at dp[coins.length][amount].
-        //Therefore we need a matrix of coins.length+1 x amount+1 length
+        //dp[i][j] will represent minimum number of coins needed to form j amount
+            //given first i coins from coins array
+        //dp[coins.length][amount] will represent the minimum number of coins needed to form 
+            //'amount' amount given all the coins in 'coins' array
+        //Therefore, we need a 2D matrix of size coins.length + 1 x amount + 1
 
-        if(amount == 0) return 0;
 
         int rows = coins.length + 1;
         int cols = amount + 1;
-
+        
         int[][] dp = new int[rows][cols];
 
-        //filling first column with 0s as we need minimum 0 coins to make 0 amount
-        for(int i = 0; i < rows; i ++){
-            dp[i][0] = 0;
+        //base cases
+        //filling first row
+        for(int j = 1; j < cols; j ++){
+            int i = 0;
+            dp[i][j] = Integer.MAX_VALUE;
         }
 
-        for(int j = 0; j < cols; j ++){
-            dp[0][j] = Integer.MAX_VALUE;
+        //filling first col
+        for(int i = 0; i < rows; i ++){
+            int j = 0;
+
+            dp[i][j] = 0;
         }
+
 
         for(int i = 1; i < rows; i ++){
-            for(int j = 1; j < cols; j ++){                
-                if(j < coins[i - 1]){ //we cannot pick the coin
-                    dp[i][j] = dp[i - 1][j];
-                    continue;
-                } 
+            for(int j = 1; j < cols; j ++){
+                int currCoinVal = coins[i-1];
+                int currAmount = j;
 
-                int pick = Integer.MAX_VALUE;
-                if(dp[i][j - coins[i - 1]] != Integer.MAX_VALUE){
-                    pick = 1 + dp[i][j - coins[i - 1]];
+
+                if(currAmount < currCoinVal){ //not-pick
+                    dp[i][j] = dp[i-1][j];
+                }
+                else{
+                    int pick = Integer.MAX_VALUE;
+                    if(dp[i][currAmount - currCoinVal] != Integer.MAX_VALUE){
+                        pick = 1 + dp[i][currAmount - currCoinVal];
+                    }
+                    int notPick = dp[i-1][j];
+
+                    dp[i][j] = Math.min(pick, notPick);
                 }
 
-                int notPick = dp[i - 1][j];
 
-                dp[i][j] = Math.min(notPick, pick);
-                // System.out.println(dp[i][j]);
             }
         }
 
-        return dp[rows - 1][cols - 1] == Integer.MAX_VALUE ? -1 : dp[rows - 1][cols - 1];
+        return dp[rows - 1][cols - 1] == Integer.MAX_VALUE ? -1 : dp[rows-1][cols-1];
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 11 Dec 2025:
+    
+    // //intuition 1(DP : 2D array):
+    //     //We can solve this problem with a 2D DP matrix
+    //     //Given all the coins and amount, we can find the minimum number of coins needed to form the final amount
+    //         //at bottom right of the matrix.
+    //     //At each step we have two options, either to pick the current coin or not pick the current coin
+    //         //If we Pick current coin then min number of coins will be 1 + dp[i][j - coin[i - 1]] where i is 
+    //             //the number of coins and j - coins[i - 1] is the remaining amount after picking current coin.
+    //             //Here dp[i][j - coin[i - 1]] represent the min number of coins required to form "j - coin[i - 1]" amount.
+    //         //If we don't pick the current coin and proceed with the previous coin, then min number of coins will be
+    //             //dp[i-1][j]
+
+    //     //Also if the current coin is bigger than the amount, we cannot pick that coin. In which case that state in 
+    //         //dp is defined by notPick option
+    //     //Our answer for current state will be the minimum of pick and notPick
+
+    //     //Base case:
+    //         //Fill first row and with INF and first col with 0 to avoid boundary checks
+        
+    //     //Recurrence relation:
+    //         //dp[i][j] = Math.min(1 + dp[i][j - coins[i - 1]], dp[i - 1][j])
+
+    // public int coinChange(int[] coins, int amount) {
+    //     //dp[i][j] represents minimum number of coins required from i coins to form j amount.
+    //     //This means, our answer will be at dp[coins.length][amount].
+    //     //Therefore we need a matrix of coins.length+1 x amount+1 length
+
+    //     if(amount == 0) return 0;
+
+    //     int rows = coins.length + 1;
+    //     int cols = amount + 1;
+
+    //     int[][] dp = new int[rows][cols];
+
+    //     //filling first column with 0s as we need minimum 0 coins to make 0 amount
+    //     for(int i = 0; i < rows; i ++){
+    //         dp[i][0] = 0;
+    //     }
+
+    //     for(int j = 0; j < cols; j ++){
+    //         dp[0][j] = Integer.MAX_VALUE;
+    //     }
+
+    //     for(int i = 1; i < rows; i ++){
+    //         for(int j = 1; j < cols; j ++){                
+    //             if(j < coins[i - 1]){ //we cannot pick the coin
+    //                 dp[i][j] = dp[i - 1][j];
+    //                 continue;
+    //             } 
+
+    //             int pick = Integer.MAX_VALUE;
+    //             if(dp[i][j - coins[i - 1]] != Integer.MAX_VALUE){
+    //                 pick = 1 + dp[i][j - coins[i - 1]];
+    //             }
+
+    //             int notPick = dp[i - 1][j];
+
+    //             dp[i][j] = Math.min(notPick, pick);
+    //             // System.out.println(dp[i][j]);
+    //         }
+    //     }
+
+    //     return dp[rows - 1][cols - 1] == Integer.MAX_VALUE ? -1 : dp[rows - 1][cols - 1];
+
+
+    // }
 
 
 
