@@ -6,11 +6,13 @@ class Solution {
         //base case:
             //if s.charAt(0) == 0 return 0
             //dp[0] = 1 //there is 1 way to decode an empty string
-            //dp[1] = 1 //if s.charAt(0) is  then 
+            //dp[1] = 1 
         
         //any state i starting from 2 should follow the below algo:
-            //number of ways to decode i length of string depends on two states: ways to decode till 
-                //last character (dp[i-1]) and ways to decode till last two characters (dp[i-2])
+            //number of ways to decode i length of string depends on two states: 
+                //ways to decode till last character (dp[i-1]) and,
+                //ways to decode till last two characters (dp[i-2])
+            
             //if the present character (s.charAt(i-1))is a valid one, i.e. is a non-zero character then 
                 //consider dp[i-1] state to be added to the dp[i] state
 
@@ -20,6 +22,9 @@ class Solution {
 
         //We add these two states because any new digit added can form a decoded version independently (only 
             //if valid) or in partnership with previous digit (only if valid)
+
+        //During finding the number of ways to decode two digits act like a single entity that cannot be split and
+            //should be considered as if a single number is being added.
 
         
     public int numDecodings(String s) { 
@@ -35,11 +40,18 @@ class Solution {
 
         int[] dp = new int[sLen + 1];
         dp[0] = 1; //there is 1 way to decode an empty string, i.e. by doing nothing
-        dp[1] = 1;
+        dp[1] = 1; //ensured to be non-zero
 
         for(int i = 2; i < sLen + 1; i ++){
-            int oneDigit = Integer.parseInt(s.substring(i-1, i));
-            int twoDigits = Integer.parseInt(s.substring(i-2, i));
+            // int oneDigit = Integer.parseInt(s.substring(i-1, i));
+            // int twoDigits = Integer.parseInt(s.substring(i-2, i));
+
+            char currChar = s.charAt(i-1);
+            char lastChar = s.charAt(i-2);
+
+            int oneDigit = currChar - '0';
+
+            int twoDigits = (lastChar - '0') * 10 + oneDigit;
 
             if(oneDigit != 0) dp[i] += dp[i-1];
             if(twoDigits >= 10 && twoDigits <= 26) dp[i] += dp[i-2];
