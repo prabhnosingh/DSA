@@ -1,47 +1,51 @@
 class Solution {
 
-    //Re-solving on 13 Dec 2025:
-
-    //intuition 2: DP on Grid problem - 2D Dp - Bottom up Tabulation solution (solution at 0,0)
-        //As the robot can only move down and right, we can use already computed unique paths 
-            //of bottom and right neighboring cells and add them so that we get unique path count
-            //for our current cell.
-        
-        //Base case: 
-            //In the last column robot can only travel in down direction and not right (out of bounds)
-            //Therefore, the unique paths for all the cells in last col are 1
-            //In the last row robot can only travel in the right direction and not down (out of bounds)
-            //Therefore, the unique paths for all the cells in the last row are 1.
-
-        //Recurrence relation: 
-            //For any cell the number of unique pahts are : dp[i][j] = dp[i+1][j](down) + dp[i][j+1](right)    
+    //Re-solving on 20 Feb 2026:   
     
+    //intuition 1: 2D Dp : DP on grids
+        //To reach bottom right we have two immediate paths (up and left)
+        
+        //Base case:
+            //To reach bottom right from any cell in last row, there is only 1 path
+                //Therefore dp[m-1] will be all 1's
+            //To reach bottom right from any cell in last col, there is only path
+                //Therefore dp[n-1] will be all 1's
+        
+        //Recurrence relation:
+            //for any cell at non-boundary i,j we have two choices, either to move
+                //down or to move right
+            //Therefore, for i,j we can get total unique paths to reach bottom right
+                //by adding down (dp[i+1][j]) and right dp[i][j+1]
+            
+
     public int uniquePaths(int m, int n) {
-        //dp[i][j] represents the number of unique paths from i,j to reach the bottom right (m-1, n-1) by
-            //travelling only down and right
-        //dp[0][0] will represent the number of unique paths from 0,0 to reach the bottom right by travelling
-            //only down and right
-        //Therefore, we need a dp matrix of size m x n.
+        //dp[i][j] represents number of unique paths possible to reach bottom right
+            //from i,j
+        //dp[0][0] will represent number of unique paths possible to reach bottom right
+            //from 0,0
+        //Therefore, we need a 2D DP matrix of size m x n 
+
 
         int[][] dp = new int[m][n];
-
         //base cases
-
-        dp[m-1][n-1] = 1; //as there are 1 total ways to stay at m-1, n-1
-
         //filling last row
-        for(int j = n-2; j >= 0; j --){
-            dp[m-1][j] = 1;
+        for(int j = 0; j < n; j ++){
+            int i = m-1;
+
+            dp[i][j] = 1;
         }
 
         //filling last col
-        for(int i = m-2; i >= 0; i --){
-            dp[i][n-1] = 1;
+        for(int i = 0; i < m; i ++){
+            int j = n-1;
+            
+            dp[i][j] = 1;
         }
+
 
         for(int i = m-2; i >= 0; i --){
             for(int j = n-2; j >= 0; j --){
-                dp[i][j] = dp[i + 1][j] + dp[i][j + 1];
+                dp[i][j] = dp[i+1][j] + dp[i][j+1];
             }
         }
 
@@ -79,13 +83,89 @@ class Solution {
 //     //Re-solving on 13 Dec 2025:
 
 //     //intuition 2: DP on Grid problem - 2D Dp - Bottom up Tabulation solution (solution at 0,0)
+//         //As the robot can only move down and right, we can use already computed unique paths 
+//             //of bottom and right neighboring cells and add them so that we get unique path count
+//             //for our current cell.
+        
+//         //Base case: 
+//             //In the last column robot can only travel in down direction and not right (out of bounds)
+//             //Therefore, the unique paths for all the cells in last col are 1
+//             //In the last row robot can only travel in the right direction and not down (out of bounds)
+//             //Therefore, the unique paths for all the cells in the last row are 1.
+
+//         //Recurrence relation: 
+//             //For any cell the number of unique pahts are : dp[i][j] = dp[i+1][j](down) + dp[i][j+1](right)    
+    
+//     public int uniquePaths(int m, int n) {
+//         //dp[i][j] represents the number of unique paths from i,j to reach the bottom right (m-1, n-1) by
+//             //travelling only down and right
+//         //dp[0][0] will represent the number of unique paths from 0,0 to reach the bottom right by travelling
+//             //only down and right
+//         //Therefore, we need a dp matrix of size m x n.
+
+//         int[][] dp = new int[m][n];
+
+//         //base cases
+
+//         dp[m-1][n-1] = 1; //as there are 1 total ways to stay at m-1, n-1
+
+//         //filling last row
+//         for(int j = n-2; j >= 0; j --){
+//             dp[m-1][j] = 1;
+//         }
+
+//         //filling last col
+//         for(int i = m-2; i >= 0; i --){
+//             dp[i][n-1] = 1;
+//         }
+
+//         for(int i = m-2; i >= 0; i --){
+//             for(int j = n-2; j >= 0; j --){
+//                 dp[i][j] = dp[i + 1][j] + dp[i][j + 1];
+//             }
+//         }
+
+//         return dp[0][0];
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 13 Dec 2025:
+
+//     //intuition 2: DP on Grid problem - 2D Dp - Bottom up Tabulation solution (solution at 0,0)
 //         //Approach where answer comes at 0,0 works for all DP on grid problems but approach where
 //             //answer comes at bottom right, do not work for some problems
         
 //         //To get the solution at 0,0 we start from bottom right (m-1, n-1). 
 //         //Base case:
 //             //dp[m-1][n-1] = 1 as there is one way to reach bottom right from m-1,n-1, i.e. by doing nothing
-//                 //ans staying there
+//                 //and staying there
 //             //for any cell in last col, we only have 1 way to reach bottom right, therefore, fill last
 //                 //col with 1 s
 //             //for any cell in last row, we only have 1 way to reach bottom rigth, therefore, fill last 
