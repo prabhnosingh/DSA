@@ -2,78 +2,64 @@ class Solution {
     // If in the problem it was allowed 4-direction movement (no revisits in the same path), it would have become a 
         //"graph path-finding" problem with visited-state tracking, which is solved with backtracking / DFS.
 
+        //Re-solving on 20 Feb 2026:
+        
+        //intuition 1: 2D DP: DP on grids
+            //For any cell we have two choices to take, either go down or go right
+            //Therefore, to find number of uinque paths for any cell i,j we can add the unique
+                //paths from bottom (i+1, j) and right cell (i, j+1)
+            
+            //Base case:
+                //From last row there is only 1 way to reach bottom right, given that there is no
+                    //obstacle in the cells on the right of the cell.
+                //From last col there is only 1 way to reach bottom right, given that there is no
+                    //obstacle in the cells on the below of the cell.
 
-    //Solving on 13 Dec 2025:
+                //Any obstacle cell should be skipped while calculating DP and only marked as 0
+            
+            //Recurrence relation:
+                //dp[i][j] = dp[i+1][j] + dp[i][j+1], given that i, j is not an obstacle cell
 
-    //intuition 1: 2D DP - Bottom up Tabulation - Answer at 0,0 
-        //Base case:
-            //For any index in last row and last col, there is only 1 way to reach bottom
-                //right, if there is no obstacle in betweeen. Have a flag to know if there
-                //is an obstacle in last row and col and make all the preceding cells as 0
-
-        //Recurrence relation:  
-            //For any index the number of unqiue paths is the sum of number of unique paths 
-                //from right cell and bottom cell.
-            //If the current cell is an obstacle in the obstacleGrid, simply skip it
         
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        //dp[i][j] represents number of unique paths to reach bottom right from i,j 
-            //while ony going down and right and avoiding any obstacles
-        //dp[0][0] represents number of  unique paths to reach bottom right from 0,0
-            //while only going down and right and avoiding any obstacles
+        //dp[i][j] represents number of unique paths to reach bottom right form i,j while
+            //only travelling right and down with no obstacles in the paths
+        //dp[0][0] will represent number of unique paths to reach bottom right from 0,0
+            //while only travelling right and down with no obstacles in the paths
+        //Therefore, we need a 2D dp matrix of size rows x cols
         
-        //The maximum cell that we want to reach is rows-1, cols-1, therefore we need
-            //a 2D matrix of size rows x cols
-
         int rows = obstacleGrid.length;
         int cols = obstacleGrid[0].length;
 
         int[][] dp = new int[rows][cols];
 
+        if(obstacleGrid[0][0] == 1 || obstacleGrid[rows-1][cols-1] == 1) return 0;
+        
         //base cases
-        if(obstacleGrid[rows-1][cols-1] == 1) return 0;
-        if(obstacleGrid[0][0] == 1) return 0;
-
-        dp[rows-1][cols-1] = 1; //there is one way to stay on bottom right cell
-
-        //filling last col
-        boolean obstacleFound = false;
-        for(int i = rows - 2; i >= 0; i --){
-            if(obstacleGrid[i][cols-1] == 1) obstacleFound = true;
-            if(obstacleFound){
-                dp[i][cols-1] = 0;
-                continue;
-            }
-            dp[i][cols-1] = 1;
-
+        dp[rows-1][cols-1] = 1; //there is 1 way to reach bottom right from bottom right
+            //i.e. by staying where you already are
+        //filling last row
+        for(int j = cols - 2; j >= 0; j --){
+            int i = rows - 1;
+            if(obstacleGrid[i][j] == 1) break;
+            dp[i][j] = 1;
         }
 
-        //filling last row
-        obstacleFound = false;
-        for(int j = cols - 2; j >= 0; j --){
-            if(obstacleGrid[rows-1][j] == 1) obstacleFound = true;
-            if(obstacleFound){
-                dp[rows-1][j] = 0;
-                continue;
-            }
-            dp[rows-1][j] = 1;
+        //filling last col
+        for(int i = rows - 2; i >= 0; i --){
+            int j = cols - 1;
+            if(obstacleGrid[i][j] == 1) break;
+            dp[i][j] = 1;
         }
 
         for(int i = rows - 2; i >= 0; i --){
             for(int j = cols - 2; j >= 0; j --){
-                if(obstacleGrid[i][j] == 1){
-                    dp[i][j] = 0;
-                    continue;
-                }
-
+                if(obstacleGrid[i][j] == 1) continue;
                 dp[i][j] = dp[i+1][j] + dp[i][j+1];
             }
         }
 
         return dp[0][0];
-
-
-       
 
     }
 
@@ -99,6 +85,110 @@ class Solution {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // If in the problem it was allowed 4-direction movement (no revisits in the same path), it would have become a 
+//         //"graph path-finding" problem with visited-state tracking, which is solved with backtracking / DFS.
+
+
+//     //Solving on 13 Dec 2025:
+
+//     //intuition 1: 2D DP - Bottom up Tabulation - Answer at 0,0 
+//         //Base case:
+//             //For any index in last row and last col, there is only 1 way to reach bottom
+//                 //right, if there is no obstacle in betweeen. Have a flag to know if there
+//                 //is an obstacle in last row and col and make all the preceding cells as 0
+
+//         //Recurrence relation:  
+//             //For any index the number of unqiue paths is the sum of number of unique paths 
+//                 //from right cell and bottom cell.
+//             //If the current cell is an obstacle in the obstacleGrid, simply skip it
+        
+//     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+//         //dp[i][j] represents number of unique paths to reach bottom right from i,j 
+//             //while ony going down and right and avoiding any obstacles
+//         //dp[0][0] represents number of  unique paths to reach bottom right from 0,0
+//             //while only going down and right and avoiding any obstacles
+        
+//         //The maximum cell that we want to reach is rows-1, cols-1, therefore we need
+//             //a 2D matrix of size rows x cols
+
+//         int rows = obstacleGrid.length;
+//         int cols = obstacleGrid[0].length;
+
+//         if(obstacleGrid[rows-1][cols-1] == 1) return 0;
+//         if(obstacleGrid[0][0] == 1) return 0;
+
+//         int[][] dp = new int[rows][cols];
+
+//         //base cases
+
+//         dp[rows-1][cols-1] = 1; //there is one way to stay on bottom right cell
+
+//         //filling last col
+//         boolean obstacleFound = false;
+//         for(int i = rows - 2; i >= 0; i --){
+//             if(obstacleGrid[i][cols-1] == 1) obstacleFound = true;
+//             // if(obstacleFound){
+//             //     dp[i][cols-1] = 0;
+//             //     continue;
+//             // }
+//             // dp[i][cols-1] = 1;
+
+//             dp[i][cols-1] = (obstacleGrid[i][cols-1] == 0 && !obstacleFound) ? 1 : 0;
+//         }
+
+//         //filling last row
+//         obstacleFound = false;
+//         for(int j = cols - 2; j >= 0; j --){
+//             if(obstacleGrid[rows-1][j] == 1) obstacleFound = true;
+//             // if(obstacleFound){
+//             //     dp[rows-1][j] = 0;
+//             //     continue;
+//             // }
+//             // dp[rows-1][j] = 1;
+
+//             dp[rows-1][j] = (obstacleGrid[rows-1][j] == 0 && !obstacleFound) ? 1 : 0;
+//         }
+
+//         for(int i = rows - 2; i >= 0; i --){
+//             for(int j = cols - 2; j >= 0; j --){
+//                 if(obstacleGrid[i][j] == 1){
+//                     dp[i][j] = 0;
+//                     continue;
+//                 }
+
+//                 dp[i][j] = dp[i+1][j] + dp[i][j+1];
+//             }
+//         }
+
+//         return dp[0][0];
+
+
+       
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Solving on 13 Dec 2025:
 
 //     //intuition 1: 2D DP - Bottom up Tabulation - Answer at 0,0 
