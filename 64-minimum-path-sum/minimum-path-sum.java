@@ -1,25 +1,25 @@
 class Solution {
 
-    //Solving on 17 Dec 2025:
 
-    //intuition 1: 2D DP : Bottom up Tabulation : DP on grid pattern : Answer at 0,0
-        
+
+    //Re-solving on 21 Feb 2026:
+    //intuition 1: 2D DP: DP on grids
+        //for any non-boundary we have to reach bottom right, by either going right or
+            //by either going down.
+        //We will take the minimum of dp states of bottom and right cells and add it to
+            //current cells value
         //Recurrence relation:
-            //We can only travel right or down, so to find minimum path sum for any cell i,j we
-                //can make the decision to choose one path that is minimum from right or down neighboring
-                //cells from dp grid and add that to the current cell number from original grid.
-            //=> dp[i][j] = grid[i][j] + Math.min(dp[i+1][j](down), dp[i][j+1](right))
+            //dp[i][j] = min(dp[i+1][j], dp[i][j+1]) + grid[i][j]
+        
         //Base case:
-            //For last row we can only travel right as down will lead us to out of bounds. So, we just 
-                //add the numbers from right to left, starting from rows-1, cols-1
-            //For last col we can only travel down as right will lead us to out of bounds. So, we just
-                //add the numbers from bottom to top, starting from rows-1, cols-1
+            //There is only one option to reach bottom right from last col and last row,
+                //i.e. by going down and right respectively. Therefore, add the numbers from
+                //bottom to top for last col and right to left for last row
 
     public int minPathSum(int[][] grid) {
-        //dp[i][j] represents the minimum path sum from i, j to bottom right while only travelling down and right
-        //dp[0][0] will represent the minimum path sum from 0,0 to bottom right while only travelling down and right
-        //The maximum index cell that we will reach is gridRows-1, gridCols - 1. Therefore, we need a matrix of size
-            //gridRows x gridCols
+        //dp[i][j] will represent minimum sum of the path from i, j to bottom right
+        //dp[0][0] will represent minimum sum of the path from 0, 0 to bottom right
+        //Therefore, we need a 2D DP matrix of size rows x cols
 
         int rows = grid.length;
         int cols = grid[0].length;
@@ -27,25 +27,29 @@ class Solution {
         int[][] dp = new int[rows][cols];
 
         //base cases
-        dp[rows-1][cols-1] = grid[rows-1][cols-1];
-
-        //filling last col
-        for(int i = rows-2; i >= 0; i --){
-            dp[i][cols-1] = grid[i][cols-1] + dp[i+1][cols-1]; 
-        }       
+        dp[rows - 1][cols - 1] = grid[rows - 1][cols - 1];
 
         //filling last row
-        for(int j = cols-2; j >= 0; j --){
-            dp[rows-1][j] = grid[rows-1][j] + dp[rows-1][j+1];
+        for(int j = cols - 2; j >= 0; j --){
+            int i = rows - 1;
+            dp[i][j] = grid[i][j] + dp[i][j + 1];
+        }
+
+        //filling last col
+        for(int i = rows - 2; i >= 0; i --){
+            int j = cols - 1;
+            dp[i][j] = grid[i][j] + dp[i + 1][j];
         }
 
         for(int i = rows-2; i >= 0; i --){
             for(int j = cols-2; j >= 0; j --){
-                dp[i][j] = grid[i][j] + Math.min(dp[i+1][j], dp[i][j+1]);
+                dp[i][j] = Math.min(dp[i+1][j], dp[i][j+1]) + grid[i][j];
             }
-        }   
+        }
 
         return dp[0][0];
+
+
     }
 
 
@@ -76,6 +80,82 @@ class Solution {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 17 Dec 2025:
+
+//     //intuition 1: 2D DP : Bottom up Tabulation : DP on grid pattern : Answer at 0,0
+        
+//         //Recurrence relation:
+//             //We can only travel right or down, so to find minimum path sum for any cell i,j we
+//                 //can make the decision to choose one path that is minimum from right or down neighboring
+//                 //cells from dp grid and add that to the current cell number from original grid.
+//             //=> dp[i][j] = grid[i][j] + Math.min(dp[i+1][j](down), dp[i][j+1](right))
+//         //Base case:
+//             //For last row we can only travel right as down will lead us to out of bounds. So, we just 
+//                 //add the numbers from right to left, starting from rows-1, cols-1
+//             //For last col we can only travel down as right will lead us to out of bounds. So, we just
+//                 //add the numbers from bottom to top, starting from rows-1, cols-1
+
+//     public int minPathSum(int[][] grid) {
+//         //dp[i][j] represents the minimum path sum from i, j to bottom right while only travelling down and right
+//         //dp[0][0] will represent the minimum path sum from 0,0 to bottom right while only travelling down and right
+//         //The maximum index cell that we will reach is gridRows-1, gridCols-1. Therefore, we need a matrix of size
+//             //gridRows x gridCols
+
+//         int rows = grid.length;
+//         int cols = grid[0].length;
+
+//         int[][] dp = new int[rows][cols];
+
+//         //base cases
+//         dp[rows-1][cols-1] = grid[rows-1][cols-1];
+
+//         //filling last col
+//         for(int i = rows-2; i >= 0; i --){
+//             dp[i][cols-1] = grid[i][cols-1] + dp[i+1][cols-1]; 
+//         }       
+
+//         //filling last row
+//         for(int j = cols-2; j >= 0; j --){
+//             dp[rows-1][j] = grid[rows-1][j] + dp[rows-1][j+1];
+//         }
+
+//         for(int i = rows-2; i >= 0; i --){
+//             for(int j = cols-2; j >= 0; j --){
+//                 dp[i][j] = grid[i][j] + Math.min(dp[i+1][j], dp[i][j+1]);
+//             }
+//         }   
+
+//         return dp[0][0];
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Solving on 14 Dec 2025:
 
 //     //intuition 1: 2D DP : Bottom up Tabulation : Answer at 0,0
