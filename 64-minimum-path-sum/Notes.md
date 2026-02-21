@@ -1,1 +1,1 @@
-<h2>minimum-path-sum Notes</h2><hr>[ Time taken: 20 m 4 s ]
+<h2>minimum-path-sum Notes</h2><hr>[ Time taken: 12 m 55 s ]
