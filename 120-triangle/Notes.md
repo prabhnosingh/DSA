@@ -1,1 +1,1 @@
-<h2>triangle Notes</h2><hr>[ Time taken: 1 hr 20 m 0 s ]
+<h2>triangle Notes</h2><hr>[ Time taken: 20 m 43 s ]
