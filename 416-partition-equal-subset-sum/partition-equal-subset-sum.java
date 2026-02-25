@@ -1,107 +1,119 @@
 class Solution {
-    //Solving on 26 Dec 2025:
 
-    //intuition 2 (2D DP): (DP on Sums pattern: 0/1 Knapsack(subset sum))
-        //Forming two subsets that have equal sums, involves each subset having exact sum = totalSum / 2
-        //Therefore, if totalSum is odd, return false
-        //Now the problem reduces to finding a subset of numbers that sum up to totalSum / 2
+    //Optimizatin comment: “If j < nums[i-1], choosing the current number is invalid, so we rely only on the
+        //not-choose case.”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Re-Solving on 24 Feb 2026
+
+    //intuition 1: 2D : DP : 0/1 Knapsack
+        //For two subsets with equal sum to exist, one of the subsets
+            //will have exactly half of the total sum. Therefore, we 
+            //can conclude that if a subset of sum = totalSum/2 exists
+            //then it is possible to partition the array into two subsets
+            //of equal sums
+        //This finding reduces this problem to Subset Sum Problem
+
+        //Base case:
+            //Given zero elements we can form zero sum, therefore 
+                //dp[0][0] = true
+            //Given zero elements we cannot form non-zero sum, therefore
+                //fill first row from first column with false
+            //Given non-zero elements we can from zero sum, therefore
+                //fill first col from first row with true
         
         //Recurrence relation:
-            //While forming a subset, we have two choices:
-                //Pick the current number: If we pick the current number, it causes two actions.
-                    //i. We cannot pick the same number ever again (because we can only choose a number once)
-                        //=> i - 1 
-                    //ii. Our current sum reduces by the value of number picked 
-                        //=> j - nums[i-1]
-                    
-                    //This reduces our subproblem to finding a dp state to determine whether we can have a sum
-                        //of j-nums[i-1] with first i-1 numbers from nums
-                        //=> dp[i-1][j-nums[i-1]]
-                
-                //Not pick the current number: 
-                    //If choose not to pick the current number then our available numbers reduce by 1.
-                        //=> i-1
-                    //And our sum remains unchanged
-                        //=> j
-                    
-                    //This reduces our subproblem to finding a dp state to determine whether we can have a sum
-                        //of j with first i-1 numbers from nums
-                        //=> dp[i-1][j]
-                
-                //Now for any dp state dp[i][j], it will be possible to form a sum of j with first i numbers from 
-                    //nums if either of the states from "choosing current number" or "not choosing current number" 
-                    //gives true
-                
-            //Therefore, final recurrence is as follows:
-            //=> dp[i][j] = dp[i-1][j] (not choosing the currNum) || dp[i-1][j-nums[i-1]] (choosing the currNum)
-            
-            //At any time if we get "j - nums[i-1]" < 0, then we can only go with not choosing the currNum as 
-                //choosing the currNum will lead us to extra sum than required
-
-            
-        //Base cases:
-            //Given 0 numbers, we can form 0 sum. Hence, dp[0][0] = true
-            //Given 0 numbers, we can not form any non-zero sum. Hence, first row starting from col with 1
-                // is all false
-            //Given non-zero numbers, we can form a 0 sum by just choosing not to select any of the numbers.
-                //Therefore, first col is all True
-
-
+            //We have two choices, either to choose the current number or skip it:
+                //if we choose it then, the target sum reduces by currNum and total
+                    //numbers available reduces by 1
+                    //dp[i-1][j-currNum]
+                //if we do not choose it then, the target sum remains the same and
+                    //total numbers available reduces by 1 (since it is 0/1 knapsack)
+                    //dp[i-1][j]
+            //we take || (OR) of both the states
+            //if the currNum is greater than target sum, we have no choice, we only skip
 
         
  
     public boolean canPartition(int[] nums) {
-        //dp[i][j] represents whether we can compute a sum of j with first i numbers
-        //dp[nums.length][totalSum/2] will represent whether we can compute a sum of totalSum/2 with all 
-            //available nums
-        //Therefore, we need a 2D DP matrix of size nums.length+1 x totalSum/2+1
+        //dp[i][j] will represent whether we can form j sum given first
+            //i numbers from nums
+        //dp[nums.length][totalSum/2] will represent whether we can form
+            //totalSum/2 sum given all elements from nums
+        //Therefore, we need a 2D DP matrix of size nums.length+1 x totalSum/2
 
-        int totalSum = Arrays.stream(nums).sum();
-        if(totalSum % 2 != 0){ //if totalSum is odd
-            return false;
-        }
+        int totalSum = 0;
+        for(int num : nums) totalSum += num;
+
+        if(totalSum % 2 != 0) return false; //the total sum is odd and therefore
+            //cannot be partitioned into two equal halfs 
 
         int rows = nums.length + 1;
         int cols = (totalSum/2) + 1;
-
+        
         boolean[][] dp = new boolean[rows][cols];
 
-        //base cases:
-        
-        //0 sum and 0 nums
+        //base case
         dp[0][0] = true;
 
-        //filling first row: non-zero sum and 0 nums
+        //filling first row
         for(int j = 1; j < cols; j ++){
             int i = 0;
             dp[i][j] = false;
         }
 
-        //filling first col: zero sum and non-zero nums
+        //filling first col
         for(int i = 1; i < rows; i ++){
             int j = 0;
             dp[i][j] = true;
         }
 
-
         for(int i = 1; i < rows; i ++){
             for(int j = 1; j < cols; j ++){
                 int currNum = nums[i-1];
-                boolean choose = false;
-                boolean notChoose = false;
-                
-                if(j - currNum >= 0){ //we can choose the currNum
-                    choose = dp[i-1][j - nums[i-1]];
+                if(currNum > j){
+                    dp[i][j] = dp[i-1][j];
                 }
-
-                notChoose = dp[i-1][j];
-
-                dp[i][j] = choose || notChoose;
+                else{
+                    dp[i][j] = dp[i-1][j] || dp[i-1][j-currNum];
+                }
             }
         }
 
         return dp[rows-1][cols-1];
-
     }
 
 
@@ -129,6 +141,138 @@ class Solution {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 26 Dec 2025:
+
+//     //intuition 2 (2D DP): (DP on Sums pattern: 0/1 Knapsack(subset sum))
+//         //Forming two subsets that have equal sums, involves each subset having exact sum = totalSum / 2
+//         //Therefore, if totalSum is odd, return false
+//         //Now the problem reduces to finding a subset of numbers that sum up to totalSum / 2
+        
+//         //Recurrence relation:
+//             //While forming a subset, we have two choices:
+//                 //Pick the current number: If we pick the current number, it causes two actions.
+//                     //i. We cannot pick the same number ever again (because we can only choose a number once)
+//                         //=> i - 1 
+//                     //ii. Our current sum reduces by the value of number picked 
+//                         //=> j - nums[i-1]
+                    
+//                     //This reduces our subproblem to finding a dp state to determine whether we can have a sum
+//                         //of j-nums[i-1] with first i-1 numbers from nums
+//                         //=> dp[i-1][j-nums[i-1]]
+                
+//                 //Not pick the current number: 
+//                     //If choose not to pick the current number then our available numbers reduce by 1.
+//                         //=> i-1
+//                     //And our sum remains unchanged
+//                         //=> j
+                    
+//                     //This reduces our subproblem to finding a dp state to determine whether we can have a sum
+//                         //of j with first i-1 numbers from nums
+//                         //=> dp[i-1][j]
+                
+//                 //Now for any dp state dp[i][j], it will be possible to form a sum of j with first i numbers from 
+//                     //nums if either of the states from "choosing current number" or "not choosing current number" 
+//                     //gives true
+                
+//             //Therefore, final recurrence is as follows:
+//             //=> dp[i][j] = dp[i-1][j] (not choosing the currNum) || dp[i-1][j-nums[i-1]] (choosing the currNum)
+            
+//             //At any time if we get "j - nums[i-1]" < 0, then we can only go with not choosing the currNum as 
+//                 //choosing the currNum will lead us to extra sum than required
+//             //“If j < nums[i-1], choosing the current number is invalid, so we rely only on the not-choose case.”
+
+            
+//         //Base cases:
+//             //Given 0 numbers, we can form 0 sum. Hence, dp[0][0] = true
+//             //Given 0 numbers, we can not form any non-zero sum. Hence, first row starting from col with 1
+//                 // is all false
+//             //Given non-zero numbers, we can form a 0 sum by just choosing not to select any of the numbers.
+//                 //Therefore, first col is all True
+
+
+
+        
+ 
+//     public boolean canPartition(int[] nums) {
+//         //dp[i][j] represents whether we can compute a sum of j with first i numbers
+//         //dp[nums.length][totalSum/2] will represent whether we can compute a sum of totalSum/2 with all 
+//             //available nums
+//         //Therefore, we need a 2D DP matrix of size nums.length+1 x totalSum/2+1
+
+//         int totalSum = Arrays.stream(nums).sum();
+//         if(totalSum % 2 != 0){ //if totalSum is odd
+//             return false;
+//         }
+
+//         int rows = nums.length + 1;
+//         int cols = (totalSum/2) + 1;
+
+//         boolean[][] dp = new boolean[rows][cols];
+
+//         //base cases:
+        
+//         //0 sum and 0 nums
+//         dp[0][0] = true;
+
+//         //filling first row: non-zero sum and 0 nums
+//         for(int j = 1; j < cols; j ++){
+//             int i = 0;
+//             dp[i][j] = false;
+//         }
+
+//         //filling first col: zero sum and non-zero nums
+//         for(int i = 1; i < rows; i ++){
+//             int j = 0;
+//             dp[i][j] = true;
+//         }
+
+
+//         for(int i = 1; i < rows; i ++){
+//             for(int j = 1; j < cols; j ++){
+//                 int currNum = nums[i-1];
+//                 boolean choose = false;
+//                 boolean notChoose = false;
+                
+//                 if(j - currNum >= 0){ //we can choose the currNum
+//                     choose = dp[i-1][j - currNum];
+//                     // choose = dp[i-1][j - nums[i-1]];
+//                 }
+
+//                 notChoose = dp[i-1][j];
+
+//                 dp[i][j] = choose || notChoose;
+//             }
+//         }
+
+//         return dp[rows-1][cols-1];
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 26 Dec 2025:
 
     // //intuition 1: (DP on Sums pattern: 0/1 Knapsack(subset sum))
