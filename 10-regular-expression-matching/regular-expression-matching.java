@@ -27,7 +27,7 @@ class Solution {
 
 
 
-    //Re-Solving on 28 Feb 2026
+    //Re-Solving on 28 Feb - 02 Mar 2026
     //intuition 1: 
         //* can match zero or multiple characters matching to preceding characters
 
@@ -60,7 +60,7 @@ class Solution {
 
         //dp[i][j] represents whether first i characters of str match with first j
             //characters of string pat
-        //dp[str.length][pat.length] will represent whether the str matches with the
+        //dp[str.length][pat.length] will represent whether the whole str matches with the
             //whole pat.
         //Therefore, we need a 2D dp matrix of size str.length+1 x pat.length+1
 
@@ -98,6 +98,7 @@ class Solution {
                     //considering current pat char
                     boolean considerCurrPatChar = (prevPatChar == strChar || prevPatChar == '.') ? 
                         dp[i-1][j] : false; //current strChar is consumed while patChar ('*') stays as is
+                        //because we can use prevPatChar unlimited times
                     dp[i][j] = dp[i][j] || considerCurrPatChar;
                 }
 
