@@ -2,7 +2,7 @@ class Solution {
 
     //Solving on 02 Mar 2026:
 
-    //intuition 2 : recursion + memoization
+    //intuition 2 () : recursion + memoization (2D array)
         //Try out all ways
         //Recurrence:
             //Express f(idx, target)
@@ -24,42 +24,117 @@ class Solution {
 
             //base case:
                 //idx == -1
-
+        //TC: greater than 2^n (exponential)
+            //greater than 2^n because we might be processing the same index multiple times
+        //SC: greater tahn O(n) ~ O(target) (auxillary)
         
         //memoization: we can memoize any repeated states. In this problem we can represent
-            //a state with amount and idx
+            //a state with amount and idx (changing parameters)
         //Go with HashMap of key as string (target + idx) and value as ways to form the target
 
+        //Go with 2D int array as memo
+
+        //TC: O(N*T) 
+        //SC: O(N*T) + O(Target) auxillary space
+
+        //N = number of coins
+        //T = target
 
     public int change(int amount, int[] coins) {
-        HashMap<String, Integer> memo = new HashMap<>();
-        return recurs(coins.length-1, amount, coins, memo);
+        int[][] dp = new int[coins.length][amount+1];
+        for(int i = 0; i < coins.length; i ++){
+            Arrays.fill(dp[i], -1);
+        }
+
+        return recurs(coins.length-1, amount, coins, dp);
     }
 
-    public int recurs(int idx, int target, int[] coins, HashMap<String, Integer> memo){
-        if(idx == -1) return 0; //negative base case
+    public int recurs(int idx, int target, int[] coins, int[][] dp){
         if(target == 0) return 1; //positive base case
+        if(idx == -1) return 0; //negative base case
 
         String key = idx + "_" + target;
 
-        if(memo.containsKey(key)) return memo.get(key);
+        if(dp[idx][target] != -1) return dp[idx][target];
         
         int pick = 0;
         int notPick = 0;
         if(coins[idx] <= target){
-            pick = recurs(idx, target - coins[idx], coins, memo);
-            notPick = recurs(idx-1, target, coins, memo);
+            pick = recurs(idx, target - coins[idx], coins, dp);
+            notPick = recurs(idx-1, target, coins, dp);
 
         }
         else{ //not pick only
-            notPick = recurs(idx-1, target, coins, memo); 
+            notPick = recurs(idx-1, target, coins, dp); 
         }   
 
-        memo.put(key, pick + notPick);
+        dp[idx][target] = pick + notPick;
         return pick + notPick;
     }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 02 Mar 2026:
 
+//     //intuition 2 (beats 5%) : recursion + memoization (hashMap)
+//         //Try out all ways
+//         //Recurrence:
+//             //Express f(idx, target)
+//                 //till index idx in how many ways can we form the target 
+//             //Explore all possibilities
+//                 //take it:
+//                     //idx while target reduces by arr[idx] => f(idx, target-arr[idx])
+//                         //if we choose arr[idx] to be part of one way then we find, in 
+//                             //how many ways we can form the remaining target till index
+//                             //idx
+//                     //we can only take if target >= arr[idx] 
+//                 //not take it:
+//                     //idx moves while target remains same => f(idx-1, target)
+//                         //if we choose not to include arr[idx] to be part of on way
+//                             //then we find, in how many ways we can form the target
+//                             //till index idx-1 
+//             //Sum all possibilities and return
+//                 //return take + notTake 
+
+//             //base case:
+//                 //idx == -1
+//         //TC: greater than 2^n (exponential)
+//             //greater than 2^n because we might be processing the same index multiple times
+//         //SC: greater tahn O(n) ~ O(target) (auxillary)
+        
+//         //memoization: we can memoize any repeated states. In this problem we can represent
+//             //a state with amount and idx (changing parameters)
+//         //Go with HashMap of key as string (target + idx) and value as ways to form the target
+
+
+//     public int change(int amount, int[] coins) {
+//         HashMap<String, Integer> memo = new HashMap<>();
+//         return recurs(coins.length-1, amount, coins, memo);
+//     }
+
+//     public int recurs(int idx, int target, int[] coins, HashMap<String, Integer> memo){
+//         if(target == 0) return 1; //positive base case
+//         if(idx == -1) return 0; //negative base case
+
+//         String key = idx + "_" + target;
+
+//         if(memo.containsKey(key)) return memo.get(key);
+        
+//         int pick = 0;
+//         int notPick = 0;
+//         if(coins[idx] <= target){
+//             pick = recurs(idx, target - coins[idx], coins, memo);
+//             notPick = recurs(idx-1, target, coins, memo);
+
+//         }
+//         else{ //not pick only
+//             notPick = recurs(idx-1, target, coins, memo); 
+//         }   
+
+//         memo.put(key, pick + notPick);
+//         return pick + notPick;
+//     }
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // //Solving on 02 Mar 2026:
 
