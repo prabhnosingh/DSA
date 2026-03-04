@@ -33,8 +33,9 @@ class Solution {
             //if both chars match , return 1
 
 
-        //TC:
-        //SC:
+        //TC: O(mxn)
+        //SC: O(m+n) (recursive stack) + O(mxn) (dp table) 
+            //(There are two changing indices, therefore DP state space is O(mxn)) 
 
         //memoization:
             //variable parameters are idx1 and idx2
@@ -94,8 +95,7 @@ class Solution {
     //                 //i.e. text1.charAt(idx1) == text2.charAt(idx2)
     //             //f(idx1-1, idx2-1) then reduce both idx1 and idx2 by 1 and return 1
 
-    //             //if characters from each string do not match
-    //             //then explore all possibilities:
+    //             //if characters from each string do not match then explore all possibilities:
     //                 //f(idx1-1, idx2) reducing idx1 and keeping idx2 same
     //                 //f(idx1, idx2-1) keeping idx1 same and reducing idx2
     //                 //f(idx1-1, idx2-1) recucing both idx1 and idx2
@@ -106,7 +106,13 @@ class Solution {
     //     //base cases:
     //         //if any idx goes below 0 (-1) return 0
     //         //if both chars match , return 1
-   
+    //     
+    //     //TC: O(2^(m+n))
+    //          //“In the worst case when characters don’t match, each state branches into 
+    //              //two recursive calls (i-1,j) and (i,j-1), i.e. skip character from text1 or 
+    //              //skip character from text2. The recursion depth is at most m+n, so the recursion
+    //              //tree can have up to 2^(m+n) nodes, giving time complexity O(2^(m+n)).” 
+    //     //SC: O(m+n) where m and n are size of text1 and text2
 
     // public int longestCommonSubsequence(String text1, String text2) {
        
