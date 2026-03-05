@@ -2,7 +2,7 @@ class Solution {
 
     //Re-solving on 03 Mar 2025:
 
-    //intuition 2: Recursion + memoization 
+    //intuition 3: Tabulation 
         //bigger problem: length of common subsequence given text1 string till
             //idx text1.length-1 and text2 string till idx text2.length-1. 
         //The parameters of the recursive function will be idx1, idx2 and return type
@@ -43,35 +43,151 @@ class Solution {
             //here dp[i][j] will represent, longest common subsequence given text1 till 
                 //index i and text2 till index j
             
-   
+        //tabulation:
+            //base case:
+                //given 0 characters for text1 and non-zero characters of text2 we can only
+                    //form common subsequence of length 0, hence fill first row with 0's
+                //given 0 characters for text2 and non-zero characters of text1 we can only
+                    //form common subsequence of length 0, hence fill first col with 0's
+
+                
+            //recurrence relation:
+                //if the curr char from both the strings matches:
+                    //then current state dp[i][j] depends on the state when both of these chars
+                        //were not present
+                    //dp[i][j] = 1 + dp[i-1][j-1]
+                //if the current char from both the strings do not match:
+                    //then we have two choices:
+                        //skip curr char from text1, in which case our current dp state will depend
+                            //on the state when the curr char from text1 was not there, i.e. dp[i-1][j]
+                    
+                        //skip curr char from text2, in which case our current dp state will depend 
+                            //on the state when the curr char from text2 was not there, i.e. dp[i][j-1]
+                    
+                    //we take the max out of these states for our current dp state
+                    //dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1])
 
     public int longestCommonSubsequence(String text1, String text2) {
-        int[][] dp = new int[text1.length()][text2.length()];
+        //dp[i][j] represent length of longest common subsequence given first i charcters of text1
+            //and first j characters of text2
+        //dp[text1.length][text2.length] will represent length of longest common subsequence given the
+            //full text1 and text2 strings
+        //Therefore, we will required a 2D DP matrix of size text1.length + 1 x text2.length + 1
 
-        for(int i = 0; i < text1.length(); i ++){
-            Arrays.fill(dp[i], -1);
+        int rows = text1.length() + 1;
+        int cols = text2.length() + 1;
+        
+        int[][] dp = new int[rows][cols];
+
+        //base cases
+        dp[0][0] = 0;
+
+        //filling first col
+        for(int i = 0; i < rows; i ++){
+            int j = 0;
+            dp[i][j] = 0;
         }
-        return recurse(text1.length()-1, text2.length()-1, text1, text2, dp);
 
-    }
+        //filling first row
+        for(int j = 0; j < cols; j ++){
+            int i = 0;
+            dp[i][j] = 0;
+        }
 
-    private int recurse(int idx1, int idx2, String text1, String text2, int[][] dp){
-        if(idx1 == -1 || idx2 == -1) return 0;
-        if(dp[idx1][idx2] != -1) return dp[idx1][idx2];
-        if(text1.charAt(idx1) == text2.charAt(idx2)){
-            return 1 + recurse(idx1-1, idx2-1, text1, text2, dp);
-        } 
 
-        int pos1 = recurse(idx1 - 1, idx2, text1, text2, dp);
-        int pos2 = recurse(idx1, idx2 - 1, text1, text2, dp);
-        // int pos3 = recurse(idx1-1, idx2-1, text1, text2); //not necessary 
-            //as already covered under pos1 and pos2
+        for(int i = 1; i < rows; i ++){
+            for(int j = 1; j < cols; j ++){
+                int t1char = text1.charAt(i-1);
+                int t2char = text2.charAt(j-1);
 
-        dp[idx1][idx2] = Math.max(pos1, pos2);
-        // return Math.max(Math.max(pos1, pos2), pos3);
-        return Math.max(pos1, pos2);
+                if(t1char == t2char){
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }
+
+                else{
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+                }
+            }   
+        }
+
+        return dp[rows-1][cols-1];
+   
         
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 03 Mar 2025:
+
+    // //intuition 2: Recursion + memoization 
+    //     //bigger problem: length of common subsequence given text1 string till
+    //         //idx text1.length-1 and text2 string till idx text2.length-1. 
+    //     //The parameters of the recursive function will be idx1, idx2 and return type
+    //         //should be int.
+    //     //Smaller sub-problem will be the find length of common subsequence while
+    //         //reducing the idx of each string till 0
+
+    //     //Recurrence relation:
+    //         //expression: 
+    //             //f(idx1, idx2)
+
+    //         //exploring all possibilities:
+    //             //if characers from each string match 
+    //                 //i.e. text1.charAt(idx1) == text2.charAt(idx2)
+    //             //f(idx1-1, idx2-1) then reduce both idx1 and idx2 by 1 and return 1
+
+    //             //if characters from each string do not match
+    //             //then explore all possibilities:
+    //                 //f(idx1-1, idx2) reducing idx1 and keeping idx2 same
+    //                 //f(idx1, idx2-1) keeping idx1 same and reducing idx2
+    //                 //f(idx1-1, idx2-1) recucing both idx1 and idx2
+                
+    //         //return
+    //             //pick the max of all the possibilities and return
+
+    //     //base cases:
+    //         //if any idx goes below 0 (-1) return 0
+    //         //if both chars match , return 1
+
+
+    //     //TC: O(mxn)
+    //     //SC: O(m+n) (recursive stack) + O(mxn) (dp table) 
+    //         //(There are two changing indices, therefore DP state space is O(mxn)) 
+
+    //     //memoization:
+    //         //variable parameters are idx1 and idx2
+    //         //therefore we can have a 2D dp matrix of size text1.length x text2.length
+    //         //here dp[i][j] will represent, longest common subsequence given text1 till 
+    //             //index i and text2 till index j
+            
+   
+
+    // public int longestCommonSubsequence(String text1, String text2) {
+    //     int[][] dp = new int[text1.length()][text2.length()];
+
+    //     for(int i = 0; i < text1.length(); i ++){
+    //         Arrays.fill(dp[i], -1);
+    //     }
+    //     return recurse(text1.length()-1, text2.length()-1, text1, text2, dp);
+
+    // }
+
+    // private int recurse(int idx1, int idx2, String text1, String text2, int[][] dp){
+    //     if(idx1 == -1 || idx2 == -1) return 0;
+    //     if(dp[idx1][idx2] != -1) return dp[idx1][idx2];
+    //     if(text1.charAt(idx1) == text2.charAt(idx2)){
+    //         return 1 + recurse(idx1-1, idx2-1, text1, text2, dp);
+    //     } 
+
+    //     int pos1 = recurse(idx1 - 1, idx2, text1, text2, dp);
+    //     int pos2 = recurse(idx1, idx2 - 1, text1, text2, dp);
+    //     // int pos3 = recurse(idx1-1, idx2-1, text1, text2); //not necessary 
+    //         //as already covered under pos1 and pos2
+
+    //     dp[idx1][idx2] = Math.max(pos1, pos2);
+    //     // return Math.max(Math.max(pos1, pos2), pos3);
+    //     return Math.max(pos1, pos2);
+        
+    // }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
