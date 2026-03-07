@@ -1,58 +1,48 @@
 class Solution {
+    
+    //Re-solving on 07 March 2026
 
-//      Pattern	Loop?
-//      Position based decisions	❌ No
-//      Choosing next element	✅ Yes
-//      Subsets / combinations	✅ Yes
-//      String index decisions	❌ No
-
-//If each recursion level represents one position → NO for-loop
-
-    //Solving on 06 Mar 2026:
-
-    //intuition 1: Backtracking
-        //We can recursively traverse all the indices of the string 
-        //at each step we have an option to either make the alphabet 
-            //uppercase or lowercase
-        //if the letter is a number we just continue
-        //after each traversal we reverse the change of changing the case as
-            //part of backtracking
-
-
+    //intuition 1: Backtracking 
+        //For each letter we have two options, either to change the case or not change the case
+        //For any number we only have the option to not change the case
+        //We can have a list of strings to store the permutations
+        //We will do a dfs to find all permutations along with backtracking the state
+        //We can have a char[] array out of string s and then do operations on top of it
         
+        //base case will be when the currIdx reaches end of charArray, at which point we
+            //will convert the current charArray state to a string and add it to permutations
+
     public List<String> letterCasePermutation(String s) {
-        
         List<String> perms = new ArrayList<>();
-
-        dfs(s.toCharArray(), perms, 0);
-
+        dfs(perms, s.toCharArray(), 0);
         return perms;
-       
     }
 
-    private void dfs(char[] charArray, List<String> perms, int currIdx){
+    private void dfs(List<String> perms, char[] charArray, int currIdx){
 
-        if(currIdx == charArray.length){ //the whole string traversed
-            perms.add(new String(charArray));    
-            return;  
-        }
-
-        dfs(charArray, perms, currIdx + 1); //for skipping current element from any operation
-
-        char currChar = charArray[currIdx];
-        
-        if(Character.isLowerCase(currChar)){
-            charArray[currIdx] = Character.toUpperCase(currChar);
-        }
-        else if (Character.isUpperCase(currChar)){
-            charArray[currIdx] = Character.toLowerCase(currChar);
-        }   
-        else { // in case currChar is a digit
+        if(currIdx == charArray.length){
+            perms.add(new String(charArray));
             return;
         }
 
-        dfs(charArray, perms, currIdx + 1); //traversing all permutations after changing the case
+        //not changing the case
+        dfs(perms, charArray, currIdx + 1);
 
+        char currChar = charArray[currIdx];
+
+        if(Character.isLowerCase(currChar)){
+            charArray[currIdx] = Character.toUpperCase(currChar);
+        }
+        else if(Character.isUpperCase(currChar)){
+            charArray[currIdx] = Character.toLowerCase(currChar);
+        }
+        else{ //in case the character is a number, skip the case change option
+            return;
+        }
+
+        dfs(perms, charArray, currIdx + 1);
+
+        //backtracking
         charArray[currIdx] = currChar;
     }
 
@@ -81,7 +71,92 @@ class Solution {
 
 
 
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////
+// //      Pattern	Loop?
+// //      Position based decisions	❌ No
+// //      Choosing next element	✅ Yes
+// //      Subsets / combinations	✅ Yes
+// //      String index decisions	❌ No
+
+// //If each recursion level represents one position → NO for-loop
+
+//     //Solving on 06 Mar 2026:
+
+//     //intuition 1: Backtracking
+//         //We can recursively traverse all the indices of the string 
+//         //at each step we have an option to either make the alphabet 
+//             //uppercase or lowercase
+//         //if the letter is a number we just continue
+//         //after each traversal we reverse the change of changing the case as
+//             //part of backtracking
+
+
+        
+//     public List<String> letterCasePermutation(String s) {
+        
+//         List<String> perms = new ArrayList<>();
+
+//         dfs(s.toCharArray(), perms, 0);
+
+//         return perms;
+       
+//     }
+
+//     private void dfs(char[] charArray, List<String> perms, int currIdx){
+
+//         if(currIdx == charArray.length){ //the whole string traversed
+//             perms.add(new String(charArray));    
+//             return;  
+//         }
+
+//         dfs(charArray, perms, currIdx + 1); //for skipping current element from any operation
+
+//         char currChar = charArray[currIdx];
+        
+//         if(Character.isLowerCase(currChar)){
+//             charArray[currIdx] = Character.toUpperCase(currChar);
+//         }
+//         else if (Character.isUpperCase(currChar)){
+//             charArray[currIdx] = Character.toLowerCase(currChar);
+//         }   
+//         else { // in case currChar is a digit
+//             return;
+//         }
+
+//         dfs(charArray, perms, currIdx + 1); //traversing all permutations after changing the case
+
+//         charArray[currIdx] = currChar;
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////
     // //Solving on 16 Dec 2025:
 
     // //intuition 1: Backtracking 
