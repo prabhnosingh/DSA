@@ -1,16 +1,27 @@
 class Solution {
     //Re-solving on 07 Mar 2026:
 
-    //intuition 1: dfs : backtracking   
+    //This problem can be solved with DP/memoization because:
+        //It is fining total number of expressions and not the actural expressions
+        //Any particular state depends on already computed state
+
+    //intuition 2: dfs : backtracking : memoization  
         //each number in nums have an option to be prefixed with either '+' or '-'
         //we can explore all the possibilities to find which of these compute to target
-        //since all the numbers are by default positive, we can make then negative and 
-            //then convert them back while backtracking
+        //"for each nubmer, recursively choose either +nums[i] or -nums[i] and update 
+            //currSum accordingly" 
         //base case:
-            //when currSum becomes equal to target, then return 1 
-            //when currIdx becomes equal to length of nums, then return 0
+            //when currIdx becomes equal to length of nums:
+                //and currSum equal to target, then return 1 
+                //else return 0
 
         //what if target is 0?
+
+        //TC: O(2^n) : for each number we have two choices, either to choose it as positive
+            //or to choose it as negative
+            //"each of the n numbers creates 2 branches"
+            //"total leaf expressions = 2^n"
+        //Sc: O(n) : size of recursive stack. Height of the tree
     public int findTargetSumWays(int[] nums, int target) {
         
         return dfs(nums, target, 0, 0);
@@ -38,6 +49,54 @@ class Solution {
 
         return option1 + option2;
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 07 Mar 2026:
+
+    // //intuition 1: dfs : backtracking   
+    //     //each number in nums have an option to be prefixed with either '+' or '-'
+    //     //we can explore all the possibilities to find which of these compute to target
+    //     //"for each nubmer, recursively choose either +nums[i] or -nums[i] and update 
+    //         //currSum accordingly" 
+    //     //base case:
+    //         //when currIdx becomes equal to length of nums:
+    //             //and currSum equal to target, then return 1 
+    //             //else return 0
+
+    //     //what if target is 0?
+
+    //     //TC: O(2^n) : for each number we have two choices, either to choose it as positive
+    //         //or to choose it as negative
+    //         //"each of the n numbers creates 2 branches"
+    //         //"total leaf expressions = 2^n"
+    //     //Sc: O(n) : size of recursive stack. Height of the tree
+    // public int findTargetSumWays(int[] nums, int target) {
+        
+    //     return dfs(nums, target, 0, 0);
+
+    // }
+
+    // private int dfs(int[] nums, int target, int currSum, int currIdx){
+    //     // if(currSum == target) return 1;
+
+    //     if(currIdx == nums.length){ //we should only check whether the target is met
+    //         //or not when the whole expression is traversed
+    //         if(currSum == target) return 1;
+    //         else return 0;
+
+    //     } 
+
+    //     int currNum = nums[currIdx];
+        
+    //     //negative currNum
+    //     int option1 = dfs(nums, target, currSum + (currNum * -1), currIdx + 1);
+
+    //     //positive currNum
+    //     int option2 = dfs(nums, target, currSum + currNum, currIdx + 1);
+        
+
+    //     return option1 + option2;
+    // }
 
 
 
