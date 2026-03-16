@@ -2,7 +2,7 @@ class Solution {
     //Re-solving on 07 Mar 2026:
 
     //This problem can be solved with DP/memoization because:
-        //It is fining total number of expressions and not the actural expressions
+        //It is finding total number of expressions and not the actual expressions
         //Any particular state depends on already computed state
 
     //intuition 2: dfs : backtracking : memoization  
@@ -15,21 +15,49 @@ class Solution {
                 //and currSum equal to target, then return 1 
                 //else return 0
 
-        //what if target is 0?
+        //what if target is 0? -> only check if the currIdx becomes equal to nums length
+
+        
+        //memoization: the variables are currSum and currIdx
+            //max currSum can be total sum of nums
+            //max currIdx can be nums.length-1
+
+            //therefore we can have a 2d memo array of size totalSum + 1 x nums.length
 
         //TC: O(2^n) : for each number we have two choices, either to choose it as positive
             //or to choose it as negative
             //"each of the n numbers creates 2 branches"
             //"total leaf expressions = 2^n"
         //Sc: O(n) : size of recursive stack. Height of the tree
+
+
+
     public int findTargetSumWays(int[] nums, int target) {
         
-        return dfs(nums, target, 0, 0);
+        int totalSum = 0;
+        // for(int num : nums){
+        //     totalSum += num;
+        // }
+        // if(totalSum < target){
+        //     return 0;
+        // }
+
+        // int[][] dp = new int[totalSum+1][nums.length];
+        HashMap<String, Integer> memo = new HashMap<>();
+
+        // for(int i = 0; i < totalSum+1; i ++){
+        //     Arrays.fill(dp[i], -1);
+        // }
+        
+        return dfs(nums, target, 0, 0, memo);
 
     }
 
-    private int dfs(int[] nums, int target, int currSum, int currIdx){
+    private int dfs(int[] nums, int target, int currSum, int currIdx, 
+        HashMap<String, Integer> memo){
         // if(currSum == target) return 1;
+        String key = currSum + "_" + currIdx;
+        if(memo.containsKey(key)) return memo.get(key);
 
         if(currIdx == nums.length){ //we should only check whether the target is met
             //or not when the whole expression is traversed
@@ -41,11 +69,12 @@ class Solution {
         int currNum = nums[currIdx];
         
         //negative currNum
-        int option1 = dfs(nums, target, currSum + (currNum * -1), currIdx + 1);
+        int option1 = dfs(nums, target, currSum + (currNum * -1), currIdx + 1, memo);
 
         //positive currNum
-        int option2 = dfs(nums, target, currSum + currNum, currIdx + 1);
+        int option2 = dfs(nums, target, currSum + currNum, currIdx + 1, memo);
         
+        memo.put(key, option1 + option2);
 
         return option1 + option2;
     }
