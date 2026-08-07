@@ -11,10 +11,13 @@ class Solution {
                 //In this case we move left towards mid (left = mid + 1) - exclude the mid as 
                     //it can never be our answer (smaller element exist at nums[right])
             //if nums[mid] < nums[right] 
-                //then that means that the minimum lies towards left
+                //the minimum lies at mid or somewhere to the left of mid
                 //In this case we move right towards mid (right = mid) - keep the mid as it can 
                     //be our answer
             
+        
+        //TC: O(log n)
+        //SC: O(1)
     
     public int findMin(int[] nums) {
         
