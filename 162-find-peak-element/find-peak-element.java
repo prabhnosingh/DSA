@@ -10,6 +10,7 @@ class Solution {
         //0 1 2 3 4 5 6
         //1 2 1 6 7 8 9 -> in this test case there are two probable answers 0 idx (2) or 6 idx (9)
             //6 idx can be one of the answer as 5 < 6 and anything outside boudary of the array is also -INF
+            //with the below apporach 6 idx will be our answer
     public int findPeakElement(int[] nums) {
         
         int left = 0;
