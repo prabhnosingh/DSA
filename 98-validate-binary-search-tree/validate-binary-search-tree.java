@@ -15,54 +15,101 @@
  */
 class Solution {
 
-    // //Re-solving on 16 Nov 2025:
+    //Re-solving on 08 Aug 2025:
 
-    //intuition 1 (dfs): Using two helper functions getMax and getMin
-    //Check if left ST's any element is not greater than the max of root
-    //Check if right ST's any element is not smaller than the min of root  
-    
+    //intuition 1: dfs
+        //have a helper function to traverse BST that takes a root, max and min value
+        //now any node of left subtree of root should not be greater than the max (maximum element allowed)
+        //and, any node of right subtree of root should not be greater than the min (minimum element allowed)
+
+
     public boolean isValidBST(TreeNode root) {  
         
+        return traverseBST(root, Long.MAX_VALUE, Long.MIN_VALUE);
+        //choosing "long" as input can be as big as 2147483647 (Integer.MAX_VALUE) and
+            //as low as Integer.MIN_VALUE, so when root = 2147483647, root.val >= max
+            //returns false even when it should be true
+
+        
+    }
+
+    private boolean traverseBST(TreeNode root, long max, long min){
         if(root == null) return true;
 
-        if(maxElement(root.left) >= root.val){
-            return false;
-        }
+        if(root.val >= max) return false;
+        if(root.val <= min) return false;
 
-        if(minElement(root.right) <= root.val){
-            return false;
-        }
 
-        return isValidBST(root.left) && isValidBST(root.right);       
+        return traverseBST(root.left, root.val, min) && traverseBST(root.right, max, root.val); 
+        //left sub tree can have a maximum value that is less than root.val, hence max = root.val
+        //right sub tree can have a minimum value that is greater than root.val, hence min = root.val 
     }
 
-    private long maxElement(TreeNode root){
-        if(root == null){
-            return Long.MIN_VALUE;
-        }   
 
-        long maxLST = maxElement(root.left);
-        long maxRST = maxElement(root.right);
 
-        return Math.max(root.val, Math.max(maxLST, maxRST));    
-    
-    }
 
-    private long minElement(TreeNode root){
-        if(root == null){
-            return Long.MAX_VALUE;
-        }   
 
-        long minLST = minElement(root.left);
-        long minRST = minElement(root.right);
 
-        return Math.min(root.val, Math.min(minLST, minRST));    
-    
-    }
-        
+
+
+
+
+
+
+
+
+
         
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+//     // //Re-solving on 16 Nov 2025:
+
+//     //intuition 1 (dfs): Using two helper functions getMax and getMin
+//     //Check if left ST's any element is not greater than the max of root
+//     //Check if right ST's any element is not smaller than the min of root  
+    
+//     public boolean isValidBST(TreeNode root) {  
+        
+//         if(root == null) return true;
+
+//         if(maxElement(root.left) >= root.val){
+//             return false;
+//         }
+
+//         if(minElement(root.right) <= root.val){
+//             return false;
+//         }
+
+//         return isValidBST(root.left) && isValidBST(root.right);       
+//     }
+
+//     private long maxElement(TreeNode root){
+//         if(root == null){
+//             return Long.MIN_VALUE;
+//         }   
+
+//         long maxLST = maxElement(root.left);
+//         long maxRST = maxElement(root.right);
+
+//         return Math.max(root.val, Math.max(maxLST, maxRST));    
+    
+//     }
+
+//     private long minElement(TreeNode root){
+//         if(root == null){
+//             return Long.MAX_VALUE;
+//         }   
+
+//         long minLST = minElement(root.left);
+//         long minRST = minElement(root.right);
+
+//         return Math.min(root.val, Math.min(minLST, minRST));    
+    
+//     }
+        
+        
+
+// /////////////////////////////////////////////////////////////////////////////////////////////
     // // //Re-solving on 16 Nov 2025:
 
     // //intuition 1 (dfs): Have a helper function that takes max and min values 
