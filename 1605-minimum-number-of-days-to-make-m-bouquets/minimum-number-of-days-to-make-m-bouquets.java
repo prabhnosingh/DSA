@@ -14,24 +14,32 @@ class Solution {
         //The range of days to look in is [1, maxBoomDay]
         //We will run binary search on this range and find the lower bound which
             //makes m bouquets with k adjacent flowers per bouquet 
+        //As currDay increases, the number of bloomed flowers can only increase.
+            //Therefore:
+            //F F F F T T T T
+            //        ^
+            //   minimum valid day
 
         //The answer will be -1 if m*k > bloomday.length as we can only have at max 
             //bloomday.length flowers
 
         //TC: O(bloomDay.length * log maxBloomDay)
+        //SC:O(1)
     public int minDays(int[] bloomDay, int m, int k) {
 
         if((long)m*k > bloomDay.length) return -1;
 
         int maxBloomDay = 0;    
+        int minBloomDay = Integer.MAX_VALUE;
 
         for(int bd : bloomDay){
             maxBloomDay = Math.max(maxBloomDay, bd);
+            minBloomDay = Math.min(minBloomDay, bd);
         }
 
-        int left = 1;
+        int left = minBloomDay; //as any flower cannot bloom before minBloomDay
         int right = maxBloomDay; //whe don't we do right = maxBloomDay - 1;? is it because we want to 
-            //include it in the range?
+            //include it in the range? -> yes
         
         while(left < right){
             int mid = left + (right - left) / 2;
@@ -70,5 +78,6 @@ class Solution {
             if(m == 0) return true; //all bouquets complete
         }
         return false;
+
     }
 }
