@@ -2,12 +2,15 @@ class Solution {
 
     //Solving on 07 Aug 2026
 
-    //intuition 1: 
+    //intuition 1: Topic: Binary Search on Answers
         //Minimum capacity of the ship to start from will be maximum weight but that
             //might not a valid answer given the constraint of days.
         //We can start from maximum_weight and go until total_weight and then run 
             //binary search on that range to find the least ship capacity that will satisfy
             //the days requirement
+    
+        //TC: O(n log (totalWeight-maxWeight))
+        //SC: O(1)
     public int shipWithinDays(int[] weights, int days) {
         
         //finding max weight
@@ -38,6 +41,7 @@ class Solution {
     }
 
     //checking if the weight will even work for the given days
+    //TC: O(n)
     public boolean isValidWeight(int[] weights, int currWeight, int days){
         
         int tempWeight = currWeight;
