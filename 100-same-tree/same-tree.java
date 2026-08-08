@@ -19,6 +19,11 @@ class Solution {
 
     //intuition 1: 
         //run a recursive call in isSameTree and compare p and q at all the levels
+
+        //TC: O(n) : where n is the total number of nodes in 1 tree when both trees are identical
+            //in worst case where all the nodes are indeed equal in p and q, we visit 
+                //all the nodes to validate
+        //SC: O(h) : where h is the min(height(p), height(q))
     public boolean isSameTree(TreeNode p, TreeNode q) {
         if(p == null && q == null) return true;
         if(p == null || q == null) return false;
