@@ -20,9 +20,13 @@ class Solution {
     //intuition 1: dfs
         //have a helper function to traverse BST that takes a root, max and min value
         //now any node of left subtree of root should not be greater than the max (maximum element allowed)
-        //and, any node of right subtree of root should not be greater than the min (minimum element allowed)
+        //and, any node of right subtree of root should not be lesser than the min (minimum element allowed)
+        //for every node: min < node.val < max
 
-
+        //TC: O(n) : where n is the number of nodes in the binary tree
+            //because in the worst case, traverseBST() visits every node exactly once to verify whether
+                //the BST is valid
+        //SC: O(h) : where h is the tree height, which in worst case can be O(n)
     public boolean isValidBST(TreeNode root) {  
         
         return traverseBST(root, Long.MAX_VALUE, Long.MIN_VALUE);
