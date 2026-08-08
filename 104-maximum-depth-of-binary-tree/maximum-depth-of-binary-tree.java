@@ -17,10 +17,13 @@ class Solution {
     //Re-solving on 05 Nov 2025:
     //intuition 1: BFS
         //track the depth at each level until no other node is available
-        //use a queue 
+        //use a queue to traverse the tree level by level 
+        //increment dpeth after processing each complete level
     //intuition 2: DFS
         //search for depth in left and right subtree recursively and return the max
-            //of both
+            //of both + 1 (for current node)
+        //TC: O(n) : where n is the number of total nodes
+        //SC: O(h) : where h is the height of the tree
     public int maxDepth(TreeNode root) {
         if(root == null) return 0;
 
