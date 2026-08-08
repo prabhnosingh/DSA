@@ -24,7 +24,7 @@ class Solution {
 
         while(left < right){
             int mid = left + (right - left) / 2;
-            System.out.println(mid + " = returns : " + isValidSpeed(piles, h, mid));
+            // System.out.println(mid + " = returns : " + isValidSpeed(piles, h, mid));
             if(isValidSpeed(piles, h, mid)){ //look for more smaller speed but keep the current 
                 //mid as an option
                 right = mid;
