@@ -12,7 +12,7 @@ class Solution {
         //Sub-pattern: Minimum feasible answer
         
         //The range of days to look in is [1, maxBoomDay]
-        //We will run binary search on this range and find the lower bound which
+        //We will run binary search on this range and find the lower bound (smallest day) which
             //makes m bouquets with k adjacent flowers per bouquet 
         //As currDay increases, the number of bloomed flowers can only increase.
             //Therefore:
@@ -59,7 +59,7 @@ class Solution {
 
     //O(bloomDay.length)
     private boolean isValidBloomDay(int[] bloomDay, int m, int k, int currDay){
-        //apply sliding window
+        
 
         int currFlowers = 0;
         for(int i = 0; i < bloomDay.length; i ++){
