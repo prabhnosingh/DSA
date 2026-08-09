@@ -38,7 +38,7 @@ class Solution {
         if(leftSt != null && rightSt != null) return root;
 
         //p and q are both in right subtree
-        if(leftSt == null) return rightSt;
+        else if(leftSt == null) return rightSt;
 
         //p and q are both in left subtree
         return leftSt;
