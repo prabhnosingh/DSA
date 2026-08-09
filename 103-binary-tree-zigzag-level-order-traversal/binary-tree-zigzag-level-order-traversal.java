@@ -43,7 +43,7 @@ class Solution {
             for(int i = 0; i < currQueueSize; i ++){
                 TreeNode currNode = queue.poll();
                 if(currNode.left != null) queue.offer(currNode.left);
-                if(currNode.right != null) queue.offer(currNode.right);
+                if(currNode.right != null) queue.offer(currNode.right);//O(1)
 
                 if(leftToRight) currLevel.addLast(currNode.val);
                 else currLevel.addFirst(currNode.val);
@@ -63,6 +63,8 @@ class Solution {
     //     //run normal bfs and track if we want to add values left to right or right to left
     //     //for left to right, add values normally
     //     //for right to left, add values using list.add(0, value)
+    //     //TC: O(n^2) 
+    //     //SC: O(n) 
     // public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
     //     List<List<Integer>> zigzagLevelOrderList = new ArrayList<>();
 
@@ -80,10 +82,11 @@ class Solution {
     //         for(int i = 0; i < currQueueSize; i ++){
     //             TreeNode currNode = queue.poll();
     //             if(currNode.left != null) queue.offer(currNode.left);
-    //             if(currNode.right != null) queue.offer(currNode.right);
+    //             if(currNode.right != null) queue.offer(currNode.right); 
 
     //             if(leftToRight) currLevel.add(currNode.val);
-    //             else currLevel.add(0, currNode.val);
+    //             else currLevel.add(0, currNode.val); //costs O(k) because all existing (k)
+    //             //elements must shift one position to the right
 
 
     //         }
