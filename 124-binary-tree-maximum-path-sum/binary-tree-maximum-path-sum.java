@@ -32,7 +32,7 @@ class Solution {
     public int maxPathSum(TreeNode root) {
     
         int rootSum = treeTraversal(root);
-        maxPathSum = Math.max(maxPathSum, rootSum);
+        // maxPathSum = Math.max(maxPathSum, rootSum);
 
         return maxPathSum;
     }
@@ -45,8 +45,7 @@ class Solution {
         int rightMaxSum = Math.max(0, treeTraversal(root.right));
 
         //split scenario
-        maxPathSum = Math.max(maxPathSum, root.val + Math.max(leftMaxSum, 0) + 
-            Math.max(rightMaxSum, 0));
+        maxPathSum = Math.max(maxPathSum, root.val + leftMaxSum + rightMaxSum);
 
         //return value to the parent
         return root.val + Math.max(leftMaxSum, rightMaxSum);
