@@ -17,10 +17,14 @@ class Solution {
 
     //Re-solving on 09 Aug 2026
     
-    //intuition 1: BFS
+    //intuition 2: BFS (using doubly linked list)
         //run normal bfs and track if we want to add values left to right or right to left
-        //for left to right, add values normally
-        //for right to left, add values using list.add(0, value)
+        //for left to right, add values normally to doubly linkedlist using addLast
+        //for right to left, add values to doubly linkedlist using addFirst
+
+        //TC: O(n)
+        //SC: O(n/2) = O(n)
+        //where n is the total number of nodes
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> zigzagLevelOrderList = new ArrayList<>();
 
@@ -34,14 +38,15 @@ class Solution {
         while(!queue.isEmpty()){
             int currQueueSize = queue.size();
 
-            List<Integer> currLevel = new ArrayList<>();
+            //doubly linked list
+            LinkedList<Integer> currLevel = new LinkedList<>();
             for(int i = 0; i < currQueueSize; i ++){
                 TreeNode currNode = queue.poll();
                 if(currNode.left != null) queue.offer(currNode.left);
                 if(currNode.right != null) queue.offer(currNode.right);
 
-                if(leftToRight) currLevel.add(currNode.val);
-                else currLevel.add(0, currNode.val);
+                if(leftToRight) currLevel.addLast(currNode.val);
+                else currLevel.addFirst(currNode.val);
 
 
             }
@@ -51,6 +56,43 @@ class Solution {
         return zigzagLevelOrderList;
 
     }
+
+    // //Re-solving on 09 Aug 2026
+    
+    // //intuition 1: BFS
+    //     //run normal bfs and track if we want to add values left to right or right to left
+    //     //for left to right, add values normally
+    //     //for right to left, add values using list.add(0, value)
+    // public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    //     List<List<Integer>> zigzagLevelOrderList = new ArrayList<>();
+
+    //     if(root == null) return zigzagLevelOrderList;
+
+    //     Queue<TreeNode> queue = new ArrayDeque<>();
+    //     queue.offer(root);
+
+    //     boolean leftToRight = true;
+
+    //     while(!queue.isEmpty()){
+    //         int currQueueSize = queue.size();
+
+    //         List<Integer> currLevel = new ArrayList<>();
+    //         for(int i = 0; i < currQueueSize; i ++){
+    //             TreeNode currNode = queue.poll();
+    //             if(currNode.left != null) queue.offer(currNode.left);
+    //             if(currNode.right != null) queue.offer(currNode.right);
+
+    //             if(leftToRight) currLevel.add(currNode.val);
+    //             else currLevel.add(0, currNode.val);
+
+
+    //         }
+    //         leftToRight = !leftToRight;
+    //         zigzagLevelOrderList.add(currLevel);
+    //     } 
+    //     return zigzagLevelOrderList;
+
+    // }
 
 
 
