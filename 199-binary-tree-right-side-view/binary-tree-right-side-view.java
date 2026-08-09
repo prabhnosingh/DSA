@@ -16,40 +16,103 @@
 
 
 class Solution {
+    
+    //Re-solving on 09 Aug 2026
 
-    //Re-solving on 16 Nov 2025:
-
-    //intuition 1 (bfs): Do level order traversal and then add last element from each level to the ans list
-
-
+    //intuition 1: 
+        //Run a BFS and store the last node's value at each level from queue    
     public List<Integer> rightSideView(TreeNode root) {
+        
         List<Integer> rightSideViewList = new ArrayList<>();
+
         if(root == null) return rightSideViewList;
-        Queue<TreeNode> levelOrderQueue = new ArrayDeque<>();
 
-        levelOrderQueue.offer(root);
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.offer(root);
+        
+        while(!queue.isEmpty()){
+            int currQueueSize = queue.size();
 
-        while(!levelOrderQueue.isEmpty()){
-            int currSize = levelOrderQueue.size();
+            for(int i = 0; i < currQueueSize; i ++){
+                TreeNode currNode = queue.poll();
+                if(currNode.left != null) queue.offer(currNode.left);
+                if(currNode.right != null) queue.offer(currNode.right);
 
-            for(int i = 0; i < currSize; i ++){
-                TreeNode currNode = levelOrderQueue.poll();
-
-                if(currNode.left != null){
-                    levelOrderQueue.offer(currNode.left);
-                }
-                if(currNode.right != null){
-                    levelOrderQueue.offer(currNode.right);
-                }
-
-                if(i == currSize - 1){ //last element of that level
-                    rightSideViewList.add(currNode.val);
-                }   
+                if(i == currQueueSize - 1) rightSideViewList.add(currNode.val);
             }
         }
 
         return rightSideViewList;
+
     }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 16 Nov 2025:
+
+//     //intuition 1 (bfs): Do level order traversal and then add last element from each level to the ans list
+
+
+//     public List<Integer> rightSideView(TreeNode root) {
+//         List<Integer> rightSideViewList = new ArrayList<>();
+//         if(root == null) return rightSideViewList;
+//         Queue<TreeNode> levelOrderQueue = new ArrayDeque<>();
+
+//         levelOrderQueue.offer(root);
+
+//         while(!levelOrderQueue.isEmpty()){
+//             int currSize = levelOrderQueue.size();
+
+//             for(int i = 0; i < currSize; i ++){
+//                 TreeNode currNode = levelOrderQueue.poll();
+
+//                 if(currNode.left != null){
+//                     levelOrderQueue.offer(currNode.left);
+//                 }
+//                 if(currNode.right != null){
+//                     levelOrderQueue.offer(currNode.right);
+//                 }
+
+//                 if(i == currSize - 1){ //last element of that level
+//                     rightSideViewList.add(currNode.val);
+//                 }   
+//             }
+//         }
+
+//         return rightSideViewList;
+//     }
 
     
 
