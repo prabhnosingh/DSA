@@ -39,7 +39,8 @@ class Solution {
             int currQueueSize = queue.size();
 
             //doubly linked list
-            LinkedList<Integer> currLevel = new LinkedList<>();
+            // LinkedList<Integer> currLevel = new LinkedList<>();
+            Deque<Integer> currLevel = new ArrayDeque<>();
             for(int i = 0; i < currQueueSize; i ++){
                 TreeNode currNode = queue.poll();
                 if(currNode.left != null) queue.offer(currNode.left);
@@ -51,7 +52,8 @@ class Solution {
 
             }
             leftToRight = !leftToRight;
-            zigzagLevelOrderList.add(currLevel);
+            // zigzagLevelOrderList.add(currLevel);
+            zigzagLevelOrderList.add(new ArrayList<>(currLevel));
         } 
         return zigzagLevelOrderList;
 
