@@ -18,18 +18,25 @@ class Solution {
     //Solving on 09 Aug 2026
 
     //intuition 2: BFS (deque)
-        //Do a level order traversal using a queue
+        //perform level-order traversal while assigning every node the index
+            //it would have if the tree were a complete binary tree.
+        //the indexing preserves the positions of missing/null nodes between
+            //the leftmost and rightmost actual nodes.
         //The queue will take a pair (node, idx)
         //We will index each node using the below understanding:
             //In a full binary tree, the number of nodes double at each level
                 //and since each parent node has two childs the range of node index
-                //would double as wel
+                //would double as well
             //Therefore we can say for any node at idx Ci, the left child of that
-                //node would be at 2Ci idx  and right child node of that node would be
+                //node would be at 2Ci idx and right child node of that node would be
                 //at 2Ci + 1 idx
   
         //After implementing this indexing we would take the first and last index from
             //any level and compute the width using "idxLast - idxFirst  + 1"
+
+        //TC: O(n) : where n is the total number of nodes and we visit each node once
+        //SC: O(w) : where w is the maximum number of actual nodes present at any level. In worst case it can be n/2
+            //in case of a balanced binary tree
 
     public int widthOfBinaryTree(TreeNode root) {
         
@@ -43,10 +50,8 @@ class Solution {
             int currQueueSize = queue.size();
            
             Pair<TreeNode, Integer> headElm = queue.peekFirst();
-
-            int firstIdx = 0;
-            int lastIdx = 0;
             Pair<TreeNode, Integer> currElm = null;
+
             for(int i = 0; i < currQueueSize; i ++){
                 currElm = queue.poll();
                 TreeNode currElmNode = currElm.getKey();
