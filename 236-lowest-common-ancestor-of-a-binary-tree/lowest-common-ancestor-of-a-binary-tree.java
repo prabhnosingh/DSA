@@ -9,40 +9,36 @@
  */
 class Solution {
 
-    //Re-solving on 16 Nov 2025:
+    //Re-solving on 09 Aug 2026:
 
-    //intution 1 (recursive): There will be three scenarios:
-        //p and q exist in different subtrees starting from root -> In this case return root
-        
-        //both p and q exist in left subtree starting from root -> In this case return whatever is 
-        //encountered first out of p and q 
-
-        //and, both p and q exist in right subtree starting from root -> In this case return whatever
-        //is encountered first out of p and q
-
+    //intuition 1: 
+        //we firs mark LCA as root 
+        //if we find p and q as child of a node N, then we immediately return N as 
+            //our answer. Basically when we find p and q on a split, we return the
+            //parent node of the split
+        //we will have three scenarios:
+            //1. when p and q are in left and right subtrees, then return the root
+            //2. when p and q are both in left subtree
+            //3. when p and q are both in right subtree
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root == null){
-            return null;
-        }
+        if(root == null) return null;
 
-        if(root == p || root == q){
-            return root;
-        }
+        if(root.val == p.val || root.val == q.val) return root;
 
-        TreeNode leftLCA = lowestCommonAncestor(root.left, p, q);
-        TreeNode rightLCA = lowestCommonAncestor(root.right, p , q);
 
-        if(leftLCA != null && rightLCA != null){
-            return root;
-        }
-        if(leftLCA == null){
-            return rightLCA;
-        }
+        TreeNode leftSt = lowestCommonAncestor(root.left, p, q);
+        TreeNode rightSt = lowestCommonAncestor(root.right, p, q);
 
-        if(rightLCA == null){
-            return leftLCA;
-        }
-        return null;
+        //p and q are in separate subtrees
+        if(leftSt != null && rightSt != null) return root;
+
+        //p and q are both in right subtree
+        if(leftSt == null) return rightSt;
+
+        //p and q are both in left subtree
+        return leftSt;
+        //this works as we know that p and q will for sure exist in the tree
+    
     }
 
 
@@ -95,6 +91,92 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 16 Nov 2025:
+
+//     //intution 1 (recursive): There will be three scenarios:
+//         //p and q exist in different subtrees starting from root -> In this case return root
+        
+//         //both p and q exist in left subtree starting from root -> In this case return whatever is 
+//         //encountered first out of p and q 
+
+//         //and, both p and q exist in right subtree starting from root -> In this case return whatever
+//         //is encountered first out of p and q
+
+//     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+//         if(root == null){
+//             return null;
+//         }
+
+//         if(root == p || root == q){
+//             return root;
+//         }
+
+//         TreeNode leftLCA = lowestCommonAncestor(root.left, p, q);
+//         TreeNode rightLCA = lowestCommonAncestor(root.right, p , q);
+
+//         if(leftLCA != null && rightLCA != null){
+//             return root;
+//         }
+//         if(leftLCA == null){
+//             return rightLCA;
+//         }
+
+//         if(rightLCA == null){
+//             return leftLCA;
+//         }
+//         return null;
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Re-solving on 09 Nov 2025:
     // //intution 1: Look recursively in lst and rst of root for both p and q. If p or q is encountered in any of the subtree, return
     // //p or q, else return null. Now there will be below scenarios:
@@ -129,7 +211,8 @@ class Solution {
     //         return rstLCA;
     //     }
 
-    //     return null; //to cover the case when boht lstLCA and rstLCA are null. This could happen in a subtree of a subtree....
+    //     return null; //to cover the case when both lstLCA and rstLCA are null. This could happen in a subtree of a subtree 
+    //     //that do not have either of p or q in it
 
     // }
 
