@@ -25,6 +25,9 @@ class Solution {
     //intuition 2: DFS
         //find the height of left and right sub trees and along the way 
             //validate whether any subtree violates Balanced binary tree condition
+
+        //TC: O(n) : where n is the nodes in root
+        //SC: O(h) : where h is the height of the root
     public boolean isBalanced(TreeNode root) {
         
         if(treeHeight(root) == -1) return false;
