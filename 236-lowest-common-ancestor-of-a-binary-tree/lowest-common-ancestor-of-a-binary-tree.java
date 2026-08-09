@@ -18,8 +18,13 @@ class Solution {
             //parent node of the split
         //we will have three scenarios:
             //1. when p and q are in left and right subtrees, then return the root
-            //2. when p and q are both in left subtree
-            //3. when p and q are both in right subtree
+            //2. when p and q are both in left subtree starting from root. We return 
+                //the first node that is equal to p or q
+            //3. when p and q are both in right subtree starting from root. We return 
+                //the first node that is equal to p or q
+        
+        //TC: O(n) : where n is the total number of nodes
+        //SC: O(h) : where h is the height of the tree
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if(root == null) return null;
 
