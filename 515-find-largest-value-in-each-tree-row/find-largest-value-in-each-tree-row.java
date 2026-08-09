@@ -17,8 +17,12 @@ class Solution {
     //Solving on 09 Aug 2026
 
     //intuition 2: DFS
-        //have a global arralist to store max values at each level, where
+        //have a arraylist to store max values at each level, where
             //each index in the arraylist denotes a level
+        //add new element if the depth reaches equal to the current size
+            //of the arraylist else compare and store the maximum at that depth
+        //TC: O(n) : n = number of nodes - travering each node exactly once
+        //SC: O(h) : h = height of nodes
     public List<Integer> largestValues(TreeNode root) {
 
         List<Integer> largestValuesList = new ArrayList<>();
@@ -32,7 +36,8 @@ class Solution {
     private void dfs(TreeNode root, int currDepth, List<Integer> largestValuesList){
         if(root == null) return;
 
-        if(currDepth >= largestValuesList.size()){
+        if(currDepth == largestValuesList.size()){
+            //first node encountered at this depth
             largestValuesList.add(root.val);
         }
         else{
@@ -42,7 +47,6 @@ class Solution {
         dfs(root.left, currDepth + 1, largestValuesList);
         dfs(root.right, currDepth + 1, largestValuesList);
 
-        // return currDepth
     }
 
 
@@ -59,6 +63,8 @@ class Solution {
 
     // //intuition 1: BFS
     //     //Run a level order traversal and find the largest value along the way
+    //     //TC: O(n) : where n is the number of nodes
+    //     //SC: O(w) : where w is the max width of the tree. In worst case it can be O(n/2) = O(n)
     // public List<Integer> largestValues(TreeNode root) {
         
     //     List<Integer> largestValueList = new ArrayList<>();
