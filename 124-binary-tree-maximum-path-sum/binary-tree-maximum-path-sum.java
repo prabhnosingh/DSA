@@ -15,10 +15,12 @@
  */
 class Solution {
 
-    //Solving on 08 Aug 2026
+    //Re-solving on 08 Aug 2026
 
     //intuition 2: DFS (without global var)
-        //smaller problem - find maximum path sum in left and right subtrees
+        //smaller problem:
+            //find the maximum downward path sum from each child that can be extended
+                //through the current node to its parent
         //at each node we have two options:
             //either to split and have total sum as root.val + leftMax + rightMax
                 //and use this value to update the max in an array
@@ -34,9 +36,7 @@ class Solution {
         
         int[] maxPathSum = new int[1];
         maxPathSum[0] = Integer.MIN_VALUE;
-        int rootSum = treeTraversal(root, maxPathSum);
-        maxPathSum[0] = Math.max(maxPathSum[0], rootSum);
-
+        treeTraversal(root, maxPathSum);
         return maxPathSum[0];
     }
 
@@ -60,7 +60,9 @@ class Solution {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////// 
     // //intuition 1: DFS
-    //     //smaller problem - find maximum path sum in left and right subtrees
+    //     //smaller problem:
+    //         //find the maximum downward path sum from each child that can be extended
+    //             //through the current node to its parent 
     //     //at each node we have two options:
     //         //either to split and have total sum as root.val + leftMax + rightMax
     //             //and use this value to update the global max
@@ -75,7 +77,7 @@ class Solution {
     // public int maxPathSum(TreeNode root) {
     
     //     int rootSum = treeTraversal(root);
-    //     maxPathSum = Math.max(maxPathSum, rootSum);
+    //     // maxPathSum = Math.max(maxPathSum, rootSum);
 
     //     return maxPathSum;
     // }
@@ -90,7 +92,7 @@ class Solution {
     //     //split scenario
     //     maxPathSum = Math.max(maxPathSum, root.val + leftMaxSum + rightMaxSum);
 
-    //     //return value to the parent
+    //     //return value to the parent (can be extended upward)
     //     return root.val + Math.max(leftMaxSum, rightMaxSum);
 
     // }   
