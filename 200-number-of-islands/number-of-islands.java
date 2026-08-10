@@ -17,13 +17,15 @@ class Solution {
         int islands = 0;
 
         Queue<int[]> queue = new ArrayDeque<>();
+
+        int[][] directions = new int[][]{{1,0}, {0,1}, {-1,0}, {0,-1}};
         for(int i = 0; i < rows; i ++){
             for(int j = 0; j < cols; j ++){
                 if(grid[i][j] == '1'){
                     islands += 1;
                     queue.offer(new int[]{i, j});
                     grid[i][j] = '2';
-                    traverseGrid(grid, queue);
+                    traverseGrid(grid, queue, directions);
                 }
 
             }
@@ -32,7 +34,7 @@ class Solution {
         return islands;
     }
         
-    private void traverseGrid(char[][] grid, Queue<int[]> queue){
+    private void traverseGrid(char[][] grid, Queue<int[]> queue, int[][] directions){
 
         while(!queue.isEmpty()){
             int currQueueSize = queue.size();
@@ -43,24 +45,36 @@ class Solution {
                 int currY = currIdx[1];
 
 
-                if(currX+1 != grid.length && grid[currX+1][currY] == '1') {
-                    grid[currX+1][currY] = '2';
-                    queue.offer(new int[]{currX+1, currY});
-                }
-                if(currY + 1 != grid[0].length && grid[currX][currY+1] == '1') {
-                    grid[currX][currY+1] = '2';
-                    queue.offer(new int[]{currX, currY+1});
+                for(int[] direction : directions){
+                    int newX = currX + direction[0];
+                    int newY = currY + direction[1];
+
+                    if(newX != -1 && newX != grid.length && newY != -1 && newY != grid[0].length &&
+                    grid[newX][newY] == '1'){
+                        grid[newX][newY] = '2'; //marking as visited
+                        queue.offer(new int[]{newX, newY});
+                    }
                 }
 
-                if(currX-1 != -1 && grid[currX-1][currY] == '1'){
-                    grid[currX-1][currY] = '2';
-                    queue.offer(new int[]{currX-1, currY});
-                }
 
-                if(currY-1 != -1 && grid[currX][currY-1] == '1'){
-                    grid[currX][currY-1] = '2';
-                    queue.offer(new int[]{currX, currY-1});
-                }
+                // if(currX+1 != grid.length && grid[currX+1][currY] == '1') {
+                //     grid[currX+1][currY] = '2';
+                //     queue.offer(new int[]{currX+1, currY});
+                // }
+                // if(currY + 1 != grid[0].length && grid[currX][currY+1] == '1') {
+                //     grid[currX][currY+1] = '2';
+                //     queue.offer(new int[]{currX, currY+1});
+                // }
+
+                // if(currX-1 != -1 && grid[currX-1][currY] == '1'){
+                //     grid[currX-1][currY] = '2';
+                //     queue.offer(new int[]{currX-1, currY});
+                // }
+
+                // if(currY-1 != -1 && grid[currX][currY-1] == '1'){
+                //     grid[currX][currY-1] = '2';
+                //     queue.offer(new int[]{currX, currY-1});
+                // }
 
             }
         }
