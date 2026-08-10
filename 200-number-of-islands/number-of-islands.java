@@ -1,63 +1,71 @@
 class Solution {
-    //Re-Solving on 02 Jan 2026
 
-    //intuition 1: BFS : Graphs
-        //Have a helper function that takes in the index of starting node of each island. Only pass
-            //index of cell that is '1'.
-        //Inside this function run bfs starting from this cell. Add to queue all the surrounding cells
-            //that are '1'. Before adding to queue, change each cell as '2' to mark it as visited and 
-            //avoid future duplicate considerations. 
+    //Re-Solving on 10 Aug 2026
 
+    //intuition 1: Graphs BFS
+        //Have a queue that stores the indices of all 1's in the grid
+        //Traverse the grid from 0,0 and add coordinates of any 1 
+            //encountered and then call a helper function that will
+            //run BFS on the queue and will mark all the adjacent 
+            //'1's as visited. Mark any '1' as visited before entering
+            //its coordinates to the queue
     public int numIslands(char[][] grid) {
         
         int rows = grid.length;
         int cols = grid[0].length;
 
-        int numIslands = 0;
+        int islands = 0;
 
+        Queue<int[]> queue = new ArrayDeque<>();
         for(int i = 0; i < rows; i ++){
             for(int j = 0; j < cols; j ++){
                 if(grid[i][j] == '1'){
-                    numIslands += 1;
-                    bfs(i, j, grid);
+                    islands += 1;
+                    queue.offer(new int[]{i, j});
+                    grid[i][j] = '2';
+                    traverseGrid(grid, queue);
                 }
+
             }
         }
-        return numIslands;
 
+        return islands;
     }
-
-    private void bfs(int row, int col, char[][] grid){
-        Queue<int[]> queue = new ArrayDeque<>();
-
-        queue.offer(new int[]{row, col});
-        grid[row][col] = '2';
-
-        int[][] directions = {{1,0}, {0,1}, {-1,0}, {0,-1}};
+        
+    private void traverseGrid(char[][] grid, Queue<int[]> queue){
 
         while(!queue.isEmpty()){
-            int currQSize = queue.size();
+            int currQueueSize = queue.size();
 
-            for(int i = 0; i < currQSize; i ++){
-                int[] currCell = queue.poll();
+            for(int i = 0; i < currQueueSize; i ++){
+                int[] currIdx = queue.poll();
+                int currX = currIdx[0];
+                int currY = currIdx[1];
 
-                int x = currCell[0];
-                int y = currCell[1];
 
-                for(int[] dir : directions){
-                    int newX = x + dir[0];
-                    int newY = y + dir[1];
+                if(currX+1 != grid.length && grid[currX+1][currY] == '1') {
+                    grid[currX+1][currY] = '2';
+                    queue.offer(new int[]{currX+1, currY});
+                }
+                if(currY + 1 != grid[0].length && grid[currX][currY+1] == '1') {
+                    grid[currX][currY+1] = '2';
+                    queue.offer(new int[]{currX, currY+1});
+                }
 
-                    if(newX >= 0 && newY >= 0 && newX < grid.length && newY < grid[0].length && grid[newX][newY] == '1'){
-                        grid[newX][newY] = '2'; //marking visited
-                        queue.offer(new int[]{newX, newY});
-                    }
+                if(currX-1 != -1 && grid[currX-1][currY] == '1'){
+                    grid[currX-1][currY] = '2';
+                    queue.offer(new int[]{currX-1, currY});
+                }
+
+                if(currY-1 != -1 && grid[currX][currY-1] == '1'){
+                    grid[currX][currY-1] = '2';
+                    queue.offer(new int[]{currX, currY-1});
                 }
 
             }
-
         }
     }
+
     
 
 
@@ -104,6 +112,116 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-Solving on 02 Jan 2026
+
+//     //intuition 1: BFS : Graphs
+//         //Have a helper function that takes in the index of starting node of each island. Only pass
+//             //index of cell that is '1'.
+//         //Inside this function run bfs starting from this cell. Add to queue all the surrounding cells
+//             //that are '1'. Before adding to queue, change each cell as '2' to mark it as visited and 
+//             //avoid future duplicate considerations. 
+
+//     //TC: O(m*n) : m and n are rows and cols. Each cell is traversed exatly once
+//     //SC: O(m*n) : At worst the whole grid could be 1
+//     // "Your BFS is called per island, but the total work across all BFS calls is still O(m·n) because once a
+//         //cell becomes '2', it will never be enqueued again."
+
+//     public int numIslands(char[][] grid) {
+        
+//         int rows = grid.length;
+//         int cols = grid[0].length;
+
+//         int numIslands = 0;
+
+//         for(int i = 0; i < rows; i ++){
+//             for(int j = 0; j < cols; j ++){
+//                 if(grid[i][j] == '1'){
+//                     numIslands += 1;
+//                     bfs(i, j, grid);
+//                 }
+//             }
+//         }
+//         return numIslands;
+
+//     }
+
+//     private void bfs(int row, int col, char[][] grid){
+//         Queue<int[]> queue = new ArrayDeque<>();
+
+//         queue.offer(new int[]{row, col});
+//         grid[row][col] = '2';
+
+//         int[][] directions = {{1,0}, {0,1}, {-1,0}, {0,-1}};
+
+//         while(!queue.isEmpty()){
+//             int currQSize = queue.size();
+
+//             for(int i = 0; i < currQSize; i ++){
+//                 int[] currCell = queue.poll();
+
+//                 int x = currCell[0];
+//                 int y = currCell[1];
+
+//                 for(int[] dir : directions){
+//                     int newX = x + dir[0];
+//                     int newY = y + dir[1];
+
+//                     if(newX >= 0 && newY >= 0 && newX < grid.length && newY < grid[0].length && grid[newX][newY] == '1'){
+//                         grid[newX][newY] = '2'; //marking visited
+//                         queue.offer(new int[]{newX, newY});
+//                     }
+//                 }
+
+//             }
+
+//         }
+//     }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Solving on 01 Jan 2026
 
 //     //intuition 1: Graph (DFS: Flood fill pattern)
