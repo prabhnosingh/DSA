@@ -4,11 +4,14 @@ class Solution {
 
     //intuition 1: Graphs BFS
         //Have a queue that stores the indices of all 1's in the grid
-        //Traverse the grid from 0,0 and add coordinates of any 1 
+        //Traverse the grid from 0,0 and add coordinates of any unvisited '1' 
             //encountered and then call a helper function that will
-            //run BFS on the queue and will mark all the adjacent 
+            //run BFS on the queue and will mark all the adjacent unvisted 
             //'1's as visited. Mark any '1' as visited before entering
             //its coordinates to the queue
+        
+        //TC: O(m x n) : where m is the number of rows and n is the number of cols in grid
+        //SC: O(m x n) : in worst case when all the characters in grid are '1's 
     public int numIslands(char[][] grid) {
         
         int rows = grid.length;
@@ -23,8 +26,8 @@ class Solution {
             for(int j = 0; j < cols; j ++){
                 if(grid[i][j] == '1'){
                     islands += 1;
-                    queue.offer(new int[]{i, j});
                     grid[i][j] = '2';
+                    queue.offer(new int[]{i, j});
                     traverseGrid(grid, queue, directions);
                 }
 
@@ -39,7 +42,7 @@ class Solution {
         while(!queue.isEmpty()){
             int currQueueSize = queue.size();
 
-            for(int i = 0; i < currQueueSize; i ++){
+            // for(int i = 0; i < currQueueSize; i ++){
                 int[] currIdx = queue.poll();
                 int currX = currIdx[0];
                 int currY = currIdx[1];
@@ -76,7 +79,7 @@ class Solution {
                 //     queue.offer(new int[]{currX, currY-1});
                 // }
 
-            }
+            // }
         }
     }
 
