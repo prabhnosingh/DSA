@@ -2,9 +2,10 @@ class Solution {
     
     //Re-solving on 11 Aug 2026
 
-    //intuition 1: Graph BFS - (multi source BFS)
+    //intuition 2: Graph BFS - (multi source BFS)
         //Store all the 0s in a queue and then traverse its '1' neighbors and adding the
             //1 to the polled element's distance
+        //First mark all 1's as -1s to distiguish between visited and non visited cells
     public int[][] updateMatrix(int[][] mat) {
         
         int rows = mat.length;
@@ -18,6 +19,9 @@ class Solution {
             for(int j = 0; j < cols; j ++){
                 if(mat[i][j] == 0){
                     queue.offer(new int[] {i, j});
+                }
+                else{
+                    mat[i][j] = -1;
                 }
             }
         }
@@ -33,11 +37,9 @@ class Solution {
                 int newY = currY + direction[1];
 
                 if(newX != -1 && newY != -1 && newX != rows && newY != cols &&
-                mat[newX][newY] == 1){
-                    //need to find a way to mark this as
-                        //visited in order to avoid repeated traversals
-                    if(mat[currX][currY] == 0) mat[newX][newY] = (mat[currX][currY] + 1) * -1; 
-                    if(mat[currX][currY] < 0) mat[newX][newY] = mat[currX][currY] - 1;
+                mat[newX][newY] == -1){
+               
+                    mat[newX][newY] = mat[currX][currY] + 1;
 
                     queue.offer(new int[]{newX, newY});
                 }
@@ -45,15 +47,70 @@ class Solution {
             }
         }
 
-        for(int i = 0; i < rows; i ++){
-            for(int j = 0; j < cols; j ++){
-                mat[i][j] = -1 * mat[i][j];
-            }
-        }
-
+   
         return mat;
 
     }
+    // //Re-solving on 11 Aug 2026
+
+    // //intuition 1: Graph BFS - (multi source BFS)
+    //     //Store all the 0s in a queue and then traverse its '1' neighbors and adding the
+    //         //1 to the polled element's distance
+    //     //multiply the distance with -1 if the currElm is a 0 to differentiate later
+    //     //else subtract -1 
+    //     //at last multiply with -1 to make all distances positive
+
+    //     //TC: O(m * n) : each cell is visited once and enqued once
+    //     //SC: O(1)
+    // public int[][] updateMatrix(int[][] mat) {
+        
+    //     int rows = mat.length;
+    //     int cols = mat[0].length;
+
+    //     Queue<int[]> queue = new ArrayDeque<>();
+
+    //     int[][] directions = new int[][]{{1,0}, {0,1}, {-1,0}, {0,-1}};
+
+    //     for(int i = 0; i < rows; i ++){
+    //         for(int j = 0; j < cols; j ++){
+    //             if(mat[i][j] == 0){
+    //                 queue.offer(new int[] {i, j});
+    //             }
+    //         }
+    //     }
+
+    //     while(!queue.isEmpty()){
+    //         int[] currElm = queue.poll();
+
+    //         int currX = currElm[0];
+    //         int currY = currElm[1];
+
+    //         for(int[] direction : directions){
+    //             int newX = currX + direction[0];
+    //             int newY = currY + direction[1];
+
+    //             if(newX != -1 && newY != -1 && newX != rows && newY != cols &&
+    //             mat[newX][newY] == 1){
+    //                 //need to find a way to mark this as
+    //                     //visited in order to avoid repeated traversals
+    //                 if(mat[currX][currY] == 0) mat[newX][newY] = (mat[currX][currY] + 1) * -1; 
+    //                 if(mat[currX][currY] < 0) mat[newX][newY] = mat[currX][currY] - 1;
+
+    //                 queue.offer(new int[]{newX, newY});
+    //             }
+
+    //         }
+    //     }
+
+    //     for(int i = 0; i < rows; i ++){
+    //         for(int j = 0; j < cols; j ++){
+    //             mat[i][j] = -1 * mat[i][j];
+    //         }
+    //     }
+
+    //     return mat;
+
+    // }
 
    
 
