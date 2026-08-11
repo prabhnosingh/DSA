@@ -1,70 +1,148 @@
 class Solution {
-    //Sovling on 05 Jan 2026
+    
+    //Re-solving on 11 Aug 2026
 
-    //intuition 2(Space optimization): Graph : Mutli-source BFS pattern
-        //Add all the 0's to a queue and run BFS on all of them together.
-        //Anytime a 1 is encountered, replace it with current BFS level + 1 and add th pos to a 
-            //boolean visited array
-        //This way we visit each cell exactly once
-
-        //“When we expand from a cell (x,y), any unvisited neighbor gets distance = dist[x][y] + 1.”
-
-        //Space-optimization:
-            //We can mark all 1s as -1 initially while filling 0 positions in queue.
-            //By doing this we remove the need of visited array as a -1 will signify an unvisited
-                //1 and a positive number will represent a visited 1 that has been assigned the
-                //shortest distance from a zero
-
-    //TC: O(rows*cols) (each cell enqueued once)
-    //SC: O(rows*cols) (queue worst case)
-
+    //intuition 1: Graph BFS - (multi source BFS)
+        //Store all the 0s in a queue and then traverse its '1' neighbors and adding the
+            //1 to the polled element's distance
     public int[][] updateMatrix(int[][] mat) {
+        
         int rows = mat.length;
         int cols = mat[0].length;
 
         Queue<int[]> queue = new ArrayDeque<>();
-        int[][] directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
 
-        //initializing queue with positions of 0s
+        int[][] directions = new int[][]{{1,0}, {0,1}, {-1,0}, {0,-1}};
+
         for(int i = 0; i < rows; i ++){
             for(int j = 0; j < cols; j ++){
                 if(mat[i][j] == 0){
-                    queue.offer(new int[]{i, j});
-                }
-                else{ //if it is a 1
-                    mat[i][j] = -1;
+                    queue.offer(new int[] {i, j});
                 }
             }
         }
 
-        // int currBFSLevel = 0;
         while(!queue.isEmpty()){
-            int currQSize = queue.size();
+            int[] currElm = queue.poll();
 
-            for(int i = 0; i < currQSize; i ++){
-                int[] currPos = queue.poll();
-                int x = currPos[0];
-                int y = currPos[1];
+            int currX = currElm[0];
+            int currY = currElm[1];
 
-                for(int[] dir : directions){
-                    int newX = x + dir[0];
-                    int newY = y + dir[1];
+            for(int[] direction : directions){
+                int newX = currX + direction[0];
+                int newY = currY + direction[1];
 
-                    if(newX >= 0 && newY >= 0 && newX < rows && newY < cols && mat[newX][newY] == -1){
-                        // mat[newX][newY] = currBFSLevel + 1; 
-                        mat[newX][newY] = mat[x][y] + 1; 
-                        queue.offer(new int[]{newX, newY});
-                    }
+                if(newX != -1 && newY != -1 && newX != rows && newY != cols &&
+                mat[newX][newY] == 1){
+                    //need to find a way to mark this as
+                        //visited in order to avoid repeated traversals
+                    if(mat[currX][currY] == 0) mat[newX][newY] = (mat[currX][currY] + 1) * -1; 
+                    if(mat[currX][currY] < 0) mat[newX][newY] = mat[currX][currY] - 1;
+
+                    queue.offer(new int[]{newX, newY});
                 }
+
             }
-            // currBFSLevel += 1;
         }
-        
+
+        for(int i = 0; i < rows; i ++){
+            for(int j = 0; j < cols; j ++){
+                mat[i][j] = -1 * mat[i][j];
+            }
+        }
+
         return mat;
+
     }
 
+   
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Sovling on 05 Jan 2026
+
+//     //intuition 2(Space optimization): Graph : Mutli-source BFS pattern
+//         //Add all the 0's to a queue and run BFS on all of them together.
+//         //Anytime a 1 is encountered, replace it with current BFS level + 1 and add th pos to a 
+//             //boolean visited array
+//         //This way we visit each cell exactly once
+
+//         //“When we expand from a cell (x,y), any unvisited neighbor gets distance = dist[x][y] + 1.”
+
+//         //Space-optimization:
+//             //We can mark all 1s as -1 initially while filling 0 positions in queue.
+//             //By doing this we remove the need of visited array as a -1 will signify an unvisited
+//                 //1 and a positive number will represent a visited 1 that has been assigned the
+//                 //shortest distance from a zero
+
+//     //TC: O(rows*cols) (each cell enqueued once)
+//     //SC: O(rows*cols) (queue worst case)
+
+//     public int[][] updateMatrix(int[][] mat) {
+//         int rows = mat.length;
+//         int cols = mat[0].length;
+
+//         Queue<int[]> queue = new ArrayDeque<>();
+//         int[][] directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+//         //initializing queue with positions of 0s
+//         for(int i = 0; i < rows; i ++){
+//             for(int j = 0; j < cols; j ++){
+//                 if(mat[i][j] == 0){
+//                     queue.offer(new int[]{i, j});
+//                 }
+//                 else{ //if it is a 1
+//                     mat[i][j] = -1;
+//                 }
+//             }
+//         }
+
+//         // int currBFSLevel = 0;
+//         while(!queue.isEmpty()){
+//             int currQSize = queue.size();
+
+//             for(int i = 0; i < currQSize; i ++){
+//                 int[] currPos = queue.poll();
+//                 int x = currPos[0];
+//                 int y = currPos[1];
+
+//                 for(int[] dir : directions){
+//                     int newX = x + dir[0];
+//                     int newY = y + dir[1];
+
+//                     if(newX >= 0 && newY >= 0 && newX < rows && newY < cols && mat[newX][newY] == -1){
+//                         // mat[newX][newY] = currBFSLevel + 1; 
+//                         mat[newX][newY] = mat[x][y] + 1; 
+//                         queue.offer(new int[]{newX, newY});
+//                     }
+//                 }
+//             }
+//             // currBFSLevel += 1;
+//         }
+        
+//         return mat;
+//     }
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //Sovling on 05 Jan 2026
 
     // //intuition 2: Graph : Mutli-source BFS pattern
