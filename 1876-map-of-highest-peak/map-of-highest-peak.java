@@ -9,6 +9,12 @@ class Solution {
             //assigning height to each land cell as 1 + currCell height. This way 
             //any neighbor cell cannot have more height diff than 1 from the 
             //current cell.
+        //because BFS expands from all water cells simultaneously,
+            //the first time we reach a land cell is through its nearest water cell,
+            //giving it the maximum valid height.
+        
+        //TC: O(m*n) : each node is enqueued once
+        //SC: O(m*n)
     public int[][] highestPeak(int[][] isWater) {
         
         int rows = isWater.length;
