@@ -1,96 +1,183 @@
 class Solution {
     
-    //Re-solving on 04 Jan 2025
-
-
+    //Re-solving on 14 Aug 2026
     
-    //intuition 2: Graph: multi-source BFS
-        //Add all rotten oranges to a queue and start polling all of the them one by one and 
-            //offer back teh newly affected oranges to the queue. Each level will signify one
-            //minute.
-        //After each level complete, all the rotten oranges would have infected their respective
-            //adjacent fresh oranges
+    //intuition 1: Multi-source BFS
+        //we start with putting all the oranges into the queue and starting traversing
+            //fresh oranges outwards one by one while making fresh (1) oranges rotten (2)
+        //at start we find the number of fresh oranges in the grid
+        //this way all the fresh oranges that can be reached from a rotten orange will
+            //become rotten. We count the newly rotten oranges.
 
-        //“All oranges in the queue at the start of a BFS level rot their neighbors in the
-            //same minute. So after processing exactly queue.size() nodes, we’ve completed one minute.”
-
-
-        //TC: O(rows * cols) : We traverse each cell once
-        //SC: O(rows * cols): In worst call all the cells could be in queue
-
+        //at last we see if number of fresh oranges before running bfs is equal to the 
+            //number of newly made rotten oranges, if no, return -1
     public int orangesRotting(int[][] grid) {
-        
+      
         int rows = grid.length;
         int cols = grid[0].length;
-        int minTime = 0;
-
-        int[][] directions = {{1,0}, {0,1}, {-1,0}, {0,-1}};
-        
         Queue<int[]> queue = new ArrayDeque<>();
 
-        int freshOrangeCount = 0; //this avoids rescanning grid after bfs traversal to find 
-            //any remaining fresh oranges
+        int initialFresh = 0;
+        int newlyRotten = 0;
+        int minsElapsed = 0;
 
-        //intializing queue with rotten oranges
+        int[][] directions = new int[][]{{1,0}, {0,1}, {-1,0}, {0,-1}};
+
         for(int i = 0; i < rows; i ++){
             for(int j = 0; j < cols; j ++){
                 if(grid[i][j] == 2) queue.offer(new int[]{i, j});
-                if(grid[i][j] == 1) freshOrangeCount += 1;
+                else if(grid[i][j] == 1) initialFresh += 1;
             }
-        }   
-
-        if(freshOrangeCount == 0){
-            return 0;
         }
+
+        if(initialFresh == 0) return 0;
+        if(queue.size() == 0) return -1; //no rotten orange exists
+
         while(!queue.isEmpty()){
-            int currQSize = queue.size();
-            boolean freshOrangeFound = false;
+            int currQueueSize = queue.size();
 
-            for(int i = 0; i < currQSize; i ++){
-                int[] currPos = queue.poll();
-                int x = currPos[0];
-                int y = currPos[1];
+            for(int i = 0; i < currQueueSize; i ++){
+                int[] currIdx = queue.poll();
 
-                for(int[] dir : directions){
-                    int newX = x + dir[0];
-                    int newY = y + dir[1];
+                for(int[] direction : directions){
+                    int newX = currIdx[0] + direction[0];
+                    int newY = currIdx[1] + direction[1];
 
-                    if(newX >= 0 && newY >= 0 && newX < rows && newY < cols && grid[newX][newY] == 1){
-                        freshOrangeFound = true;
-                        freshOrangeCount -= 1;
-                        grid[newX][newY] = 2;
+                    if(newX != -1 && newX != rows && newY != -1 && newY != cols
+                    && grid[newX][newY] == 1){
+                        grid[newX][newY] = 2; //marking as rotten
+                        newlyRotten += 1;
                         queue.offer(new int[]{newX, newY});
                     }
-                } 
+                }
             }
-            //do not increase time if none of the rotten oranges were able to infect any fresh oranges
-                //due unavailability of fresh oranges
-            // if(freshOrangeFound){
-            //     minTime += 1;
-            // }
-
-            //alternate to the above if condition
-            if(queue.size() > 0){ //time gets incremented only when any fresh orange was infected and 
-                //added to queue
-                minTime += 1; 
-            }
+            minsElapsed += 1; //1 min after traversing 1 level
         }
 
-        // //checking for any fresh oranges
-        // for(int i = 0; i < rows; i ++){
-        //     for(int j = 0; j < cols; j ++){
-        //         if(grid[i][j] == 1) return -1;
-        //     }
-        // }
-        
-        return freshOrangeCount > 0 ? -1 : minTime;
+        if(newlyRotten != initialFresh) return -1;
+        else return minsElapsed - 1; //-1 to compensate addition of 1 minuate after all 
+            //oranges have became rotten from last layer and are in queue
 
     }
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 04 Jan 2025
+
+
+    
+//     //intuition 2: Graph: multi-source BFS
+//         //Add all rotten oranges to a queue and start polling all of the them one by one and 
+//             //offer back teh newly affected oranges to the queue. Each level will signify one
+//             //minute.
+//         //After each level complete, all the rotten oranges would have infected their respective
+//             //adjacent fresh oranges
+
+//         //“All oranges in the queue at the start of a BFS level rot their neighbors in the
+//             //same minute. So after processing exactly queue.size() nodes, we’ve completed one minute.”
+
+
+//         //TC: O(rows * cols) : We traverse each cell once
+//         //SC: O(rows * cols): In worst call all the cells could be in queue
+
+//     public int orangesRotting(int[][] grid) {
+        
+//         int rows = grid.length;
+//         int cols = grid[0].length;
+//         int minTime = 0;
+
+//         int[][] directions = {{1,0}, {0,1}, {-1,0}, {0,-1}};
+        
+//         Queue<int[]> queue = new ArrayDeque<>();
+
+//         int freshOrangeCount = 0; //this avoids rescanning grid after bfs traversal to find 
+//             //any remaining fresh oranges
+
+//         //intializing queue with rotten oranges
+//         for(int i = 0; i < rows; i ++){
+//             for(int j = 0; j < cols; j ++){
+//                 if(grid[i][j] == 2) queue.offer(new int[]{i, j});
+//                 if(grid[i][j] == 1) freshOrangeCount += 1;
+//             }
+//         }   
+
+//         if(freshOrangeCount == 0){
+//             return 0;
+//         }
+//         while(!queue.isEmpty()){
+//             int currQSize = queue.size();
+//             boolean freshOrangeFound = false;
+
+//             for(int i = 0; i < currQSize; i ++){
+//                 int[] currPos = queue.poll();
+//                 int x = currPos[0];
+//                 int y = currPos[1];
+
+//                 for(int[] dir : directions){
+//                     int newX = x + dir[0];
+//                     int newY = y + dir[1];
+
+//                     if(newX >= 0 && newY >= 0 && newX < rows && newY < cols && grid[newX][newY] == 1){
+//                         freshOrangeFound = true;
+//                         freshOrangeCount -= 1;
+//                         grid[newX][newY] = 2;
+//                         queue.offer(new int[]{newX, newY});
+//                     }
+//                 } 
+//             }
+//             //do not increase time if none of the rotten oranges were able to infect any fresh oranges
+//                 //due unavailability of fresh oranges
+//             // if(freshOrangeFound){
+//             //     minTime += 1;
+//             // }
+
+//             //alternate to the above if condition
+//             if(queue.size() > 0){ //time gets incremented only when any fresh orange was infected and 
+//                 //added to queue
+//                 minTime += 1; 
+//             }
+//         }
+
+//         // //checking for any fresh oranges
+//         // for(int i = 0; i < rows; i ++){
+//         //     for(int j = 0; j < cols; j ++){
+//         //         if(grid[i][j] == 1) return -1;
+//         //     }
+//         // }
+        
+//         return freshOrangeCount > 0 ? -1 : minTime;
+
+//     }
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////
     // //This does not work as it starts from top left and move towards bottom right with increasing
     //     //time but this will fail in case we have a rotten orange somewhere down the grid as this
     //     //rotten orange will start affecting other fresh oranges sooner than the rotten orange at top.
