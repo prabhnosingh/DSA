@@ -1,87 +1,90 @@
 class Solution {
-
-    //Solving on 13 Aug 2026
-
-    //intuition 1: 
-        //We assume each lock state as graph node 
-        //We can solve this by DFS as well as BFS, but BFS will be more optimal
-            //in this case, given that it is finding shortest path in a unweighted
-            //graph.
-        //DFS will go in deep into a branch before backtracking and then might be
-            //inefficient given the constraints
-        //BFS explores the graph layer by layer and hence guarantees that the first
-            //target node encountered is indeed the shortest from root ('0000')
-
-        //We can store combinations at level starting from '0000' in a queue and
-            //push the resulting valid (not in deadends) combinations back into
-            //the queue
-        //Use a HashSet to avoid traversing deadends and the combinations that have
-            //already been traversed
-
-        
     public int openLock(String[] deadends, String target) {
-        
-        if(target.equals("0000")) return 0;
-        
-        HashSet<String> set = new HashSet<>();
-        Queue<StringBuilder> queue = new ArrayDeque<>();
-        queue.offer(new StringBuilder("0000"));
-        set.add("0000");
+        // Map the next slot digit for each current slot digit.
+        Map<Character, Character> nextSlot = Map.of(
+            '0', '1', 
+            '1', '2', 
+            '2', '3', 
+            '3', '4', 
+            '4', '5', 
+            '5', '6', 
+            '6', '7', 
+            '7', '8', 
+            '8', '9', 
+            '9', '0'
+        );
+        // Map the previous slot digit for each current slot digit.
+        Map<Character, Character> prevSlot = Map.of(
+            '0', '9', 
+            '1', '0', 
+            '2', '1', 
+            '3', '2', 
+            '4', '3', 
+            '5', '4', 
+            '6', '5', 
+            '7', '6', 
+            '8', '7', 
+            '9', '8'
+        );
 
+        // Set to store visited and dead-end combinations.
+        Set<String> visitedCombinations = new HashSet<>(Arrays.asList(deadends));
+        // Queue to store combinations generated after each turn.
+        Queue<String> pendingCombinations = new LinkedList<String>();
 
-        for(String deadend: deadends){
-            set.add(deadend);
-
-            if(deadend.equals("0000")) return -1;
-        }
-
+        // Count the number of wheel turns made.
         int turns = 0;
-        while(!queue.isEmpty()){
-            int currQueueSize = queue.size();
 
-            turns += 1;
-            for(int j = 0; j < currQueueSize; j ++){
-                String currComb = new String(queue.poll());
-
-                for(int i = 0; i < 4; i ++){ //turning each lock by 1 and putting back in queue
-                    //-1 / +1
-                    int currCombCharInt = currComb.charAt(i) - '0'; //converting a char to int
-                    int plusOne = currCombCharInt + 1;
-                    int minusOne = currCombCharInt - 1; 
-                    if(minusOne == -1){
-                        minusOne = 9;
-                    }
-                    else if(plusOne == 10){
-                        plusOne = 0;
-                    }
-                    StringBuilder newSb1 = new StringBuilder(currComb);
-                    newSb1.setCharAt(i, (char) (plusOne + '0'));
-                    
-                    if(newSb1.toString().equals(target)) return turns;
-
-                    else if(!set.contains(newSb1.toString())) {
-                        queue.offer(newSb1);
-                        set.add(newSb1.toString());
-                    }
-
-                    StringBuilder newSb2 = new StringBuilder(currComb);
-                    newSb2.setCharAt(i, (char) (minusOne + '0'));
-                    
-                    if(newSb2.toString().equals(target)) return turns;
-                    
-                    else if(!set.contains(newSb2.toString())){
-                        queue.offer(newSb2);
-                        set.add(newSb2.toString());
-                    }
-                    
-                }   
-
-            }
+        // If the starting combination is also a dead-end, 
+        // then we can't move from the starting combination.
+        if (visitedCombinations.contains("0000")) {
+            return -1;
         }
 
-        return -1; 
+        // Start with the initial combination '0000'.
+        pendingCombinations.add("0000");
+        visitedCombinations.add("0000");
 
+        while (!pendingCombinations.isEmpty()) {
+            // Explore all the combinations of the current level.
+            int currLevelNodesCount = pendingCombinations.size();
+            for (int i = 0; i < currLevelNodesCount; i++) {
+                // Get the current combination from the front of the queue.
+                String currentCombination = pendingCombinations.poll();
 
+                // If the current combination matches the target, 
+                // return the number of turns/level.
+                if (currentCombination.equals(target)) {
+                    return turns;
+                }
 
+                // Explore all possible new combinations by turning each wheel in both directions.
+                for (int wheel = 0; wheel < 4; wheel += 1) {
+                    // Generate the new combination by turning the wheel to the next digit.
+                    StringBuilder newCombination = new StringBuilder(currentCombination);
+                    newCombination.setCharAt(wheel, nextSlot.get(newCombination.charAt(wheel)));
+                    // If the new combination is not a dead-end and was never visited, 
+                    // add it to the queue and mark it as visited.
+                    if (!visitedCombinations.contains(newCombination.toString())) {
+                        pendingCombinations.add(newCombination.toString());
+                        visitedCombinations.add(newCombination.toString());
+                    }
+
+                    // Generate the new combination by turning the wheel to the previous digit.
+                    newCombination = new StringBuilder(currentCombination);
+                    newCombination.setCharAt(wheel, prevSlot.get(newCombination.charAt(wheel)));
+                    // If the new combination is not a dead-end and is never visited, 
+                    // add it to the queue and mark it as visited.
+                    if (!visitedCombinations.contains(newCombination.toString())) {
+                        pendingCombinations.add(newCombination.toString());
+                        visitedCombinations.add(newCombination.toString());
+                    }
+                }
+            }
+            // We will visit next-level combinations.
+            turns += 1;
+        }
+        // We never reached the target combination.
+        return -1;
     }
 }
