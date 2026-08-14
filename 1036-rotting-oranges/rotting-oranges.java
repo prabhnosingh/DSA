@@ -11,6 +11,10 @@ class Solution {
 
         //at last we see if number of fresh oranges before running bfs is equal to the 
             //number of newly made rotten oranges, if no, return -1
+        
+        //TC: O(rows x cols) - traversing grid + enqueing each cell at most once
+        //SC: O(rows x cols) - queue might be full of all the cells in worst case
+
     public int orangesRotting(int[][] grid) {
       
         int rows = grid.length;
