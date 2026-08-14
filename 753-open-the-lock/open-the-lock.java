@@ -147,15 +147,18 @@ class Solution {
         
         if(target.equals("0000")) return 0;
         
-        HashSet<String> set = new HashSet<>();
+        // HashSet<String> set = new HashSet<>();
+        boolean[] visited = new boolean[10000];
         Queue<StringBuilder> queue = new ArrayDeque<>();
         queue.offer(new StringBuilder("0000"));
-        set.add("0000");
+        // set.add("0000");
+        visited[0] = true;
 
 
         for(String deadend: deadends){ //TC: O(deadends.length * 4) SC: O(deadends.length * 4)
-            set.add(deadend);
-
+            // set.add(deadend);
+            visited[Integer.parseInt(deadend)] = true;
+ 
             if(deadend.equals("0000")) return -1;
         }
 
@@ -186,9 +189,11 @@ class Solution {
                     
                     if(newSb1.toString().equals(target)) return turns;
 
-                    else if(!set.contains(newSb1.toString())) {
+                    // else if(!set.contains(newSb1.toString())) {
+                    else if(!visited[Integer.parseInt(newSb1.toString())]){
                         queue.offer(newSb1);
-                        set.add(newSb1.toString());
+                        // set.add(newSb1.toString());
+                        visited[Integer.parseInt(newSb1.toString())] = true;
                     }
 
                     StringBuilder newSb2 = new StringBuilder(currComb);
@@ -196,9 +201,11 @@ class Solution {
                     
                     if(newSb2.toString().equals(target)) return turns;
                     
-                    else if(!set.contains(newSb2.toString())){
+                    // else if(!set.contains(newSb2.toString())){
+                    else if(!visited[Integer.parseInt(newSb2.toString())]){
                         queue.offer(newSb2);
-                        set.add(newSb2.toString());
+                        // set.add(newSb2.toString());
+                        visited[Integer.parseInt(newSb2.toString())] = true;;
                     }
                     
                 }   
