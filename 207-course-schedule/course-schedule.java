@@ -18,6 +18,16 @@ class Solution {
         //Deque the courses and reduce the in-degree of the adjacent courses
         //Enque the adjacent courses if the in-degree becomes 0
         //at last see if processed courses = total courses, if yes, return true, else false
+
+        //TC: O(n) for building inDegree + 
+            //O(prerequisites.length) for building adjList + 
+            //O(n) for BFS (each course enqueued once)
+        
+        //SC: O(n) inDegree +
+            //O(n + prerequisites.length) +
+            //O(n) for queue
+
+            //n being the total number of courses
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         
         Queue<Integer> queue = new ArrayDeque<>();
@@ -27,9 +37,9 @@ class Solution {
         int processedCourses = 0;
 
         //building adjList and finding indgree of all the courses
-        //prerequisites are in the format of ai -> bi but as we trying to get
-            //topoligical order, we will build adj list as bi -> ai, indicating
-            //that bi should be finished before we can finish ai (is this correct understanding)
+        //prerequisites are in the format of ai, bi which means that bi should be finished before ai
+        //Therefore we will build adj list with directed edge as bi -> ai, indicating
+            //that bi should be finished before we can finish ai
         for(int[] prereq : prerequisites){
             int c1 = prereq[0];
             int c2 = prereq[1];
@@ -45,14 +55,14 @@ class Solution {
         for(int i = 0; i < numCourses; i ++){
             if(inDegree[i] == 0) {
                 queue.offer(i);
-                processedCourses += 1;
+                // processedCourses += 1;
             }
         }
 
         while(!queue.isEmpty() && processedCourses != numCourses){
             
             int currCourse = queue.poll();
-            
+             processedCourses += 1;
             if(!adjList.containsKey(currCourse)) continue;
 
             for(int childCourse : adjList.get(currCourse)){
@@ -60,7 +70,7 @@ class Solution {
 
                 if(inDegree[childCourse] == 0) {
                     queue.offer(childCourse);
-                    processedCourses += 1;
+                    // processedCourses += 1;
                 }
             }
 
