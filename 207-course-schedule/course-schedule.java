@@ -36,6 +36,7 @@ class Solution {
         }
 
         for(int course = 0; course < numCourses; course ++){
+            if(coloring[course] == 2) continue;
             coloring[course] = 1; //marking as currently being traversed
             if(!dfsTraversal(adjList, coloring, course)) return false;
             coloring[course] = 2; //marking a course successfully traversed
