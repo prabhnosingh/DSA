@@ -13,21 +13,23 @@ class Solution {
         //So this problem boils down to whether there is a cycle in the graph or not
         //Therefore, we can apply Topological sort - Kahn's algorithm
 
-        //Calculate in-order degree of all the courses
+        //Calculate in-degree of all the courses
         //Insert courses with 0 in-degree to the queue
-        //Deque the courses and reduce the in-degree of the adjacent courses
+        //Dequeue the courses and reduce the in-degree of the adjacent courses
         //Enque the adjacent courses if the in-degree becomes 0
         //at last see if processed courses = total courses, if yes, return true, else false
 
-        //TC: O(n) for building inDegree + 
-            //O(prerequisites.length) for building adjList + 
-            //O(n) for BFS (each course enqueued once)
-        
-        //SC: O(n) inDegree +
-            //O(n + prerequisites.length) +
-            //O(n) for queue
+        //V = numCourses
+        //E = prerequisites.length
 
-            //n being the total number of courses
+        //TC: O(E) for building adjList and inDegree + 
+            //O(V) for adding indegree-0 nodes to queue + 
+            //O(V + E) for BFS (every course is enqueued once + every prerequisite edge is traversed once)
+        
+        //SC: O(V) for inDegree +
+            //O(V + E) for adjList +
+            //O(V) for queue
+
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         
         Queue<Integer> queue = new ArrayDeque<>();
@@ -55,22 +57,22 @@ class Solution {
         for(int i = 0; i < numCourses; i ++){
             if(inDegree[i] == 0) {
                 queue.offer(i);
-                // processedCourses += 1;
+                processedCourses += 1;
             }
         }
 
         while(!queue.isEmpty() && processedCourses != numCourses){
             
             int currCourse = queue.poll();
-             processedCourses += 1;
+            
             if(!adjList.containsKey(currCourse)) continue;
 
-            for(int childCourse : adjList.get(currCourse)){
-                inDegree[childCourse] -= 1;
+            for(int depCourse : adjList.get(currCourse)){
+                inDegree[depCourse] -= 1;
 
-                if(inDegree[childCourse] == 0) {
-                    queue.offer(childCourse);
-                    // processedCourses += 1;
+                if(inDegree[depCourse] == 0) {
+                    queue.offer(depCourse);
+                    processedCourses += 1;
                 }
             }
 
