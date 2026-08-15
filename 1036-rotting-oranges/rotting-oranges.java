@@ -3,7 +3,7 @@ class Solution {
     //Re-solving on 14 Aug 2026
     
     //intuition 1: Multi-source BFS
-        //we start with putting all the oranges into the queue and starting traversing
+        //we start with putting all the rotten oranges into the queue and starting traversing
             //fresh oranges outwards one by one while making fresh (1) oranges rotten (2)
         //at start we find the number of fresh oranges in the grid
         //this way all the fresh oranges that can be reached from a rotten orange will
@@ -11,7 +11,12 @@ class Solution {
 
         //at last we see if number of fresh oranges before running bfs is equal to the 
             //number of newly made rotten oranges, if no, return -1
-        
+
+        //Key reasoning:
+            //all rotten oranges start BFS simultaneously.
+            //therefore, each BFS level represents one minute of rotting
+            //happening from all currently rotten oranges at the same time.
+                    
         //TC: O(rows x cols) - traversing grid + enqueing each cell at most once
         //SC: O(rows x cols) - queue might be full of all the cells in worst case
 
@@ -37,7 +42,7 @@ class Solution {
         if(initialFresh == 0) return 0;
         if(queue.size() == 0) return -1; //no rotten orange exists
 
-        while(!queue.isEmpty()){
+        while(!queue.isEmpty() && initialFresh > 0){
             int currQueueSize = queue.size();
 
             for(int i = 0; i < currQueueSize; i ++){
@@ -50,7 +55,8 @@ class Solution {
                     if(newX != -1 && newX != rows && newY != -1 && newY != cols
                     && grid[newX][newY] == 1){
                         grid[newX][newY] = 2; //marking as rotten
-                        newlyRotten += 1;
+                        // newlyRotten += 1;
+                        initialFresh -= 1;
                         queue.offer(new int[]{newX, newY});
                     }
                 }
@@ -58,10 +64,11 @@ class Solution {
             minsElapsed += 1; //1 min after traversing 1 level
         }
 
-        if(newlyRotten != initialFresh) return -1;
-        else return minsElapsed - 1; //-1 to compensate addition of 1 minuate after all 
-            //oranges have became rotten from last layer and are in queue
+        // if(newlyRotten != initialFresh) return -1;
+        // else return minsElapsed - 1; //-1 to compensate addition of 1 minuate after all 
+        //     //oranges have became rotten from last layer and are in queue
 
+        return initialFresh == 0 ? minsElapsed : -1;
     }
 
 
