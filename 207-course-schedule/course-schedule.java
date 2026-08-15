@@ -2,76 +2,78 @@ class Solution {
     
     //Re-solving on 13 Feb 2026
 
-    //intuition 1: Graphs : DFS (3 coloring) - can we solve it using Topological sort?
-        //Have an adjacency list in which each course's prerequisites are stored against
-            //that course
-        //The basic thing to find is that we find some sort of cycle, then we return false
-        //So maintain a color array that stores 0,1,2 for each index, where each index 
-            //indicates a course
-        //Now if a course is in unvisited, it will be 0
-        //if a course is currently under traversal, it will be 1 (if while traversing any 
-            //course, the same course is reached, then we conclude that there is a cycle 
-            //and the current course cannot be finished, hence return false)
-        //if a course is already visited, it will be 2 (this would mean that this course
-            //is kinda possible to finish, so we can just return the call from here without
-            //traversing again)
+    //intuition 2: Topic: Graphs
+        //Pattern: Topological sort
+        //Sub-pattern: BFS + Kahn's algorithm
 
+        //We are having a directed graph in this problem
+        //We basically need to find if there is a cycle in this graph. As if there
+            //is a cycle then it will not be possible to finish all the courses
+        
+        //So this problem boils down to whether there is a cycle in the graph or not
+        //Therefore, we can apply Topological sort - Kahn's algorithm
+
+        //Calculate in-order degree of all the courses
+        //Insert courses with 0 in-degree to the queue
+        //Deque the courses and reduce the in-degree of the adjacent courses
+        //Enque the adjacent courses if the in-degree becomes 0
+        //at last see if processed courses = total courses, if yes, return true, else false
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         
+        Queue<Integer> queue = new ArrayDeque<>();
         HashMap<Integer, List<Integer>> adjList = new HashMap<>();
-        
-        //0 - unvisited
-        //1 - currently being visited
-        //2 - successfully visited
-        int[] coloring = new int[numCourses];
 
+        int[] inDegree = new int[numCourses];
+        int processedCourses = 0;
 
-        //building the adjacency list
+        //building adjList and finding indgree of all the courses
+        //prerequisites are in the format of ai -> bi but as we trying to get
+            //topoligical order, we will build adj list as bi -> ai, indicating
+            //that bi should be finished before we can finish ai (is this correct understanding)
         for(int[] prereq : prerequisites){
             int c1 = prereq[0];
             int c2 = prereq[1];
 
-            if(!adjList.containsKey(c1)) adjList.put(c1, new ArrayList<>());
-            adjList.get(c1).add(c2); //to finish c1 we need to finish c2
+            if(!adjList.containsKey(c2)) adjList.put(c2, new ArrayList<>());
+
+            adjList.get(c2).add(c1);
+
+            inDegree[c1] += 1;
         }
 
-        for(int course = 0; course < numCourses; course ++){
-            if(coloring[course] == 2) continue;
-            coloring[course] = 1; //marking as currently being traversed
-            if(!dfsTraversal(adjList, coloring, course)) return false;
-            coloring[course] = 2; //marking a course successfully traversed
+        //adding zero in-degree courses to the queue
+        for(int i = 0; i < numCourses; i ++){
+            if(inDegree[i] == 0) {
+                queue.offer(i);
+                processedCourses += 1;
+            }
         }
 
+        while(!queue.isEmpty() && processedCourses != numCourses){
+            
+            int currCourse = queue.poll();
+            
+            if(!adjList.containsKey(currCourse)) continue;
+
+            for(int childCourse : adjList.get(currCourse)){
+                inDegree[childCourse] -= 1;
+
+                if(inDegree[childCourse] == 0) {
+                    queue.offer(childCourse);
+                    processedCourses += 1;
+                }
+            }
+
+
+        }
+
+        if(processedCourses != numCourses) return false;
         return true;
 
+       
 
     }
 
-    private boolean dfsTraversal(HashMap<Integer, List<Integer>> adjList, int[] coloring, 
-    int currCourse){
-
-        if(coloring[currCourse] == 2) return true;
-
-        if(!adjList.containsKey(currCourse)) {//indicates that currCourse does
-            //not have any pre requisite
-            return true; 
-        
-        }
-
-        for(int prereqCourse : adjList.get(currCourse)){
-            if(coloring[prereqCourse] == 1) return false;
-            else if(coloring[prereqCourse] == 2) continue; //prereqCourse is already
-                //possible to complete, proceed with next prereqCourse
-
-            coloring[prereqCourse] = 1;
-
-            if(!dfsTraversal(adjList, coloring, prereqCourse)) return false;
-            coloring[prereqCourse] = 2; //marking as successfully finished
-        }
-
-        return true;
-
-    }
 
 
 
@@ -99,6 +101,130 @@ class Solution {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 13 Feb 2026
+
+//     //intuition 1: Graphs : DFS (3 coloring) - can we solve it using Topological sort? - yes
+//         //Have an adjacency list in which each course's prerequisites are stored against
+//             //that course
+//         //The basic thing to find is that we find some sort of cycle, then we return false
+//         //So maintain a color array that stores 0,1,2 for each index, where each index 
+//             //indicates a course
+//         //Now if a course is in unvisited, it will be 0
+//         //if a course is currently under traversal, it will be 1 (if while traversing any 
+//             //course, the same course is reached, then we conclude that there is a cycle 
+//             //and the current course cannot be finished, hence return false)
+//         //if a course is already visited, it will be 2 (this would mean that this course
+//             //is kinda possible to finish, so we can just return the call from here without
+//             //traversing again)
+//         //If we encounter any node with color = 1, that node is already on the current DFS 
+//             //recursion path, which means we found a directed cycle.
+//         //2 means the course and all prerequisites reachable from it have already been fully 
+//             //explored without finding a cycle.
+
+//         //Color 1 represents nodes on the current DFS path. If DFS encounters another color-1 
+//             //node, there is a back edge, which proves a directed cycle exists. Color 2 
+//             //represents nodes whose entire dependency graph has already been verified 
+//             //to be cycle-free.
+
+//         //TC: O(V + E) : V = number of nodes (numCourses) and E = prerequisites.length
+//             //Build adj list = O(E)
+//             //DFS all vertices = O(V + E)
+//             //Each course is fully processed at most once and each prerequisite edge is
+//                 //examined at most once.
+//         //SC: O(V + E)
+//             //Adj list = O(V + E)
+//             //coloring[] = O(V)
+//             //recursion stack = O(V) worst case
+
+
+//         //how much maximum could prerequisites array can be in size? - n(n-1)
+//              //if there are n number of courses and each prerequisite pair is unique
+//              //with no-self dependency, the maximum possible number of prerequisites
+//              //will be n(n-1) - each course can depend on every other course except
+//              //itself        
+//     public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+//         HashMap<Integer, List<Integer>> adjList = new HashMap<>();
+        
+//         //0 - unvisited
+//         //1 - currently being visited
+//         //2 - successfully visited
+//         int[] coloring = new int[numCourses];
+
+
+//         //building the adjacency list
+//         for(int[] prereq : prerequisites){
+//             int c1 = prereq[0];
+//             int c2 = prereq[1];
+
+//             if(!adjList.containsKey(c1)) adjList.put(c1, new ArrayList<>());
+//             adjList.get(c1).add(c2); //to finish c1 we need to finish c2
+//         }
+
+//         for(int course = 0; course < numCourses; course ++){
+//             if(coloring[course] == 2) continue;
+//             coloring[course] = 1; //marking as currently being traversed
+//             if(!dfsTraversal(adjList, coloring, course)) return false;
+//             coloring[course] = 2; //marking a course successfully traversed
+//         }
+
+//         return true;
+
+
+//     }
+
+//     private boolean dfsTraversal(HashMap<Integer, List<Integer>> adjList, int[] coloring, 
+//     int currCourse){
+
+//         if(coloring[currCourse] == 2) return true;
+
+//         if(!adjList.containsKey(currCourse)) {//indicates that currCourse does
+//             //not have any pre requisite
+//             return true; 
+        
+//         }
+
+//         for(int prereqCourse : adjList.get(currCourse)){
+//             if(coloring[prereqCourse] == 1) return false;
+//             else if(coloring[prereqCourse] == 2) continue; //prereqCourse is already
+//                 //possible to complete, proceed with next prereqCourse
+
+//             coloring[prereqCourse] = 1;
+
+//             if(!dfsTraversal(adjList, coloring, prereqCourse)) return false;
+//             coloring[prereqCourse] = 2; //marking as successfully finished
+//         }
+
+//         return true;
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Re-solving on 13 Feb 2026
 
 //     //intuition 2: Graphs : Topological sort
