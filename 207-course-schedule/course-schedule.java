@@ -2,82 +2,75 @@ class Solution {
     
     //Re-solving on 13 Feb 2026
 
-    //intuition 2: Graphs : Topological sort
-        //We will find the toplogical sort order of the courses based on prerequisites
-        //Topological order algo
-            //build an adjacency list
-            //have stack and visited array and run dfs
-            //push each node to stack after traversing all its children
-            //have two int arrays, topoOrder and position
-            //pop all the elements from the stack and add to topoOrder and position while keeping
-                //a track of position with k variable
-        //At last see if the topoOrder is valid, if yes, return true, else, return false
-            //to check topoOrder is valid or not, run nested for loop for each node and its
-                //children and see if any parent node's position is greater than its child node's
-                //position, if yes, then the topological sort order is invalid
-
-        //TC: O(E+V)
-        //SC: O(E+V)
+    //intuition 1: Graphs : DFS (3 coloring) - can we solve it using Topological sort?
+        //Have an adjacency list in which each course's prerequisites are stored against
+            //that course
+        //The basic thing to find is that we find some sort of cycle, then we return false
+        //So maintain a color array that stores 0,1,2 for each index, where each index 
+            //indicates a course
+        //Now if a course is in unvisited, it will be 0
+        //if a course is currently under traversal, it will be 1 (if while traversing any 
+            //course, the same course is reached, then we conclude that there is a cycle 
+            //and the current course cannot be finished, hence return false)
+        //if a course is already visited, it will be 2 (this would mean that this course
+            //is kinda possible to finish, so we can just return the call from here without
+            //traversing again)
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         
-        List<Integer>[] adjList = new ArrayList[numCourses];
+        HashMap<Integer, List<Integer>> adjList = new HashMap<>();
+        
+        //0 - unvisited
+        //1 - currently being visited
+        //2 - successfully visited
+        int[] coloring = new int[numCourses];
 
-        //intializing adjList with empty arraylist
-        for(int i = 0; i < numCourses; i ++){ //O(V)
-            adjList[i] = new ArrayList<>();
+
+        //building the adjacency list
+        for(int[] prereq : prerequisites){
+            int c1 = prereq[0];
+            int c2 = prereq[1];
+
+            if(!adjList.containsKey(c1)) adjList.put(c1, new ArrayList<>());
+            adjList.get(c1).add(c2); //to finish c1 we need to finish c2
         }
 
-        //filling adjList
-        for(int[] preReq : prerequisites){ //O(E)
-            int dependantCourse = preReq[0];
-            int parentCourse = preReq[1];
-
-            adjList[dependantCourse].add(parentCourse);
+        for(int course = 0; course < numCourses; course ++){
+            coloring[course] = 1; //marking as currently being traversed
+            if(!dfsTraversal(adjList, coloring, course)) return false;
+            coloring[course] = 2; //marking a course successfully traversed
         }
 
-        Stack<Integer> stack = new Stack<>();
-        boolean[] visited = new boolean[numCourses]; 
-        for(int i = 0; i < numCourses; i ++){ //O(E+V)
-            dfs(i, adjList, stack, visited);
+        return true;
+
+
+    }
+
+    private boolean dfsTraversal(HashMap<Integer, List<Integer>> adjList, int[] coloring, 
+    int currCourse){
+
+        if(coloring[currCourse] == 2) return true;
+
+        if(!adjList.containsKey(currCourse)) {//indicates that currCourse does
+            //not have any pre requisite
+            return true; 
+        
         }
 
-        int[] topoSort = new int[numCourses];
-        int[] position = new int[numCourses];
+        for(int prereqCourse : adjList.get(currCourse)){
+            if(coloring[prereqCourse] == 1) return false;
+            else if(coloring[prereqCourse] == 2) continue; //prereqCourse is already
+                //possible to complete, proceed with next prereqCourse
 
-        int k = 0;
-        while(!stack.isEmpty()){ //O(V)
-            int currCourse = stack.pop();
-            topoSort[k] = currCourse;
-            position[currCourse] = k;
+            coloring[prereqCourse] = 1;
 
-            k += 1;
-        }
-
-        for(int i = 0; i < numCourses; i ++){ //O(E) => iterating over all adjacency list once in total
-            for(int parentCourse : adjList[i]){
-                if(position[i] >= position[parentCourse]) return false; //parent courses should be
-                //done before i courses and hence should appear after i in topological sort, else return false
-            }
+            if(!dfsTraversal(adjList, coloring, prereqCourse)) return false;
+            coloring[prereqCourse] = 2; //marking as successfully finished
         }
 
         return true;
 
     }
-
-    private void dfs(int currCourse, List<Integer>[] adjList, Stack<Integer> stack, boolean[] visited){
-        if(visited[currCourse]) return;
-
-        visited[currCourse] = true;
-
-        for(int parentCourse : adjList[currCourse]){
-            dfs(parentCourse, adjList, stack, visited);
-        }
-
-        stack.push(currCourse); //pushing currCourse after traversing all its children
-    }
-
-
 
 
 
@@ -105,6 +98,111 @@ class Solution {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 13 Feb 2026
+
+//     //intuition 2: Graphs : Topological sort
+//         //We will find the toplogical sort order of the courses based on prerequisites
+//         //Topological order algo
+//             //build an adjacency list
+//             //have stack and visited array and run dfs
+//             //push each node to stack after traversing all its children
+//             //have two int arrays, topoOrder and position
+//             //pop all the elements from the stack and add to topoOrder and position while keeping
+//                 //a track of position with k variable
+//         //At last see if the topoOrder is valid, if yes, return true, else, return false
+//             //to check topoOrder is valid or not, run nested for loop for each node and its
+//                 //children and see if any parent node's position is greater than its child node's
+//                 //position, if yes, then the topological sort order is invalid
+
+//         //TC: O(E+V)
+//         //SC: O(E+V)
+
+//     public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+//         List<Integer>[] adjList = new ArrayList[numCourses];
+
+//         //intializing adjList with empty arraylist
+//         for(int i = 0; i < numCourses; i ++){ //O(V)
+//             adjList[i] = new ArrayList<>();
+//         }
+
+//         //filling adjList
+//         for(int[] preReq : prerequisites){ //O(E)
+//             int dependantCourse = preReq[0];
+//             int parentCourse = preReq[1];
+
+//             adjList[dependantCourse].add(parentCourse);
+//         }
+
+//         Stack<Integer> stack = new Stack<>();
+//         boolean[] visited = new boolean[numCourses]; 
+//         for(int i = 0; i < numCourses; i ++){ //O(E+V)
+//             dfs(i, adjList, stack, visited);
+//         }
+
+//         int[] topoSort = new int[numCourses];
+//         int[] position = new int[numCourses];
+
+//         int k = 0;
+//         while(!stack.isEmpty()){ //O(V)
+//             int currCourse = stack.pop();
+//             topoSort[k] = currCourse;
+//             position[currCourse] = k;
+
+//             k += 1;
+//         }
+
+//         for(int i = 0; i < numCourses; i ++){ //O(E) => iterating over all adjacency list once in total
+//             for(int parentCourse : adjList[i]){
+//                 if(position[i] >= position[parentCourse]) return false; //parent courses should be
+//                 //done before i courses and hence should appear after i in topological sort, else return false
+//             }
+//         }
+
+//         return true;
+
+//     }
+
+//     private void dfs(int currCourse, List<Integer>[] adjList, Stack<Integer> stack, boolean[] visited){
+//         if(visited[currCourse]) return;
+
+//         visited[currCourse] = true;
+
+//         for(int parentCourse : adjList[currCourse]){
+//             dfs(parentCourse, adjList, stack, visited);
+//         }
+
+//         stack.push(currCourse); //pushing currCourse after traversing all its children
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Re-solving on 13 Feb 2026
 
 //     //intuition 1: Graphs : DFS 3-color
