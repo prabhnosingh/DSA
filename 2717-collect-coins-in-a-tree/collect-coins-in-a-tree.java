@@ -89,6 +89,7 @@ class Solution {
                 inDegree[currNode] -= 1;
 
                 for(int connectingNode : adjList.get(currNode)){
+                    if(inDegree[connectingNode] == 0) continue;
                     inDegree[connectingNode] -= 1;
                     if(inDegree[connectingNode] == 1 && coins[connectingNode] == 0) 
                         queue.offer(connectingNode);
