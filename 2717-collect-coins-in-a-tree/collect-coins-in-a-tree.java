@@ -138,7 +138,7 @@ class Solution {
             if(inDegree[i] > 0) remNodes += 1;
         }
 
-        //returning 2 x edges and edges = nodes - 1
+        //returning 2 x edges as edges = nodes - 1
         return 2*(remNodes - 1) < 0 ? 0 : 2*(remNodes - 1);
                
     }
