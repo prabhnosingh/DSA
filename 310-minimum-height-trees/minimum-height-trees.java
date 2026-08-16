@@ -53,8 +53,8 @@ class Solution {
         int[] inDegree = new int[n];
         Queue<Integer> queue = new ArrayDeque<>();
         HashMap<Integer, List<Integer>> adjList = new HashMap<>();
-
         List<Integer> MHTList = new ArrayList<>();
+
         if(edges.length == 0) {
             MHTList.add(0);
             return MHTList;
@@ -87,20 +87,18 @@ class Solution {
                 n -= 1;
                 if(!adjList.containsKey(currNode)) continue;
 
-                //currNode only have 1 connecting node, we remove that edge 
                 for(int connectingNode : adjList.get(currNode)){
-                    // int connectingNode = adjList.get(currNode).get(0);
-                    if(inDegree[connectingNode] == 0) continue;
+                    // if(inDegree[connectingNode] == 0) continue; //indicates that connecting node
+                        //has already been processed as a leaf node
 
 
                     //we don't need to actually remove the edge, we can use inDegree here
                     //The standard leaf-trimming solution never needs to physically remove  
                         //adjacency-list entries.
-                    inDegree[currNode] -= 1; //should be 0 now
-                    // adjList.get(connectingNode).remove(Integer.valueOf(currNode));
-                    inDegree[connectingNode] -= 1;
 
-                    // adjList.remove(currNode); //removes the currNode from the adjList
+                    //removing the edge using inDegree
+                    inDegree[currNode] -= 1; 
+                    inDegree[connectingNode] -= 1;
                     
                     if(inDegree[connectingNode] == 1) queue.offer(connectingNode);
                 }
