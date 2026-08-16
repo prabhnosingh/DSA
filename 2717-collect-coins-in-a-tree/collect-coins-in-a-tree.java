@@ -35,31 +35,42 @@ class Solution {
 
         //What if there are no coins in the coins array (i.e. all are 0) -> return 0
 
-        //TC: O(V+E) for BFS+
-            //O()
+        //Algo summary:
+            //1. Build graph + degree.
+            //2. Queue all:
+                //leaf && no coin
+            //3. Repeatedly prune those.
+                //Newly-created coinless leaves also get pruned.
+            //4. Queue all remaining leaves.
+            //5. Prune exactly 2 leaf layers.
+            //6. Whatever edges remain are unavoidable.
+            //7. answer = 2 × remainingEdges
+
+        //TC: O(2(V+E)) for BFS +
+            //O(V+E) for building adjList + inDegree +
+            //O(V) for final scan
+            //TC: O(V+E) and since E = V-1, TC = O(V)
 
         //SC: O(V) for queue +
             //O(V+E) for adjList +
             //O(V) for inDegree
+            //SC: O(V+E) and shice E = V-1 for a tree, SC = O(V)
     public int collectTheCoins(int[] coins, int[][] edges) {
         
         int totalNodes = coins.length;
         if(totalNodes <= 2) return 0;
         
         int[] inDegree = new int[totalNodes];
-
-        
-
         Queue<Integer> queue = new ArrayDeque<>();
         List<List<Integer>> adjList = new ArrayList<>();
         
-        int totalCoins = 0;
+        // int totalCoins = 0;
         //initializing adjList
         for(int i = 0; i < totalNodes; i ++){
             adjList.add(new ArrayList<>());
-            if(coins[i] == 1) totalCoins += 1;
+            // if(coins[i] == 1) totalCoins += 1;
         }
-        if(totalCoins == 0) return 0;
+        // if(totalCoins == 0) return 0;
 
         //filling adjList and inDegree
         for(int[] edge : edges){
