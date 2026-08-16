@@ -9,8 +9,9 @@ class Solution {
         //Sub-pattern: Tree Center / Leaf Trimming
 
         //for a root to have minimum height it needs to be in middle of all the nodes
-        //now at most 2 nodes can be in the middle of the tree as it is confirmed that there
-            //is no cycle
+        //now at most 2 nodes can be in the middle of the tree because he input forms
+            //a tree (connected + acyclic), and every tree has either one center or 
+            //two adjacent centers.
 
         //the problem boils down to finding these middle nodes
         //we can find these nodes by trimming the leaf nodes
@@ -20,7 +21,8 @@ class Solution {
         //store inDegree of each node in a array
         //have a queue and store all the in-degree 1 nodes to the queue
         //poll the nodes and reduce the in-degree of there adjacent nodes
-        //perform this until queue size is greater than 2
+        //enqueue adjacent nodes if there in-degree becomes 1 
+        //perform this until the remaining nodes are greater than 2
 
         //at last either we will have 1 node in the queue or 2 nodes in the queue
         //return these node(s)
@@ -81,7 +83,7 @@ class Solution {
                 adjList.get(connectingNode).remove(Integer.valueOf(currNode));
                 inDegree[connectingNode] -= 1;
 
-                adjList.remove(currNode); //removes the currNode from the adjList
+                // adjList.remove(currNode); //removes the currNode from the adjList
                 
                 if(inDegree[connectingNode] == 1) queue.offer(connectingNode);
             }
