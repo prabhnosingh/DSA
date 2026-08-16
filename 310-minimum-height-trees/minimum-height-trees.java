@@ -27,6 +27,15 @@ class Solution {
         //at last either we will have 1 node in the queue or 2 nodes in the queue
         //return these node(s)
 
+        //TC: O(V+E) for BFS +
+            //O(E) for building adjList +
+            //O(V) for enqueuing
+
+        //SC: O(V+E) for adjList +
+            //O(V) for inDegree +
+            //O(V) for queue
+
+
 
     //intuition 1: Graph : DFS
         //the input is guaranteed to not have a cycle in the graph
@@ -36,7 +45,8 @@ class Solution {
         //have a heights array that will indicate heights[i] as height of 
             //a tree if i was the root
 
-        //TC: one DFS O(V + E) and we run the DFS for every node => O((V + E)^2)
+        //TC: one DFS O(V + E) and we run the DFS for every node (V nodes) => O(V(V + E))
+            //and since this is a tree, so E = V-1. Therefore, O(VxV) = O(V^2) 
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
 
         
@@ -84,6 +94,8 @@ class Solution {
 
 
                     //we don't need to actually remove the edge, we can use inDegree here
+                    //The standard leaf-trimming solution never needs to physically remove  
+                        //adjacency-list entries.
                     inDegree[currNode] -= 1; //should be 0 now
                     // adjList.get(connectingNode).remove(Integer.valueOf(currNode));
                     inDegree[connectingNode] -= 1;
