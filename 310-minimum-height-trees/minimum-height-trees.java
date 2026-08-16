@@ -78,15 +78,36 @@ class Solution {
                 if(!adjList.containsKey(currNode)) continue;
 
                 //currNode only have 1 connecting node, we remove that edge 
-                int connectingNode = adjList.get(currNode).get(0);
+                for(int connectingNode : adjList.get(currNode)){
+                    // int connectingNode = adjList.get(currNode).get(0);
+                    if(inDegree[connectingNode] == 0) continue;
 
-                adjList.get(connectingNode).remove(Integer.valueOf(currNode));
-                inDegree[connectingNode] -= 1;
 
-                // adjList.remove(currNode); //removes the currNode from the adjList
-                
-                if(inDegree[connectingNode] == 1) queue.offer(connectingNode);
+                    //we don't need to actually remove the edge, we can use inDegree here
+                    inDegree[currNode] -= 1; //should be 0 now
+                    // adjList.get(connectingNode).remove(Integer.valueOf(currNode));
+                    inDegree[connectingNode] -= 1;
+
+                    // adjList.remove(currNode); //removes the currNode from the adjList
+                    
+                    if(inDegree[connectingNode] == 1) queue.offer(connectingNode);
+                }
             }
+            // for(int i = 0; i < currQueueSize; i ++){
+            //     int currNode = queue.poll();
+            //     n -= 1;
+            //     if(!adjList.containsKey(currNode)) continue;
+
+            //     //currNode only have 1 connecting node, we remove that edge 
+            //     int connectingNode = adjList.get(currNode).get(0);
+
+            //     adjList.get(connectingNode).remove(Integer.valueOf(currNode));
+            //     inDegree[connectingNode] -= 1;
+
+            //     adjList.remove(currNode); //removes the currNode from the adjList
+                
+            //     if(inDegree[connectingNode] == 1) queue.offer(connectingNode);
+            // }
 
         }
 
