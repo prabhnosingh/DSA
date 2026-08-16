@@ -113,6 +113,7 @@ class Solution {
                 inDegree[currNode] -= 1;
 
                 for(int connectedNode : adjList.get(currNode)){
+                    if(inDegree[connectedNode] == 0) continue;
                     inDegree[connectedNode] -= 1;
                     if(inDegree[connectedNode] == 1) queue.offer(connectedNode);
                 }
