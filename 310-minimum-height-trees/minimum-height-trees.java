@@ -61,7 +61,8 @@ class Solution {
         
         int[] inDegree = new int[n];
         Queue<Integer> queue = new ArrayDeque<>();
-        HashMap<Integer, List<Integer>> adjList = new HashMap<>();
+        // HashMap<Integer, List<Integer>> adjList = new HashMap<>();
+        List<List<Integer>> adjList = new ArrayList<>();
         List<Integer> MHTList = new ArrayList<>();
 
         if(n == 1) { //only 1 node in the whole tree
@@ -69,16 +70,24 @@ class Solution {
             return MHTList;
         }
 
+        //initialing adjList
+        for(int i = 0; i < n; i ++){
+            adjList.add(new ArrayList<>());
+        }
+
         //building adjList and inDegree
         for(int[] edge : edges){
             int u = edge[0];
             int v = edge[1];
 
-            if(!adjList.containsKey(u)) adjList.put(u, new ArrayList<>());
+            // if(!adjList.containsKey(u)) adjList.put(u, new ArrayList<>());
+            // adjList.get(u).add(v);
             adjList.get(u).add(v);
             inDegree[v] += 1;
 
-            if(!adjList.containsKey(v)) adjList.put(v, new ArrayList<>());
+            // if(!adjList.containsKey(v)) adjList.put(v, new ArrayList<>());
+            // adjList.get(v).add(u);
+            
             adjList.get(v).add(u);
             inDegree[u] += 1;
         }
@@ -95,7 +104,7 @@ class Solution {
                 int currNode = queue.poll();
                 n -= 1;
                 inDegree[currNode] -= 1;  //will be zero now
-                if(!adjList.containsKey(currNode)) continue;
+                // if(!adjList.containsKey(currNode)) continue;
 
                 for(int connectingNode : adjList.get(currNode)){
                     if(inDegree[connectingNode] == 0) continue; //indicates that connecting node
