@@ -2,7 +2,7 @@ class Solution {
 
     //Re-solving on 15 Aug 2026
 
-    //intuition 1: 
+    //intuition 1 (optimizing - using list of list instead of a hashmap): 
         //Topic: Graphs
         //Pattern: Topological sort
         //Sub-pattern: BFS : Kahn's algo
@@ -22,27 +22,30 @@ class Solution {
                 //becomes empty) the courses added to answer array are still not equal to 
                 //numCourses, return empty array, else return answer array
 
-        //E = numCourses
-        //V = prerequisites.length
+        //V = numCourses
+        //E = prerequisites.length
 
-        //TC: O(V) for adjList and in degree construction +
-            //O(E) for adding in degree-0 courses to queue +
-            //O(E + V) for running BFS (each course and each prerequisite is processed once)
+        //TC: O(E) for adjList and in degree construction +
+            //O(V) for adding in degree-0 courses to queue +
+            //O(V + E) for running BFS (each course and each prerequisite is processed once)
 
 
-        //SC: O(E + V) for adjList +
-            //O(E) for in degree array +
-            //O(E) for queue
+        //SC: O(V + E) for adjList +
+            //O(V) for in degree array +
+            //O(V) for queue
 
     public int[] findOrder(int numCourses, int[][] prerequisites) {
         
         int[] topoOrder = new int[numCourses];
         int processedCourses = 0;
 
-        HashMap<Integer, List<Integer>> adjList = new HashMap<>();
+        List<List<Integer>> adjList = new ArrayList<>();
         int[] inDegree = new int[numCourses];
 
         Queue<Integer> queue = new ArrayDeque<>();
+
+        //initializing adjlist
+        for(int i = 0; i < numCourses; i ++) adjList.add(new ArrayList<>());
 
         //building adjList and inDegree
         for(int[] prereq : prerequisites){
@@ -50,7 +53,7 @@ class Solution {
             int c2 = prereq[1];
 
             //c2 -> c1
-            if(!adjList.containsKey(c2)) adjList.put(c2, new ArrayList<>());
+            // if(!adjList.containsKey(c2)) adjList.put(c2, new ArrayList<>());
 
             adjList.get(c2).add(c1);
             inDegree[c1] += 1;
@@ -67,7 +70,7 @@ class Solution {
             int currCourse = queue.poll();
             topoOrder[processedCourses ++] = currCourse;
 
-            if(!adjList.containsKey(currCourse)) continue;
+            // if(!adjList.containsKey(currCourse)) continue;
 
             for(int depCourse : adjList.get(currCourse)){
                 inDegree[depCourse] -= 1;
@@ -80,6 +83,93 @@ class Solution {
 
 
     }
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 15 Aug 2026
+
+    // //intuition 1: 
+    //     //Topic: Graphs
+    //     //Pattern: Topological sort
+    //     //Sub-pattern: BFS : Kahn's algo
+
+    //     //To complete each course we have some pre-requisites
+    //     //The ordering that we are supposed to return is basically a topological sort 
+    //         //because we want to make sure that any course coming up in the array have
+    //         //all its prerequisites already present in the array before it
+    //     //Therefore we can apply kahn's algo here
+    //         //have an in degree array to store in degree of all the courses
+    //         //add all the courses with in degree equal to 0 to a queue
+    //         //when polling the courses from the queue, reduce the in degree of adjacent
+    //             //courses by 1 and if any adjacent course's in degree reaches 0, add it 
+    //             //to queue
+    //         //after polling the course, add that to the answer array
+    //         //keep track of courses added to the answer array and if at last (after queue
+    //             //becomes empty) the courses added to answer array are still not equal to 
+    //             //numCourses, return empty array, else return answer array
+
+    //     //V = numCourses
+    //     //E = prerequisites.length
+
+    //     //TC: O(E) for adjList and in degree construction +
+    //         //O(V) for adding in degree-0 courses to queue +
+    //         //O(V + E) for running BFS (each course and each prerequisite is processed once)
+
+
+    //     //SC: O(V + E) for adjList +
+    //         //O(V) for in degree array +
+    //         //O(V) for queue
+
+    // public int[] findOrder(int numCourses, int[][] prerequisites) {
+        
+    //     int[] topoOrder = new int[numCourses];
+    //     int processedCourses = 0;
+
+    //     HashMap<Integer, List<Integer>> adjList = new HashMap<>();
+    //     int[] inDegree = new int[numCourses];
+
+    //     Queue<Integer> queue = new ArrayDeque<>();
+
+    //     //building adjList and inDegree
+    //     for(int[] prereq : prerequisites){
+    //         int c1 = prereq[0];
+    //         int c2 = prereq[1];
+
+    //         //c2 -> c1
+    //         if(!adjList.containsKey(c2)) adjList.put(c2, new ArrayList<>());
+
+    //         adjList.get(c2).add(c1);
+    //         inDegree[c1] += 1;
+    //     }
+
+    //     //adding indegree-0 courses to queue
+    //     for(int i = 0; i < numCourses; i ++){
+    //         if(inDegree[i] == 0){
+    //             queue.offer(i);
+    //         }
+    //     }
+
+    //     while(!queue.isEmpty()){
+    //         int currCourse = queue.poll();
+    //         topoOrder[processedCourses ++] = currCourse;
+
+    //         if(!adjList.containsKey(currCourse)) continue;
+
+    //         for(int depCourse : adjList.get(currCourse)){
+    //             inDegree[depCourse] -= 1;
+    //             if(inDegree[depCourse] == 0) queue.offer(depCourse);
+    //         }
+
+    //     }
+
+    //     return processedCourses != numCourses ? new int[0] : topoOrder; 
+
+
+    // }
 
      
 
