@@ -76,7 +76,8 @@ class Solution {
             }
         }
 
-        return totalCourses != coursesTaken ? -1 : minimumSemesters;
+        return n+1 != coursesTaken ? -1 : minimumSemesters; //n+1 as 0 will by default be taken
+            //as a course, since array starts with 0 index
 
 
 
