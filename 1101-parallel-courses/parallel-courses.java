@@ -4,24 +4,30 @@ class Solution {
 
     //intuition 1: 
         //Topic: Graphs
-        //Pattern: Topological Sort (as a DAG is there)
-        //Sub-Pattern: BFS (Kahn's algo)
+        //Pattern: Topological Sort (Directed with probable Acyclic graph)
+        //Sub-Pattern: Level-order BFS + Kahn's algo
 
         //prevCourse -> nextCourse indicates that prevCourse needs to be finished before
             //nextCourse can start. 
         //Now each prerequisite course in a course is an incoming edge (indgree ++) 
-        //And for any course that have all the prerequisites satisfies will technically 
+        //And for any course that have all the prerequisites satisfied will technically 
             //have indgree = 0 (indicating no incoming edge) 
+        //As prerequisite courses are completed, we conceptually remove their outgoing edges.
+            //When a course's indegree becomes 0, all of its prerequisites have been completed, 
+            //so it can be taken in the next semester.
         //We can rephrase this as: "For a course to be eligible to be taken in a semester
             //its indegree should be 0"
         //This way we can get minimum semeseters as we take all the possible courses (with 
             //inDegree as 0) in each level
+            
 
         //We can apply BFS - Kahn's algorithm here.
             //We can run BFS traversal and at each level we will try to process (take) courses
                 //and reduce the indegree of adjacent courses
             //If number of processed courses != total courses then there must be a cycle and
                 //that means that we cannot take all courses, return -1
+            //Nodes in a directed cycle always retain at least one incoming edge from another
+                //unprocessed node in that cycle, so none of them can enter the indegree-0 queue.
             
             //Have an array of indgree 
             //Have a qeueue to store all courses with indegree 0
@@ -29,6 +35,34 @@ class Solution {
             //Poll courses from the queue and reduce the indgree of adjacent course
             //Increment count of takenCourses
             //See if takenCourses == totalCourses
+    
+        //Summary:
+            //Each BFS level represents one semester.
+             
+            //At the beginning of a semester, the queue contains every course whose 
+                //prerequisites have already been completed.
+                
+            //We take all of them simultaneously during that semester and remove 
+                //their outgoing edges.
+            
+            //Courses whose indegree becomes 0 are added to the queue for the next semester.
+
+            //If fewer than total courses are eventually processed, a cycle exists, so 
+                //completing all courses is impossible.
+
+        //V = n
+        //E = relations.length
+
+        //TC: O(V) - initialzing adjList +
+            //O(E) - building adjList and inDegree +
+            //O(V) - first enqueue to the queue of inDegree 0 courses
+            //O(V+E) - for BFS (each course and relation is processed once)
+            //TC: O(V+E)
+
+        //SC: O(V+E) - for adjList
+            //O(V) - for inDegree
+            //O(V) - for queue
+            //SC: O(V+E)
         
     public int minimumSemesters(int n, int[][] relations) {
         
