@@ -17,6 +17,24 @@ class Solution {
         //Then we add 0 inDegree nodes to the queue and poll them one by one while reducing
             //inDegree of their child nodes along the way and enqueuing child nodes to the 
             //queue if inDegree becomes 0
+
+        //V = number of unique characters (in worst case can be 26)
+        //E = number of character-order edges
+        //W = number of words
+        //N = total number of characters across all words
+        
+        //TC and SC: 
+            //unique chars: TC: O(N) SC: O(V)
+            //adjList: TC: O(N) - for each word we are trying to find the first mismatching
+                //character with the next word in words. So we traverse each charcter in words
+                //at most 2 times 
+                //SC: O(V + E)
+            //inDegree: TC: O(V) SC: O(V)
+            //BFS (Kahn's algo): TC: O(V+E) SC: O(V)
+
+        //TC: O(N + V + E) = O(N + 26 + E) = O(N + E)
+        //SC: O(V + E) = O(26 + E) = O(E)
+
        
     public String alienOrder(String[] words) {
         
@@ -27,7 +45,7 @@ class Solution {
         StringBuilder alienDictSb = new StringBuilder();
         int uniqueChars = 0;
 
-        //initializing charPresentInDict
+        //initializing charPresentInDict and uniqueChars
         for(String word : words){
             for(char ch : word.toCharArray()){
                 if(!charPresentInDict[ch - 'a']){
@@ -43,6 +61,7 @@ class Solution {
         }
 
         //building adjList and inDegree
+        
         for(int k = 0; k < words.length - 1; k ++){
             String word1 = words[k];
             String word2 = words[k + 1];
@@ -69,13 +88,15 @@ class Solution {
                 i += 1;
                 j += 1;
 
-                if(j == word2.length() && i != word1.length()){ //meaning word2, second in order is
-                    //fully parsed without finding any mismatching character, means first j chars are
-                    //same in word1 and word2. This indicates word2 is prefix of word1 but second in 
-                    //order, whereas it should have been first in order. Therefore the dict is invaid,
-                    //and return ""
-                    return "";
-                }
+            }
+            if(j == word2.length() && i != word1.length()){ //meaning word2, second in order is
+                //fully parsed without finding any mismatching character, means first j chars are
+                //same in word1 and word2. This indicates word2 is prefix of word1 but second in 
+                //order, whereas it should have been first in order. Therefore the dict is invaid,
+                //and return ""
+
+                //If we compared the entire common prefix without finding a mismatch, and word1 is longer than word2, the ordering is invalid.
+                return "";
             }
         }
 
@@ -89,7 +110,7 @@ class Solution {
             //we need to have a check while constructing adjList
         for(int i = 0; i < 26; i ++){
             if(charPresentInDict[i] && inDegree[i] == 0){ 
-                //character there in dict and have 0 inDegree and have a valid edge
+                //character there in dict and have 0 inDegree
                 queue.offer(i);
             }
         }
@@ -109,6 +130,8 @@ class Solution {
             }
         }
 
+
+        //invariant: Kahn's algorithm processes every vertex iff there is no directed cycle.
         return uniqueChars != alienDictSb.length() ? "" : new String(alienDictSb);
 
 
