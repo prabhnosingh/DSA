@@ -3,7 +3,7 @@ class Solution {
     //Solving on 20 Aug 2026
 
     //intuition 1: 
-        //Topic: Greedy
+        //Topic: DP
         //Pattern:
         //Sub-pattern:
         
@@ -14,9 +14,14 @@ class Solution {
         //start from the last index and fill a boolean dp array towards first index 
             //if a jump from index i can help us reach to last index, then any index
                 //j that can reach to index i can help us reach to last index 
+            //track the last true index using a variable and see if current nums[i] + i
+                //is greater than equal to lastTrueIdx
 
         //dp invariant:
             //given any index i, dp[i] will store if we can reach last index from index i
+
+        //TC: O(n)
+        //SC: O(n)
     public boolean canJump(int[] nums) {
         
         boolean[] dp = new boolean[nums.length];
@@ -34,7 +39,7 @@ class Solution {
             else dp[i] = false;
         }
 
-        return dp[0];
+        return lastTrueIdx == 0 ? true : false;
 
 
     }
