@@ -5,24 +5,39 @@ class Solution {
     //intuition 1: 
         //Topic: DP
         //Pattern: 1D DP 
-        //Sub-pattern:
+        //Sub-pattern: Fibonacci-style / Counting DP
+
 
 
 
         //We can use DP here as number of distinct ways to climb need sub-states of number of ways 
             //to climb
+        //We can use DP because the number of ways to reach the top from
+            //a particular step depends on the number of ways from later steps.
         
         //DP invariant:
-            //dp[i] represents number of distinct ways to reach top
-            //dp[n] will be 1
-                //As if you are already at the top, then you can stay at top in only 1 way, that 
-                    //is staying there and not moving anywhere else
-            //dp[i] depends on two further states, dp[i+1] (if we take 1 step) and dp[i+2] (if we
-                //take 2 steps)
-            //so dp[i] = dp[i+1] + dp[i+2]
+            //dp[i] represents number of distinct ways to reach top starting from the step i
+            
+            //Recurrence relation:
+                //dp[i] depends on two further states, dp[i+1] (if we take 1 step) and dp[i+2] (if we
+                    //take 2 steps)
+                //so dp[i] = dp[i+1] + dp[i+2]
 
             //dp[0] will represent number of distinct ways in which we can climb to the top from
                 //starting point
+        //Base cases:
+            //dp[n] = 1;
+                //As if you are already at the top, then you can stay at top in only 1 way, that 
+                    //is staying there and not moving anywhere else
+                //If we are already at the top, there is exactly one valid way to
+                    //complete the climb: take no more steps.
+            //dp[n-1] = 1; 
+                //we can only take 1 step from n-1 step to reach to the top. Which is the
+                    //only way available 
+
+
+        //TC: O(n)
+        //SC: O(n)
 
     public int climbStairs(int n) {
         
