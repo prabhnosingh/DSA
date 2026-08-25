@@ -16,7 +16,9 @@ class Solution {
         //we can run a for loop from 1 to nums[i] jumps (inclusive) at each index i and take the minimum
             //from all the jumps and store it at dp[i]
 
-
+        //TC: O(n^2)
+            //For every i, you could inspect approximately n-i future indices
+        //SC: O(n)
     public int jump(int[] nums) {
         
         int numsLen = nums.length;
