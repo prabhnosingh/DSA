@@ -46,9 +46,9 @@ class Solution {
         
 
         //TC: O(n^2):
-            //O(n) : There are only n unique states (dfs(0), dfs(1), ... dfs(n-1)) 
+            //There are only n unique states (dfs(0), dfs(1), ... dfs(n-1)) 
             //and for every state we try upto n ending indices
-        //SC: O(n + n) = O(n) : Size of recursive stack + size of memo
+        //SC: O(n + m) = O(n) : size of dp and O(m) : size of hashset 
     public boolean wordBreak(String s, List<String> wordDict) {
         
         int n = s.length();
