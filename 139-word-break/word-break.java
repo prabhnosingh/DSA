@@ -2,10 +2,10 @@ class Solution {
 
     //Solving on 25 Aug 2026
 
-    //intuitoin 4: bottom-up approach
+    //intuitoin 4: bottom-up approach (tabulation)
         //Topic: DP
         //Pattern: 1D DP
-        //Sub-pattern: Prefix DP / String Partitioning
+        //Sub-pattern: Prefix/Suffix DP / String Partitioning
 
 
         //To find if s[i, s.length() - 1] is successfully possible to segment we need to find if 
@@ -23,7 +23,7 @@ class Solution {
         
         //base case 
             //[s.length(), s.length() - 1] means no character (empty) and an empty substring is considered
-                //successfully segmented
+                //successfully segmented as there are no characters to segment
             //dp[s.length()] = true
 
         //recurrence relation
@@ -45,10 +45,11 @@ class Solution {
             //for each word match, assign dp[i] = d[j+1]
         
 
-        //TC: O(n^2):
+        //TC: O(n^3):
             //There are only n unique states (dfs(0), dfs(1), ... dfs(n-1)) 
-            //and for every state we try upto n ending indices
-        //SC: O(n + m) = O(n) : size of dp and O(m) : size of hashset 
+            //and for every state we try upto n ending indices and also create substrings and check
+            //whether those exists in hashset
+        //SC: O(n + m) where n = size of dp and m = size of hashset 
     public boolean wordBreak(String s, List<String> wordDict) {
         
         int n = s.length();
@@ -60,7 +61,9 @@ class Solution {
 
         for(int startingIdx = n-1; startingIdx >= 0; startingIdx --){
             for(int endingIdx = startingIdx; endingIdx < n; endingIdx ++){
-                String currWord = s.substring(startingIdx, endingIdx + 1);
+                String currWord = s.substring(startingIdx, endingIdx + 1); //s.substring creates a new
+                    //string, which costs proportional to the substring length and hashing this to find
+                    //if a similar substring exists already in the hashset also costs in character processing
                 if(wordDictSet.contains(currWord) && dp[endingIdx + 1]){
                     dp[startingIdx] = true;
                     //s[startingIdx, endingIdx] is found in the wordDict, now see if s[endingIdx+1, n-1] is
