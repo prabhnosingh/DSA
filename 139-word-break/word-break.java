@@ -61,10 +61,10 @@ class Solution {
                     //s[startingIdx, endingIdx] is found in the wordDict, now see if s[endingIdx+1, n-1] is
                         //segmentable
                 }
-                if(dp[startingIdx]) {
-                    break; //if staringIdx can successfully be segmented then there is no
-                    //need to traverse rest of the characters
-                }
+                // if(dp[startingIdx]) {
+                //     break; //if staringIdx can successfully be segmented then there is no
+                //     //need to traverse rest of the characters
+                // }
             }
         }
 
