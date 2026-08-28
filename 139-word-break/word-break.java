@@ -50,21 +50,22 @@ class Solution {
         int n = s.length();
 
         boolean[] dp = new boolean[n+1];
+        HashSet<String> wordDictSet = new HashSet<>(wordDict);
 
         dp[n] = true; //base case
 
         for(int startingIdx = n-1; startingIdx >= 0; startingIdx --){
             for(int endingIdx = startingIdx; endingIdx < n; endingIdx ++){
                 String currWord = s.substring(startingIdx, endingIdx + 1);
-                if(wordDict.contains(currWord)){
+                if(wordDictSet.contains(currWord)){
                     dp[startingIdx] = dp[startingIdx] || dp[endingIdx + 1];
                     //s[startingIdx, endingIdx] is found in the wordDict, now see if s[endingIdx+1, n-1] is
                         //segmentable
                 }
-                // if(dp[startingIdx]) {
-                //     break; //if staringIdx can successfully be segmented then there is no
-                //     //need to traverse rest of the characters
-                // }
+                if(dp[startingIdx]) {
+                    break; //if staringIdx can successfully be segmented then there is no
+                    //need to traverse rest of the characters
+                }
             }
         }
 
