@@ -58,7 +58,7 @@ class Solution {
             for(int endingIdx = startingIdx; endingIdx < n; endingIdx ++){
                 String currWord = s.substring(startingIdx, endingIdx + 1);
                 if(wordDictSet.contains(currWord)){
-                    dp[startingIdx] = dp[startingIdx] || dp[endingIdx + 1];
+                    dp[startingIdx] =dp[endingIdx + 1];
                     //s[startingIdx, endingIdx] is found in the wordDict, now see if s[endingIdx+1, n-1] is
                         //segmentable
                 }
