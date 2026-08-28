@@ -37,6 +37,10 @@ class Solution {
                 //outer loop will keep track of startingIdx starting from n-1 towards 0 (right to left)
                 //innter loop will keep track of endingIdx starting from each startingIdx towards n (left 
                     //to right)
+
+            //traversal logic:
+                //Since dp[i] depends on dp[j+1], which represents states to the right of i, calculate 
+                    //dp from right to left.
             
             //for each word match, assign dp[i] = d[j+1]
         
@@ -57,15 +61,16 @@ class Solution {
         for(int startingIdx = n-1; startingIdx >= 0; startingIdx --){
             for(int endingIdx = startingIdx; endingIdx < n; endingIdx ++){
                 String currWord = s.substring(startingIdx, endingIdx + 1);
-                if(wordDictSet.contains(currWord)){
-                    dp[startingIdx] =dp[endingIdx + 1];
+                if(wordDictSet.contains(currWord) && dp[endingIdx + 1]){
+                    dp[startingIdx] = true;
                     //s[startingIdx, endingIdx] is found in the wordDict, now see if s[endingIdx+1, n-1] is
                         //segmentable
+                    break;
                 }
-                if(dp[startingIdx]) {
-                    break; //if staringIdx can successfully be segmented then there is no
-                    //need to traverse rest of the characters
-                }
+                // if(dp[startingIdx]) {
+                //     break; //if staringIdx can successfully be segmented then there is no
+                //     //need to traverse rest of the characters
+                // }
             }
         }
 
