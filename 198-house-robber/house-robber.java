@@ -9,6 +9,11 @@ class Solution {
         //Why DP?
             //We choose DP as topic here as the decision of robbing any house in order to maximize the money
                 //depends on the previously robbed houses (previous states)
+            
+            //The optimal answer for houses [0...i] depends on optimal answers for smaller overlapping 
+                //subproblems [0....i-1] and [o....i-2]
+            //Instead of recomputing these subproblems, we store their results and use them to construct
+                //the answer for larger problem 
 
         //DP invariant
             //dp[i] represents maximum money robbed till index i while starting from 0 without alerting police
@@ -28,22 +33,53 @@ class Solution {
             //therefore, any state dp[i] depends on dp[i-1] and dp[i-2] with the below recurrence relation:
                 //dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2])
 
+            //For any house i we have two options, either to pick that house for robbing or not to pick
+                //the house for robbing
+
+                //Not pick house i
+                    //We keep the best results from houses [0....i-1]
+                    //-> dp[i-1]
+                
+                //Pick house i
+                    //We cannot rob house i-1
+                    //therefore we take nums[i] plus the best result till i-2
+                    //-> nums[i] + dp[i-2]
+                
+                //Then we take max of these two choices
+
+            //Since dp[i] depends on dp[i-1] and dp[i-2], we build the dp array from left to rigth    
+
+
+        //TC: O(n)
+        //SC: O(n)
 
     public int rob(int[] nums) {
         
         int n = nums.length;
         if(n == 1) return nums[0];
 
-        int[] dp = new int[n];
-        dp[0] = nums[0];
-        dp[1] = Math.max(nums[0], nums[1]);
+        // int[] dp = new int[n];
+
+        // dp[0] = nums[0];
+        // dp[1] = Math.max(nums[0], nums[1]);
+
+        int prevPrev = nums[0];
+        int prev = Math.max(nums[0], nums[1]);
+
+        int curr = 0;
 
         for(int i = 2; i < n; i ++){
-            dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2]);
+            // dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2]);
+
+            curr = Math.max(prev, nums[i] + prevPrev);
+
+            prevPrev = prev;
+            prev = curr;
+
         }
 
 
-        return dp[n-1];
+        return prev;
 
 
 
