@@ -1,39 +1,52 @@
 class Solution {
-    //Re-solving on 15 Feb 2026:
+    //Re-solving on 29 Aug 2026:
 
-    //intuition 1: DP : 1D DP
-        //The target is that robber should have most money after going through the whole house
-        //At any point the robber have two choices, either to rob the current house or not rob
-            //the current house and take forward the current  money he has robbed.
-        //This decision is made based on past two states:   
-            //For any state i, i.e. for any house i, the robber have two options:
-                //Either to rob i house, in which case the total will be dp[i-2] + nums[i]
-                    //because no two adjacent houses can be robbed
-                //Or, to not rob ith house, in which case the total will be dp[i-1]
+    //intuition 1:
+        //Topic: DP
+        //Pattern: 1D DP
+        //Sub-pattern: Pick/Not-pick
 
-        //We take the max of both of these choices 
+        //Why DP?
+            //We choose DP as topic here as the decision of robbing any house in order to maximize the money
+                //depends on the previously robbed houses (previous states)
+
+        //DP invariant
+            //dp[i] represents maximum money robbed till index i while starting from 0 without alerting police
+            //dp[n - 1] will represent maximum money robbed from all the houses
+            //therefore, we need a dp array of size n (nums.length)
+
+        //Base cases
+            //dp[0] = nums[0]
+            //dp[1] = Math.max(nums[0], nums[1])
+        
+        //Recurrence relation
+            //decision of whether any house i should be robbed or not is based on previous decisions and money
+                //robbed
+            //if robbing i-1 house gives us x total money and robbing i house, in which case we would not rob 
+                //i-1 house, gives us y total money and x > y, then we rob i-1 house and leave i house  
+            
+            //therefore, any state dp[i] depends on dp[i-1] and dp[i-2] with the below recurrence relation:
+                //dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2])
+
 
     public int rob(int[] nums) {
-        //dp[i] represents maximum money stolen till house i
-        //dp[totalHouses - 1] will represent maximum money stolen till end of street
-        //Therefore, we need a dp array of size totalHouses
         
+        int n = nums.length;
+        if(n == 1) return nums[0];
 
-        int totalHouses = nums.length;
-
-        if(totalHouses == 1) return nums[0];
-
-        int[] dp = new int[totalHouses];
-
+        int[] dp = new int[n];
         dp[0] = nums[0];
-          
         dp[1] = Math.max(nums[0], nums[1]);
 
-        for(int i = 2; i < totalHouses; i ++){
-            dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
+        for(int i = 2; i < n; i ++){
+            dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2]);
         }
 
-        return dp[totalHouses - 1];
+
+        return dp[n-1];
+
+
+
 
     } 
 
@@ -66,6 +79,76 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 15 Feb 2026:
+
+//     //intuition 1: DP : 1D DP (pick / not-pick) : is this 0/1 knapsack?
+//         //The target is that robber should have maximum money after going through all the houses
+//         //At any point the robber have two choices, either to rob the current house or not rob
+//             //the current house and take forward the current  money he has robbed.
+//         //This decision is made based on past two states:   
+//             //For any state i, i.e. for any house i, the robber have two options:
+//                 //Either to rob i house, in which case the total will be dp[i-2] + nums[i]
+//                     //because no two adjacent houses can be robbed
+//                 //Or, to not rob ith house, in which case the total will be dp[i-1]
+
+//         //We take the max of both of these choices 
+
+//     //TC: O(n)
+//     //SC: O(n)
+
+//     public int rob(int[] nums) {
+//         //dp[i] represents maximum money stolen till house i
+//         //dp[totalHouses - 1] will represent maximum money stolen till end of street
+//         //Therefore, we need a dp array of size totalHouses
+        
+
+//         int totalHouses = nums.length;
+
+//         if(totalHouses == 1) return nums[0];
+
+//         int[] dp = new int[totalHouses];
+
+//         dp[0] = nums[0];
+          
+//         dp[1] = Math.max(nums[0], nums[1]);
+
+//         for(int i = 2; i < totalHouses; i ++){
+//             dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
+//         }
+
+//         return dp[totalHouses - 1];
+
+//     } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Re-solving on 11 Dec 2025:
 
 //     //intuition 1 (DP: Array): 
