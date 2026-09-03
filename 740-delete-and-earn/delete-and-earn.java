@@ -56,28 +56,31 @@ class Solution {
 
     public int deleteAndEarn(int[] nums) {
         
-        HashMap<Integer, Integer> rewardsMap = new HashMap<>();
+        // HashMap<Integer, Integer> rewardsMap = new HashMap<>();
         // Arrays.sort(nums);
         int maxNum = 0;
 
+        for(int n : nums){
+            maxNum = Math.max(maxNum, n);
+        }
+
+        int[] rewardsMap = new int[maxNum + 1];
+
         for(int i = 0; i < nums.length; i ++){
-            if(!rewardsMap.containsKey(nums[i])){
-                rewardsMap.put(nums[i], 0);
-            }
 
-            rewardsMap.put(nums[i], rewardsMap.get(nums[i]) + nums[i]);
+            rewardsMap[nums[i]] += nums[i];
 
-            maxNum = Math.max(maxNum, nums[i]);
         }
 
         int[] dp = new int[maxNum + 1];
 
         //base cases
         dp[0] = 0;
-        dp[1] = rewardsMap.getOrDefault(1, 0);
+        dp[1] = rewardsMap[1];
 
         for(int i = 2; i < maxNum + 1; i ++){
-            dp[i] = Math.max(dp[i-1], dp[i-2] + rewardsMap.getOrDefault(i, 0));
+            // dp[i] = Math.max(dp[i-1], dp[i-2] + rewardsMap.getOrDefault(i, 0));
+            dp[i] = Math.max(dp[i-1], dp[i-2] + rewardsMap[i]);
         }
 
 
