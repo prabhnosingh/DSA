@@ -52,7 +52,7 @@ class Solution {
 
 
     
-
+        //TC: O(maxNum)
 
     public int deleteAndEarn(int[] nums) {
         
