@@ -52,7 +52,8 @@ class Solution {
         
         HashMap<Integer, Integer> rewardsMap = new HashMap<>();
         HashMap<Integer, Integer> calculatedVals = new HashMap<>();
-        Arrays.sort(nums);
+        // Arrays.sort(nums);
+        int maxNum = 0;
 
         for(int i = 0; i < nums.length; i ++){
             if(!rewardsMap.containsKey(nums[i])){
@@ -60,10 +61,12 @@ class Solution {
             }
 
             rewardsMap.put(nums[i], rewardsMap.get(nums[i]) + nums[i]);
+
+            maxNum = Math.max(maxNum, nums[i]);
         }
 
 
-        return maxPoints(nums, nums[nums.length-1], rewardsMap, calculatedVals);        
+        return maxPoints(nums, maxNum, rewardsMap, calculatedVals);        
 
 
     }
@@ -71,26 +74,23 @@ class Solution {
     //for finding max points able to get by considering all the values in nums between 0,n
     private int maxPoints(int[] nums, int n, HashMap<Integer, Integer> rewardsMap,
         HashMap<Integer, Integer> calculatedVals){
+            
 
             // if(!rewardsMap.containsKey(n)) return 0;
+            //the above statement is invalid as we still need to consider the states
+                //of n-1 and n-2 even when n is non existent
 
             if(n == 0) return 0;
             if(n == 1) return rewardsMap.getOrDefault(1, 0);
 
             if(calculatedVals.containsKey(n)) return calculatedVals.get(n);
 
-            int state1 = 0;
-            int state2 = 0;
+            int pick = maxPoints(nums, n - 2, rewardsMap, calculatedVals) + 
+                rewardsMap.getOrDefault(n, 0);
+            int notPick = maxPoints(nums, n - 1, rewardsMap, calculatedVals);
  
 
-            state1 = maxPoints(nums, n - 2, rewardsMap, calculatedVals) + 
-                rewardsMap.getOrDefault(n, 0);
-
-            state2 = maxPoints(nums, n - 1, rewardsMap, calculatedVals);
-
-
-
-            calculatedVals.put(n, Math.max(state1, state2));
+            calculatedVals.put(n, Math.max(pick, notPick));
  
             return  calculatedVals.get(n); 
 
