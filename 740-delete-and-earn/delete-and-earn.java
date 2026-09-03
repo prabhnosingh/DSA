@@ -1,0 +1,98 @@
+class Solution {
+
+    //Solving on 02 Sept 2026
+
+    //intuition 1: Top down recursion approach with memoization
+        //topic: DP
+        //pattern: 1D DP
+        //sub-pattern: Pick/Not pick
+
+    //we observe that the ordering of the numbers does not matter
+
+    //Why DP?
+        //1. We need to find maximum of something
+        //2. We need to make decisions on which numbers to take optimally and each decision
+            //may influence future decisions. So we need to track all the states
+
+    //dp invariant
+        //maxPoints(n) represents maximum points being able to retrieve from an array with 
+            //numbers of value between [0....n]
+
+    //recurrence relation:
+        //option 1: if we choose number n to delete and earn then in our scenario we cannot earn 
+            //anymore from n-1 and n+1, and since n+1 is not in consideration as we only checking 
+            //up and until n for any given state, we only exclude n-1 state
+        //option 2: if we choose to not choose the number n and instead choose n-1
+
+        //therefore, a state of maxPoints(n) depends on max(maxPoints(n-2) + reward (n*freq 
+            //of n), maxPoints(n-1))
+
+        //we also know that the states in recursion can be repeated, therefore, we can cache
+            //them by storing the calculated values in a hashmap
+        
+    //base case:
+        //for maxPoints(0) we will have 0
+        //for maxPoints(1) we will have 1 * freq of 1
+
+    
+    //algorithm:
+        //Since removing 1 occurence of number n will automatically remove n-1 and n+1 
+        //so technically we can remove all the occurences of n and count it towards total points
+            //all at once while making sure we do not choose n-1 and n+1
+        
+        //we can do so by having a hashmap where we store the points (n x freq of n) against 
+            //each n
+        
+
+
+    
+
+
+    public int deleteAndEarn(int[] nums) {
+        
+        HashMap<Integer, Integer> rewardsMap = new HashMap<>();
+        HashMap<Integer, Integer> calculatedVals = new HashMap<>();
+        Arrays.sort(nums);
+
+        for(int i = 0; i < nums.length; i ++){
+            if(!rewardsMap.containsKey(nums[i])){
+                rewardsMap.put(nums[i], 0);
+            }
+
+            rewardsMap.put(nums[i], rewardsMap.get(nums[i]) + nums[i]);
+        }
+
+
+        return maxPoints(nums, nums[nums.length-1], rewardsMap, calculatedVals);        
+
+
+    }
+
+    //for finding max points able to get by considering all the values in nums between 0,n
+    private int maxPoints(int[] nums, int n, HashMap<Integer, Integer> rewardsMap,
+        HashMap<Integer, Integer> calculatedVals){
+
+            // if(!rewardsMap.containsKey(n)) return 0;
+
+            if(n == 0) return 0;
+            if(n == 1) return rewardsMap.getOrDefault(1, 0);
+
+            if(calculatedVals.containsKey(n)) return calculatedVals.get(n);
+
+            int state1 = 0;
+            int state2 = 0;
+ 
+
+            state1 = maxPoints(nums, n - 2, rewardsMap, calculatedVals) + 
+                rewardsMap.getOrDefault(n, 0);
+
+            state2 = maxPoints(nums, n - 1, rewardsMap, calculatedVals);
+
+
+
+            calculatedVals.put(n, Math.max(state1, state2));
+ 
+            return  calculatedVals.get(n); 
+
+    }
+}
