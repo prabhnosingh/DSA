@@ -1,78 +1,120 @@
 class Solution {
 
-    //Re-solving on 16 Feb 2026
-   
-    //intuition 1 (brainstorming): 
-        //dp LIS array -> finding lower / upper bound with binary search 
-        //comparing last entry of LIS array with current traversal entry of nums and updating
-        //last bound found
-        //applying binary search on top of LIS array
+    //Re-solving on 06 Sept 2026
 
-        // replacing the current traversing element with the lower bound in dpLIS array
-        //at last length of dpLIS array is the anwser
-        //lower bound is first greater element than the element being compared
+    //intuition 1: 
+        //Topic: DP
+        //Pattern: 1D DP
+        //Sub-pattern: pick/not pick
+
+        //brute force:
+            //brute force way would be to try all the subsequences and find the lengths which is
+                //roughly O(2^n)
+
         
+        //the problem looks a DP problem because: why DP? 
+            //1. we need to find the max of something
+            //2. final optimal state depends on previous optimal choices of elements
+            //3. the same subproblems are evaluated repeatedly, so memoization can avoid
+                //recomputation
 
-    //intuition 1: DP : 1D DP (LIS)
-        //Have a dpLIS int array to track the length of the increasing sequence
-        //Traverse nums array and find the lower bound (first greater element than current
-            //element) of current element in dpLIS. 
-        //If there is no lower bound of currNum in dpLIS, append currNum to dpLIS at last
-        //At last return length of dpLIS
+        //Recursion with memoization (top-down approach):
+            //if we select a number at index i as the starting of a subsequence then the next 
+                //number that can be choosen depends on the number at index i, so we need to 
+                //track prev index as well
+
+            //dp invariant:
+                //recurse(currIdx, prevIdx) represents length of LIS starting from currIdx, with
+                    //previous index as prevIdx.
+               
+
+            //recurrence relation:
+                //at any index i we have two options:
+                    //option 1: take the number at index i as part of the subsequence given that 
+                        //it is greater than the prevIdx
+                        
+                        //In this case the LIS length increases by 1 and prevIdx updates to
+                            //currIdx and currIdx increases by 1
+
+                        //1 + recurse(currIdx + 1, currIdx)
+
+                    //option 2: do not take the number at index i as part of the subsequence 
+
+                        //In this case the LIS length remains the same (increases by 0) and
+                            //prevIdx remains the same while currIdx increases by 1
+
+                        //0 + recurse(currIdx + 1, prevIdx)
+
+                //we can store the results computed in a hashmap with key as "currIdx + prevIdx"
+                //TLE optimization: We can use a 2D matrix to store the computed values, instead
+                    //of a hashmap
+
+                
+
+            //base case:
+                //recurse(0, -1) will represent LIS length of a subsequence starting from index 0
+                    //will -1 prev index (no previous index)
+                
+                //if(currIdx == nums.length) return 0
+                
+
+                           
+
+            //LEARNING:
+                //"Everything that can affect the future answer must be represented in the
+                    //memoization state"
+
+
+
 
     public int lengthOfLIS(int[] nums) {
+
+        if(nums.length == 1) return 1;
+        int nLen = nums.length;
+
+        // HashMap<String, Integer> computedLens = new HashMap<>();
+        int[][] computedLens = new int[nLen][nLen]; 
+
+        recurse(nums, 0, -1, computedLens);
         
-        int numsLen = nums.length;
-        int[] dpLIS = new int[numsLen];
-        dpLIS[0] = nums[0];
-
-        int dpLISLen = 1;
-        for(int i = 1; i < numsLen; i ++){
-            int currNum = nums[i];
-            // System.out.println(currNum);
-            int lowerBoundIdx = findLowerBoundInDpLIS(dpLIS, currNum, dpLISLen);
-            // System.out.println("lowerBoundIdx :" + lowerBoundIdx);
-            if(lowerBoundIdx == -1){ //no lower bound found
-                //add currNum to dpLIS and increase dpLISLen by 1
-                dpLIS[dpLISLen] = currNum;
-                dpLISLen += 1;
+        int ans = 0;
+        for(int i = 0; i < nLen; i ++){
+            for(int j = 0; j < nLen; j ++){
+                ans = Math.max(ans, computedLens[i][j]);
             }
-            else{
-                dpLIS[lowerBoundIdx] = currNum;
-            }
-
-
         }
-        // for(int i : dpLIS){
-        //     System.out.println(i);
+        
+        return ans + 1;
 
-        // }
-        return dpLISLen;
     }
 
-    private int findLowerBoundInDpLIS(int[] dpLIS, int num, int currDpLISLen){
-        int start = 0; 
-        int end = currDpLISLen-1;
+    private int recurse(int[] nums, int currIdx, int prevIdx, 
+        int[][] computedLens){ 
 
-        int mid = 0;
+        if(currIdx == nums.length) return 0;
+        
+        // String key = currIdx + "" + prevIdx;
 
-        int probableLowerBoundIdx = -1;
-        while(start <= end){
-            mid = (end - start)/2 + start;
+        if(prevIdx != -1 && computedLens[currIdx][prevIdx] != 0) return computedLens[currIdx][prevIdx];
 
-            if(dpLIS[mid] > num){
-                probableLowerBoundIdx = mid;
-                end = mid - 1;
-            }
-            else if(dpLIS[mid] < num){ //lower bound should be strictly greater than num
-                start = mid + 1;
-            }
-            else{
-                return mid;
-            }
+        //pick
+        int pick = 0;
+        if(prevIdx == -1 || nums[currIdx] > nums[prevIdx]){ //only pick when either condition 
+            //passes
+            pick = 1 + recurse(nums, currIdx + 1, currIdx, computedLens);
         }
-        return probableLowerBoundIdx;
-    }   
+
+        //notPick
+        int notPick = 0 + recurse(nums, currIdx + 1, prevIdx, computedLens);
+
+        // computedLens.put(key, Math.max(pick, notPick));
+        if(prevIdx != -1){
+            computedLens[currIdx][prevIdx] = Math.max(pick, notPick);
+
+        } 
+
+        return  Math.max(pick, notPick);
+    }
 
 
 
@@ -99,6 +141,106 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 16 Feb 2026
+   
+//     //intuition 1 (brainstorming): 
+//         //dp LIS array -> finding lower / upper bound with binary search 
+//         //comparing last entry of LIS array with current traversal entry of nums and updating
+//         //last bound found
+//         //applying binary search on top of LIS array
+
+//         // replacing the current traversing element with the lower bound in dpLIS array
+//         //at last length of dpLIS array is the anwser
+//         //lower bound is first greater element than the element being compared
+        
+
+//     //intuition 1: DP : 1D DP (LIS)
+//         //Have a dpLIS int array to track the length of the increasing sequence
+//         //Traverse nums array and find the lower bound (first greater than equal)
+//             //of current element in dpLIS. 
+//         //If there is no lower bound of currNum in dpLIS, append currNum to dpLIS at last and
+//             //increase dpLIS length by 1
+//         //At last return length of dpLIS
+
+//     public int lengthOfLIS(int[] nums) {
+        
+//         int numsLen = nums.length;
+//         int[] dpLIS = new int[numsLen];
+//         dpLIS[0] = nums[0];
+
+//         int dpLISLen = 1;
+//         for(int i = 1; i < numsLen; i ++){
+//             int currNum = nums[i];
+//             // System.out.println(currNum);
+//             int lowerBoundIdx = findLowerBoundInDpLIS(dpLIS, currNum, dpLISLen);
+//             // System.out.println("lowerBoundIdx :" + lowerBoundIdx);
+//             if(lowerBoundIdx == -1){ //no lower bound found
+//                 //add currNum to dpLIS and increase dpLISLen by 1
+//                 dpLIS[dpLISLen] = currNum;
+//                 dpLISLen += 1;
+//             }
+//             else{
+//                 dpLIS[lowerBoundIdx] = currNum;
+//             }
+
+
+//         }
+//         // for(int i : dpLIS){
+//         //     System.out.println(i);
+
+//         // }
+//         return dpLISLen;
+//     }
+
+//     private int findLowerBoundInDpLIS(int[] dpLIS, int num, int currDpLISLen){
+//         int start = 0; 
+//         int end = currDpLISLen-1;
+
+//         int mid = 0;
+
+//         int probableLowerBoundIdx = -1;
+//         while(start <= end){
+//             mid = (end - start)/2 + start;
+
+//             if(dpLIS[mid] > num){
+//                 probableLowerBoundIdx = mid;
+//                 end = mid - 1;
+//             }
+//             else if(dpLIS[mid] < num){ 
+//                 start = mid + 1;
+//             }
+//             else{
+//                 return mid;
+//             }
+//         }
+//         return probableLowerBoundIdx;
+//     }   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Re-solving on 25 Dec 2025:
 
 //     //intuition 2(storing LIS state): (1D: DP: DP on lengths: LIS pattern)
