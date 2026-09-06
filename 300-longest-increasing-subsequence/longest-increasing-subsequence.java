@@ -4,7 +4,7 @@ class Solution {
 
     //intuition 1: 
         //Topic: DP
-        //Pattern: 1D DP
+        //Pattern: 2D DP
         //Sub-pattern: pick/not pick
 
         //brute force:
@@ -24,8 +24,9 @@ class Solution {
                 //track prev index as well
 
             //dp invariant:
-                //recurse(currIdx, prevIdx) represents length of LIS starting from currIdx, with
-                    //previous index as prevIdx.
+                //recurse(currIdx, prevIdx) represents the maximum LIS length obtainable from
+                    //indices currIdx...n-1, where prevIdx is the index of the last element
+                    //already included in the subsequence.
                
 
             //recurrence relation:
@@ -50,20 +51,19 @@ class Solution {
                     //of a hashmap
 
                 
+                //recurse(0, -1) will represent max LIS length obtainable from indices 
+                    //0...n-1 with no previous index
 
             //base case:
-                //recurse(0, -1) will represent LIS length of a subsequence starting from index 0
-                    //will -1 prev index (no previous index)
-                
                 //if(currIdx == nums.length) return 0
-                
-
-                           
+                                           
 
             //LEARNING:
                 //"Everything that can affect the future answer must be represented in the
                     //memoization state"
 
+            //TC: O(n^2) we have currIdx x prevIdx states and each state does O(1) work
+            //SC: O(n^2) memo + O(n) recursion stack = O(n^2)
 
 
 
@@ -73,18 +73,18 @@ class Solution {
         int nLen = nums.length;
 
         // HashMap<String, Integer> computedLens = new HashMap<>();
-        int[][] computedLens = new int[nLen][nLen]; 
+        int[][] computedLens = new int[nLen][nLen + 1]; //nLen + 1 to accommodate -1 prevIdx 
 
-        recurse(nums, 0, -1, computedLens);
+        return recurse(nums, 0, -1, computedLens);
         
-        int ans = 0;
-        for(int i = 0; i < nLen; i ++){
-            for(int j = 0; j < nLen; j ++){
-                ans = Math.max(ans, computedLens[i][j]);
-            }
-        }
+        // int ans = 0;
+        // for(int i = 0; i < nLen; i ++){
+        //     for(int j = 0; j < nLen + 1; j ++){
+        //         ans = Math.max(ans, computedLens[i][j]);
+        //     }
+        // }
         
-        return ans + 1;
+        // return ans;
 
     }
 
@@ -95,7 +95,7 @@ class Solution {
         
         // String key = currIdx + "" + prevIdx;
 
-        if(prevIdx != -1 && computedLens[currIdx][prevIdx] != 0) return computedLens[currIdx][prevIdx];
+        if(computedLens[currIdx][prevIdx + 1] != 0) return computedLens[currIdx][prevIdx + 1];
 
         //pick
         int pick = 0;
@@ -108,10 +108,8 @@ class Solution {
         int notPick = 0 + recurse(nums, currIdx + 1, prevIdx, computedLens);
 
         // computedLens.put(key, Math.max(pick, notPick));
-        if(prevIdx != -1){
-            computedLens[currIdx][prevIdx] = Math.max(pick, notPick);
+        computedLens[currIdx][prevIdx + 1] = Math.max(pick, notPick);
 
-        } 
 
         return  Math.max(pick, notPick);
     }
