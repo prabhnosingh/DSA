@@ -4,7 +4,7 @@ class Solution {
 
 
         
-    //intuition 2: (Tabulation) - 1D
+    //intuition 3: (Tabulation) - 1D
         //Topic: DP
         //Pattern: 1D DP
         //Sub-pattern: pick/not pick
@@ -23,6 +23,8 @@ class Solution {
                 //dp[n-1] signifies the length of longest LIS that ends at index n-1
 
                 //therefore, we need a dp array of size n
+
+                //our answer will be max(all dp[i]) states
                
 
             //recurrence relation:
@@ -57,6 +59,15 @@ class Solution {
                 //prevIdx = idx-1 -> -1
             //3. Copy the recurrence
 
+        
+        //Printing the LIS
+            //Have prevArr integer array of length nLen to store the index of previous 
+                //numbers in the LIS
+            //fill this prevArr everytime you encounter a number larger than the nums[i]
+                //which has more length than prevMax
+            //then at last, backtrack from the index of max of dp[i] and stop at index idx
+                //when prev[idx] = idx
+
 
 
     public int lengthOfLIS(int[] nums) {
@@ -65,21 +76,37 @@ class Solution {
         if(nLen == 1) return 1;
         int[] dp = new int[nLen];
 
+        int[] prevIdx = new int[nLen];
+
         int maxLen = 0;
+        int maxIdx = 0;
 
         dp[0] = 1;
 
         for(int i = 1; i < nLen; i ++){
             int prevMax = 0;
+            prevIdx[i] = i;
             for(int j = i - 1; j >= 0; j --){
-                if(nums[i] > nums[j]){
-                    prevMax = Math.max(prevMax, dp[j]);
+                if(nums[i] > nums[j] && prevMax < dp[j]){
+                    prevMax = dp[j];
+                    prevIdx[i] = j; 
                 }
             }
 
             dp[i] = 1 + prevMax;
             maxLen = Math.max(maxLen, dp[i]);
+            maxIdx = Math.max(maxIdx, i);
         }
+
+        String LIS = "";
+        int idx = maxIdx;
+        while(idx >= 0){
+            LIS += nums[idx] + ", "; 
+            if(prevIdx[idx] == idx) break;
+            idx = prevIdx[idx];
+        }
+
+        System.out.println(LIS);
 
         // return dp[nLen - 1];
         return maxLen;
