@@ -2,15 +2,10 @@ class Solution {
 
     //Re-solving on 06 Sept 2026
 
-    //intuition 1: 
+    //intuition 2: (Tabulation)
         //Topic: DP
         //Pattern: 2D DP
         //Sub-pattern: pick/not pick
-
-        //brute force:
-            //brute force way would be to try all the subsequences and find the lengths which is
-                //roughly O(2^n)
-
         
         //the problem looks a DP problem because: why DP? 
             //1. we need to find the max of something
@@ -18,52 +13,42 @@ class Solution {
             //3. the same subproblems are evaluated repeatedly, so memoization can avoid
                 //recomputation
 
-        //Recursion with memoization (top-down approach):
-            //if we select a number at index i as the starting of a subsequence then the next 
-                //number that can be choosen depends on the number at index i, so we need to 
-                //track prev index as well
+        //Tabulation (bottoms up approach):
+            
 
             //dp invariant:
-                //recurse(currIdx, prevIdx) represents the maximum LIS length obtainable from
-                    //indices currIdx...n-1, where prevIdx is the index of the last element
-                    //already included in the subsequence.
+                //dp[i][j] represents maximum length of LIS possible while choosing from 
+                    //i....n-1 elements with prevIdx as j
+
+                //dp[0][-1] will represent maximum length of LIS possible while choosing
+                    //from 0...n-1 elments with no previous index
+
+                //dp can go until n-1 and n state -> n for adjusting -1
+                //therefore, we need a 2D dp array of size n x n+1
+
                
 
             //recurrence relation:
-                //at any index i we have two options:
-                    //option 1: take the number at index i as part of the subsequence given that 
-                        //it is greater than the prevIdx
-                        
-                        //In this case the LIS length increases by 1 and prevIdx updates to
-                            //currIdx and currIdx increases by 1
-
-                        //1 + recurse(currIdx + 1, currIdx)
-
-                    //option 2: do not take the number at index i as part of the subsequence 
-
-                        //In this case the LIS length remains the same (increases by 0) and
-                            //prevIdx remains the same while currIdx increases by 1
-
-                        //0 + recurse(currIdx + 1, prevIdx)
-
-                //we can store the results computed in a hashmap with key as "currIdx + prevIdx"
-                //TLE optimization: We can use a 2D matrix to store the computed values, instead
-                    //of a hashmap
-
+                //at each state we have two options
+                    //either to pick the number at index i 
+                        //pick = 1 + dp[i+1][i]
+                    
+                    //or to not pick the number at index i
+                        //notPick = 0 + dp[i+1][j]
                 
-                //recurse(0, -1) will represent max LIS length obtainable from indices 
-                    //0...n-1 with no previous index
+                //we take the max of both for current state of dp[i][j]
+        
+                
+                
+            //algorithm:
+                //run two for loops 
+                    //one till n
+                    
 
-            //base case:
-                //if(currIdx == nums.length) return 0
-                                           
+    
 
-            //LEARNING:
-                //"Everything that can affect the future answer must be represented in the
-                    //memoization state"
-
-            //TC: O(n^2) we have currIdx x prevIdx states and each state does O(1) work
-            //SC: O(n^2) memo + O(n) recursion stack = O(n^2)
+            //TC:  
+            //SC:  
 
 
 
@@ -72,47 +57,142 @@ class Solution {
         if(nums.length == 1) return 1;
         int nLen = nums.length;
 
-        // HashMap<String, Integer> computedLens = new HashMap<>();
-        int[][] computedLens = new int[nLen][nLen + 1]; //nLen + 1 to accommodate -1 prevIdx 
+        int[][] dp = new int[nLen+1][nLen+1];
 
-        return recurse(nums, 0, -1, computedLens);
-        
-        // int ans = 0;
-        // for(int i = 0; i < nLen; i ++){
-        //     for(int j = 0; j < nLen + 1; j ++){
-        //         ans = Math.max(ans, computedLens[i][j]);
-        //     }
-        // }
-        
-        // return ans;
+        for(int idx = nLen - 1; idx >= 0; idx --){
+            for(int prevIdx = idx - 1; prevIdx >= - 1; prevIdx --){ 
+                int notPick = 0 + dp[idx + 1][prevIdx + 1];
+                
+                int pick = 0;
+                if(prevIdx == -1 || nums[idx] > nums[prevIdx]){
+                    pick = 1 + dp[idx + 1][idx + 1];
+                }
 
-    }
-
-    private int recurse(int[] nums, int currIdx, int prevIdx, 
-        int[][] computedLens){ 
-
-        if(currIdx == nums.length) return 0;
-        
-        // String key = currIdx + "" + prevIdx;
-
-        if(computedLens[currIdx][prevIdx + 1] != 0) return computedLens[currIdx][prevIdx + 1];
-
-        //pick
-        int pick = 0;
-        if(prevIdx == -1 || nums[currIdx] > nums[prevIdx]){ //only pick when either condition 
-            //passes
-            pick = 1 + recurse(nums, currIdx + 1, currIdx, computedLens);
+                dp[idx][prevIdx + 1] = Math.max(pick, notPick);
+            }
         }
 
-        //notPick
-        int notPick = 0 + recurse(nums, currIdx + 1, prevIdx, computedLens);
+        return dp[0][-1+1];
 
-        // computedLens.put(key, Math.max(pick, notPick));
-        computedLens[currIdx][prevIdx + 1] = Math.max(pick, notPick);
-
-
-        return  Math.max(pick, notPick);
+    
     }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+    // //Re-solving on 06 Sept 2026
+
+    // //intuition 1: Recursion (top down approach) 
+    //     //Topic: DP
+    //     //Pattern: 2D DP
+    //     //Sub-pattern: pick/not pick
+
+    //     //brute force:
+    //         //brute force way would be to try all the subsequences and find the lengths which is
+    //             //roughly TC: O(2^n) SC: O(mn)
+
+        
+    //     //the problem looks a DP problem because: why DP? 
+    //         //1. we need to find the max of something
+    //         //2. final optimal state depends on previous optimal choices of elements
+    //         //3. the same subproblems are evaluated repeatedly, so memoization can avoid
+    //             //recomputation
+
+    //     //Recursion with memoization (top-down approach):
+    //         //if we select a number at index i as the starting of a subsequence then the next 
+    //             //number that can be choosen depends on the number at index i, so we need to 
+    //             //track prev index as well
+
+    //         //dp invariant:
+    //             //recurse(currIdx, prevIdx) represents the maximum LIS length obtainable from
+    //                 //indices currIdx...n-1, where prevIdx is the index of the last element
+    //                 //already included in the subsequence.
+               
+
+    //         //recurrence relation:
+    //             //at any index i we have two options:
+    //                 //option 1: take the number at index i as part of the subsequence given that 
+    //                     //it is greater than the prevIdx
+                        
+    //                     //In this case the LIS length increases by 1 and prevIdx updates to
+    //                         //currIdx and currIdx increases by 1
+
+    //                     //1 + recurse(currIdx + 1, currIdx)
+
+    //                 //option 2: do not take the number at index i as part of the subsequence 
+
+    //                     //In this case the LIS length remains the same (increases by 0) and
+    //                         //prevIdx remains the same while currIdx increases by 1
+
+    //                     //0 + recurse(currIdx + 1, prevIdx)
+
+    //             //we can store the results computed in a hashmap with key as "currIdx + prevIdx"
+    //             //TLE optimization: We can use a 2D matrix to store the computed values, instead
+    //                 //of a hashmap
+
+                
+    //             //recurse(0, -1) will represent max LIS length obtainable from indices 
+    //                 //0...n-1 with no previous index
+
+    //         //base case:
+    //             //if(currIdx == nums.length) return 0
+                                           
+
+    //         //LEARNING:
+    //             //"Everything that can affect the future answer must be represented in the
+    //                 //memoization state"
+
+    //         //TC: O(n^2) we have currIdx x prevIdx states and each state does O(1) work
+    //         //SC: O(n^2) memo + O(n) recursion stack = O(n^2)
+
+
+
+    // public int lengthOfLIS(int[] nums) {
+
+    //     if(nums.length == 1) return 1;
+    //     int nLen = nums.length;
+
+    //     // HashMap<String, Integer> computedLens = new HashMap<>();
+    //     int[][] computedLens = new int[nLen][nLen + 1]; //nLen + 1 to accommodate -1 prevIdx 
+
+    //     return recurse(nums, 0, -1, computedLens);
+        
+    //     // int ans = 0;
+    //     // for(int i = 0; i < nLen; i ++){
+    //     //     for(int j = 0; j < nLen + 1; j ++){
+    //     //         ans = Math.max(ans, computedLens[i][j]);
+    //     //     }
+    //     // }
+        
+    //     // return ans;
+
+    // }
+
+    // private int recurse(int[] nums, int currIdx, int prevIdx, int[][] computedLens){ 
+
+    //     if(currIdx == nums.length) return 0;
+        
+    //     // String key = currIdx + "" + prevIdx;
+
+    //     if(computedLens[currIdx][prevIdx + 1] != 0) return computedLens[currIdx][prevIdx + 1];
+
+    //     //pick
+    //     int pick = 0;
+    //     if(prevIdx == -1 || nums[currIdx] > nums[prevIdx]){ //only pick when either condition 
+    //         //passes
+    //         pick = 1 + recurse(nums, currIdx + 1, currIdx, computedLens);
+    //     }
+
+    //     //notPick
+    //     int notPick = 0 + recurse(nums, currIdx + 1, prevIdx, computedLens);
+
+    //     // computedLens.put(key, Math.max(pick, notPick));
+    //     computedLens[currIdx][prevIdx + 1] = Math.max(pick, notPick);
+
+
+    //     return  Math.max(pick, notPick);
+    // }
 
 
 
