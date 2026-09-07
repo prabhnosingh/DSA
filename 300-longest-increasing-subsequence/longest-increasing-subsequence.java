@@ -4,9 +4,9 @@ class Solution {
 
 
         
-    //intuition 2: (Tabulation) - space optimized
+    //intuition 2: (Tabulation) - 1D
         //Topic: DP
-        //Pattern: 2D DP
+        //Pattern: 1D DP
         //Sub-pattern: pick/not pick
         
         //the problem looks a DP problem because: why DP? 
@@ -19,50 +19,35 @@ class Solution {
             
 
             //dp invariant:
-                //dp[idx][prevIdx + 1] represents maximum LIS length obtainable from indices
-                    //idx....n-1, where prevIdx is the index of the last element already included 
-                    //the subsequence
+                //dp[i] signifies the length of longest LIS that ends at index i
+                //dp[n-1] signifies the length of longest LIS that ends at index n-1
 
-                //dp[0][0] will represent maximum length of LIS possible while choosing
-                    //from 0...n-1 elments with no previous index (as prevIdx will be -1 
-                    //in this case)
-
-                //dp can go until n-1 and n state -> n for adjusting -1
-                //therefore, we need a 2D dp array of size n x n+1
-
+                //therefore, we need a dp array of size n
                
 
             //recurrence relation:
-                //at each state we have two options
-                    //either to pick the number at index i 
-                        //pick = 1 + dp[idx+1][i]
-                    
-                    //or to not pick the number at index i
-                        //notPick = 0 + dp[idx + 1][idx + 1]
-                        //recursion -> recurse(idx + 1, idx)
-                            //and since dp column stores prevIdx + 1
+                //any state dp[i] depends on previous states from i-1 till 0
+                //the previous states can be any between dp[i-1] and dp[0] 
+                //but we will choose the maximum of these in order to maximize 
+                    //the length of LIS 
+
+                //dp[i] = 1 + max(dp[i-1 ..... 0])
                 
-                //we take the max of both for current state of dp[i][j]
 
             //base case:
-                //dp[nLen][anything] = 0; -> means maximum LIS length obtainable from nLen...nLen-1
-                    //with previous number of LIS as anything is 0 as there is no number at 
-                    //nLen
-                //but java automatically intializes the last row as 0
-                
-                
+                //dp[0] = 1
+            
+                               
             //algorithm:
-                //run two for loops 
-                    //one for currIdx from n-1 till 0
-                    //and, another one for prevIdx from n-1 till -1
-                //we run the for loops backward as we need forward states for 
-                    //the current states
+                //run a for loop from 0 to n-1 to fill the dp array
+                //run a nested for loop from i - 1 till 0 to find the max previous state
+                    //from dp array 
                     
 
     
 
-            //TC: O(n^2)
-            //SC: O(n^2)
+            //TC:  O(n^2) 
+            //SC: O(n)
 
 
         // Recursion to Tabulation
@@ -75,32 +60,151 @@ class Solution {
 
 
     public int lengthOfLIS(int[] nums) {
-
-        if(nums.length == 1) return 1;
+        
         int nLen = nums.length;
+        if(nLen == 1) return 1;
+        int[] dp = new int[nLen];
 
-        //we can space optimize as to compute any state dp[idx] we only need next row
-        int[] dpCurr = new int[nLen+1];
-        int[] dpNext = new int[nLen+1];
+        int maxLen = 0;
 
-        for(int idx = nLen - 1; idx >= 0; idx --){
-            for(int prevIdx = idx - 1; prevIdx >= - 1; prevIdx --){ 
-                int notPick = 0 + dpNext[prevIdx + 1];
-                
-                int pick = 0;
-                if(prevIdx == -1 || nums[idx] > nums[prevIdx]){
-                    pick = 1 + dpNext[idx + 1];
+        dp[0] = 1;
+
+        for(int i = 1; i < nLen; i ++){
+            int prevMax = 0;
+            for(int j = i - 1; j >= 0; j --){
+                if(nums[i] > nums[j]){
+                    prevMax = Math.max(prevMax, dp[j]);
                 }
-
-                dpCurr[prevIdx + 1] = Math.max(pick, notPick);
             }
-            dpNext = dpCurr;
+
+            dp[i] = 1 + prevMax;
+            maxLen = Math.max(maxLen, dp[i]);
         }
 
-        return dpCurr[0];
+        // return dp[nLen - 1];
+        return maxLen;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // //Re-solving on 06 Sept 2026
+
+
+        
+    // //intuition 2: (Tabulation) - space optimized
+    //     //Topic: DP
+    //     //Pattern: 2D DP
+    //     //Sub-pattern: pick/not pick
+        
+    //     //the problem looks a DP problem because: why DP? 
+    //         //1. we need to find the max of something
+    //         //2. final optimal state depends on previous optimal choices of elements
+    //         //3. the same subproblems are evaluated repeatedly, so memoization can avoid
+    //             //recomputation
+
+    //     //Tabulation (bottoms up approach):
+            
+
+    //         //dp invariant:
+    //             //dp[idx][prevIdx + 1] represents maximum LIS length obtainable from indices
+    //                 //idx....n-1, where prevIdx is the index of the last element already included 
+    //                 //the subsequence
+
+    //             //dp[0][0] will represent maximum length of LIS possible while choosing
+    //                 //from 0...n-1 elments with no previous index (as prevIdx will be -1 
+    //                 //in this case)
+
+    //             //dp can go until n-1 and n state -> n for adjusting -1
+    //             //therefore, we need a 2D dp array of size n x n+1
+
+               
+
+    //         //recurrence relation:
+    //             //at each state we have two options
+    //                 //either to pick the number at index i 
+    //                     //pick = 1 + dp[idx+1][i]
+                    
+    //                 //or to not pick the number at index i
+    //                     //notPick = 0 + dp[idx + 1][idx + 1]
+    //                     //recursion -> recurse(idx + 1, idx)
+    //                         //and since dp column stores prevIdx + 1
+                
+    //             //we take the max of both for current state of dp[i][j]
+
+    //         //base case:
+    //             //dp[nLen][anything] = 0; -> means maximum LIS length obtainable from nLen...nLen-1
+    //                 //with previous number of LIS as anything is 0 as there is no number at 
+    //                 //nLen
+    //             //but java automatically intializes the last row as 0
+                
+                
+    //         //algorithm:
+    //             //run two for loops 
+    //                 //one for currIdx from n-1 till 0
+    //                 //and, another one for prevIdx from n-1 till -1
+    //             //we run the for loops backward as we need forward states for 
+    //                 //the current states
+                    
 
     
-    }
+
+    //         //TC: O(n^2)
+    //         //SC: O(n x 2)
+
+
+    //     // Recursion to Tabulation
+    //         //1. Base cases dp[n][anything] = 0
+    //         //2. Write changing parameters (idx, prevIdx)    
+    //             //idx = n-1 -> 0
+    //             //prevIdx = idx-1 -> -1
+    //         //3. Copy the recurrence
+
+
+
+    // public int lengthOfLIS(int[] nums) {
+
+    //     if(nums.length == 1) return 1;
+    //     int nLen = nums.length;
+
+    //     //we can space optimize as to compute any state dp[idx] we only need next row
+    //     int[] dpCurr = new int[nLen+1];
+    //     int[] dpNext = new int[nLen+1];
+
+    //     for(int idx = nLen - 1; idx >= 0; idx --){
+    //         for(int prevIdx = idx - 1; prevIdx >= - 1; prevIdx --){ 
+    //             int notPick = 0 + dpNext[prevIdx + 1];
+                
+    //             int pick = 0;
+    //             if(prevIdx == -1 || nums[idx] > nums[prevIdx]){
+    //                 pick = 1 + dpNext[idx + 1];
+    //             }
+
+    //             dpCurr[prevIdx + 1] = Math.max(pick, notPick);
+    //         }
+    //         dpNext = dpCurr;
+    //     }
+
+    //     return dpCurr[0];
+
+    
+    // }
 
 
 
