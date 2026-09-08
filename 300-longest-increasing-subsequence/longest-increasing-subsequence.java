@@ -4,112 +4,91 @@ class Solution {
 
 
         
-    //intuition 3: (Tabulation) - 1D
-        //Topic: DP
-        //Pattern: 1D DP
-        //Sub-pattern: pick/not pick
+    //intuition 4: (Binary search)
+        //Topic: DP / Binary search
+        //Pattern: 1D DP and Binary search
+        //Sub-pattern: pick/not pick and Binary Search Lower bound
         
-        //the problem looks a DP problem because: why DP? 
-            //1. we need to find the max of something
-            //2. final optimal state depends on previous optimal choices of elements
-            //3. the same subproblems are evaluated repeatedly, so memoization can avoid
-                //recomputation
+        
 
-        //Tabulation (bottoms up approach):
-            
+            //Intuition of Binary Search:
+                //We only concern about the length of LIS and not the actual LIS
+                //Therefore, we can have a single array that stores the length of the
+                    //LIS 
+                //We can use that array to find lower bound (first element that is >= target)
+                    //of a number and insert that number at that index, in which case the 
+                    //length of LIS remains the same but if there is no lower bound of 
+                    //the element, i.e., all the other elements are smaller then we insert
+                    //that element at the end of the array and increase the length of LIS 
+                    //by 1  
 
-            //dp invariant:
-                //dp[i] signifies the length of longest LIS that ends at index i
-                //dp[n-1] signifies the length of longest LIS that ends at index n-1
-
-                //therefore, we need a dp array of size n
-
-                //our answer will be max(all dp[i]) states
-               
-
-            //recurrence relation:
-                //any state dp[i] depends on previous states from i-1 till 0
-                //the previous states can be any between dp[i-1] and dp[0] 
-                //but we will choose the maximum of these in order to maximize 
-                    //the length of LIS 
-
-                //dp[i] = 1 + max(dp[i-1 ..... 0])
-                
-
-            //base case:
-                //dp[0] = 1
+                //we can sovle this problem using Binary search: why? 
+                //1. Need of finding lower bound of a target element
+                //2. Contraints of the problem includes "Can you come up with an algorithm 
+                    //that runs in O(n log(n)) time complexity?"            
             
                                
             //algorithm:
-                //run a for loop from 0 to n-1 to fill the dp array
-                //run a nested for loop from i - 1 till 0 to find the max previous state
-                    //from dp array 
-                    
+                //have an array of length nums
+                //have a tracker of maxLISLength
+                //have a binary search function to find the lower bound 
+                //if the found lower bound index is less than the curr maxLISLength, then
+                    //replace the element at that index with the current element or if
+                    //there is no valid lower bound index then insert that element at
+                    //last of the array and increase maxLISLength by 1                 
 
     
 
-            //TC:  O(n^2) 
-            //SC: O(n)
-
-
-        // Recursion to Tabulation
-            //1. Base cases dp[n][anything] = 0
-            //2. Write changing parameters (idx, prevIdx)    
-                //idx = n-1 -> 0
-                //prevIdx = idx-1 -> -1
-            //3. Copy the recurrence
-
-        
-        //Printing the LIS
-            //Have prevArr integer array of length nLen to store the index of previous 
-                //numbers in the LIS
-            //fill this prevArr everytime you encounter a number larger than the nums[i]
-                //which has more length than prevMax
-            //then at last, backtrack from the index of max of dp[i] and stop at index idx
-                //when prev[idx] = idx
-
+            //TC: O(n logn) : n for traversing over nums array and logn for binary search
+                //of lower bound idx
+            //SC: O(n) : for array that stores the numbers
 
 
     public int lengthOfLIS(int[] nums) {
         
         int nLen = nums.length;
         if(nLen == 1) return 1;
-        int[] dp = new int[nLen];
-
-        int[] prevIdx = new int[nLen];
-
-        int maxLen = 0;
-        int maxIdx = 0;
-
-        dp[0] = 1;
+        int[] arr = new int[nLen];
+        arr[0] = nums[0];
+        int maxLISLength = 1;
 
         for(int i = 1; i < nLen; i ++){
-            int prevMax = 0;
-            prevIdx[i] = i;
-            for(int j = i - 1; j >= 0; j --){
-                if(nums[i] > nums[j] && prevMax < dp[j]){
-                    prevMax = dp[j];
-                    prevIdx[i] = j; 
-                }
+            int lbIdx = findLBIdx(arr, nums[i], maxLISLength); 
+            if(lbIdx == -1){
+                arr[maxLISLength] = nums[i];
+                maxLISLength += 1;
+            }
+            else{
+                arr[lbIdx] = nums[i];
             }
 
-            dp[i] = 1 + prevMax;
-            maxLen = Math.max(maxLen, dp[i]);
-            maxIdx = Math.max(maxIdx, i);
         }
 
-        String LIS = "";
-        int idx = maxIdx;
-        while(idx >= 0){
-            LIS += nums[idx] + ", "; 
-            if(prevIdx[idx] == idx) break;
-            idx = prevIdx[idx];
+        return maxLISLength;
+
+        
+    }   
+
+    private int findLBIdx(int[] arr, int target, int maxLISLength){
+
+        int left = 0;
+        int right = maxLISLength;
+        int lbIdx = -1;
+
+        //when right = arr.length - 1 then while (left <= right)
+        //when right = arr.length then while (left < right)
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(arr[mid] >= target){
+                lbIdx = mid; //update lbIdx as probable lower bound might have been found
+                right = mid; //find smaller element that satisfies >= condition while still
+                    //keeping mid as option 
+            }
+            else{
+                left = mid + 1;
+            }
         }
-
-        System.out.println(LIS);
-
-        // return dp[nLen - 1];
-        return maxLen;
+        return lbIdx;
     }
 
 
@@ -130,6 +109,136 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 06 Sept 2026
+
+
+        
+//     //intuition 3: (Tabulation) - 1D
+//         //Topic: DP
+//         //Pattern: 1D DP
+//         //Sub-pattern: pick/not pick
+        
+//         //the problem looks a DP problem because: why DP? 
+//             //1. we need to find the max of something
+//             //2. final optimal state depends on previous optimal choices of elements
+//             //3. the same subproblems are evaluated repeatedly, so memoization can avoid
+//                 //recomputation
+
+//         //Tabulation (bottoms up approach):
+            
+
+//             //dp invariant:
+//                 //dp[i] signifies the length of longest LIS that ends at index i
+//                 //dp[n-1] signifies the length of longest LIS that ends at index n-1
+
+//                 //therefore, we need a dp array of size n
+
+//                 //our answer will be max(all dp[i]) states
+               
+
+//             //recurrence relation:
+//                 //any state dp[i] depends on previous states from i-1 till 0
+//                 //the previous states can be any between dp[i-1] and dp[0] 
+//                 //but we will choose the maximum of these in order to maximize 
+//                     //the length of LIS 
+
+//                 //dp[i] = 1 + max(dp[i-1 ..... 0])
+                
+
+//             //base case:
+//                 //dp[0] = 1
+            
+                               
+//             //algorithm:
+//                 //run a for loop from 0 to n-1 to fill the dp array
+//                 //run a nested for loop from i - 1 till 0 to find the max previous state
+//                     //from dp array 
+                    
+
+    
+
+//             //TC:  O(n^2) 
+//             //SC: O(n)
+
+
+//         // Recursion to Tabulation
+//             //1. Base cases dp[n][anything] = 0
+//             //2. Write changing parameters (idx, prevIdx)    
+//                 //idx = n-1 -> 0
+//                 //prevIdx = idx-1 -> -1
+//             //3. Copy the recurrence
+
+        
+//         //Printing the LIS
+//             //Have prevArr integer array of length nLen to store the index of previous 
+//                 //numbers in the LIS
+//             //fill this prevArr everytime you encounter a number larger than the nums[i]
+//                 //which has more length than prevMax
+//             //then at last, backtrack from the index of max of dp[i] and stop at index idx
+//                 //when prev[idx] = idx
+
+
+
+//     public int lengthOfLIS(int[] nums) {
+        
+//         int nLen = nums.length;
+//         if(nLen == 1) return 1;
+//         int[] dp = new int[nLen];
+
+//         int[] prevIdx = new int[nLen];
+
+//         int maxLen = 0;
+//         int maxIdx = 0;
+
+//         dp[0] = 1;
+
+//         for(int i = 1; i < nLen; i ++){
+//             int prevMax = 0;
+//             prevIdx[i] = i;
+//             for(int j = i - 1; j >= 0; j --){
+//                 if(nums[i] > nums[j] && prevMax < dp[j]){
+//                     prevMax = dp[j];
+//                     prevIdx[i] = j; 
+//                 }
+//             }
+
+//             dp[i] = 1 + prevMax;
+//             maxLen = Math.max(maxLen, dp[i]);
+//             maxIdx = Math.max(maxIdx, i);
+//         }
+
+//         String LIS = "";
+//         int idx = maxIdx;
+//         while(idx >= 0){
+//             LIS += nums[idx] + ", "; 
+//             if(prevIdx[idx] == idx) break;
+//             idx = prevIdx[idx];
+//         }
+
+//         System.out.println(LIS);
+
+//         // return dp[nLen - 1];
+//         return maxLen;
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
     // //Re-solving on 06 Sept 2026
 
