@@ -84,8 +84,6 @@ class Solution {
         int maxLISLen = 1;
 
         for(int i = 1; i < nLen; i ++){
-            dp[i][0] = 1;
-            dp[i][1] = 1; //because nums[i] is always one valid increasing subsequence 
             int prevMax = 0;
             int count = 1; //at least there would be an LIS of length 1 ending at index i
             for(int j = i - 1; j >= 0; j --){
