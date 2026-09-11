@@ -6,26 +6,36 @@ class Solution {
         
     //intuition 4: (Binary search)
         //Topic: DP / Binary search
-        //Pattern: 1D DP and Binary search
-        //Sub-pattern: pick/not pick and Binary Search Lower bound
+        //Pattern: 1D DP / Binary search on a monotonic tails array
+        //Sub-pattern: pick/not pick / Lower bound
         
         
 
             //Intuition of Binary Search:
                 //We only concern about the length of LIS and not the actual LIS
-                //Therefore, we can have a single array that stores the length of the
-                    //LIS 
+                //Therefore, we can have a single array that stores the numbers in increasing
+                    //order for tracking the LIS length 
+
+                //arr[i] stores the smallest possible ending value (tail) of an increasing
+                    //subsequence of length i+1 found so far
+
+                //by making sure that we have the smallest possible ending value in arr
+                    //we make the subsequence more extendable by more future numbers
+                
                 //We can use that array to find lower bound (first element that is >= target)
                     //of a number and insert that number at that index, in which case the 
-                    //length of LIS remains the same but if there is no lower bound of 
-                    //the element, i.e., all the other elements are smaller then we insert
-                    //that element at the end of the array and increase the length of LIS 
-                    //by 1  
+                    //length of LIS remains the same but we get a smaller tail.
+                    
+                    //if there is no lower bound of the element, i.e., all the other elements 
+                        //are smaller then we insert that element at the end of the array 
+                        //and increase the length of LIS by 1  
 
                 //we can sovle this problem using Binary search: why? 
                 //1. Need of finding lower bound of a target element
                 //2. Contraints of the problem includes "Can you come up with an algorithm 
-                    //that runs in O(n log(n)) time complexity?"            
+                    //that runs in O(n log(n)) time complexity?"  
+                //3. Arr remains sorted, allowing lower bound to be found using binary 
+                    //search          
             
                                
             //algorithm:
@@ -72,7 +82,7 @@ class Solution {
     private int findLBIdx(int[] arr, int target, int maxLISLength){
 
         int left = 0;
-        int right = maxLISLength;
+        int right = maxLISLength; //right is exclusive
         int lbIdx = -1;
 
         //when right = arr.length - 1 then while (left <= right)
@@ -82,7 +92,7 @@ class Solution {
             if(arr[mid] >= target){
                 lbIdx = mid; //update lbIdx as probable lower bound might have been found
                 right = mid; //find smaller element that satisfies >= condition while still
-                    //keeping mid as option 
+                    //keeping mid as an option 
             }
             else{
                 left = mid + 1;
