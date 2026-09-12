@@ -112,9 +112,10 @@ class Solution {
             }
 
             nextDp = currDp;
+            currDp = new int[cols];
         }
 
-        return currDp[amount] == Integer.MAX_VALUE ? -1 : currDp[amount];
+        return nextDp[amount] == Integer.MAX_VALUE ? -1 : nextDp[amount];
     }
 
     
