@@ -2,7 +2,7 @@ class Solution {
 
     //Re-solving on 11 Sept 2026:
     
-    //intuition 2: Tabulation
+    //intuition 2: Tabulation - space optimization
 
         //looks like a dp question because:
             //1. we are being asked to find minimum number of coins
@@ -56,6 +56,11 @@ class Solution {
                 //when currAmount < coins[currIdx], that means that it is not possible for the
                     //state dp[currIdx][currAmount] to make the amount, therefore, we fill it with INF
 
+
+            //space optimization:
+                //now we can observe that we only need the next and current row to compute all our states
+                //therefore, we can have current and next 1D rows and update them after each iteration
+
             //TC: O(coins.length x amount)
             //SC: O(coins.length x amount)
 
@@ -66,20 +71,21 @@ class Solution {
         int rows = coins.length + 1;
         int cols = amount + 1;
 
-        int[][] dp = new int[rows][cols];
+        // int[][] dp = new int[rows][cols];
+        int[] currDp = new int[cols];
+        int[] nextDp = new int[cols];
 
         //base cases
         //filling first column as 0 for amount == 0
-        for(int row = 0; row < rows; row ++){
-            int col = 0;
+        // for(int row = 0; row < rows; row ++){
+        //     int col = 0;
 
-            dp[row][col] = 0;
-        }
+        //     dp[row][col] = 0;
+        // }
 
         //filling last row with INF for row == coins.length
         for(int col = 1; col < cols; col ++){
-            int row = rows - 1;
-            dp[row][col] = Integer.MAX_VALUE;
+            nextDp[col] = Integer.MAX_VALUE;
         }
 
         for(int row = rows - 2; row >= 0; row --){
@@ -91,23 +97,143 @@ class Solution {
                 int notPick = Integer.MAX_VALUE;
                 if(currCoin > currAmount){ //not possible to make currAmount, so the only option is to
                     //not pick the currCoin
-                   notPick = dp[row + 1][currAmount];
+                   notPick = nextDp[currAmount];
                 }
                 else{
-                    pick = dp[row][currAmount - currCoin];
-                    notPick = dp[row + 1][currAmount];
+                    pick = currDp[currAmount - currCoin];
+                    notPick = nextDp[currAmount];
                 }
 
 
                 if(pick != Integer.MAX_VALUE) pick += 1;
 
-                dp[row][col] = Math.min(pick, notPick);
+                currDp[col] = Math.min(pick, notPick);
 
             }
+
+            nextDp = currDp;
         }
 
-        return dp[0][amount] == Integer.MAX_VALUE ? -1 : dp[0][amount];
+        return currDp[amount] == Integer.MAX_VALUE ? -1 : currDp[amount];
     }
+
+    
+
+
+
+
+
+
+
+
+    // //Re-solving on 11 Sept 2026:
+    
+    // //intuition 2: Tabulation
+
+    //     //looks like a dp question because:
+    //         //1. we are being asked to find minimum number of coins
+    //         //2. The problem has optimal substructure: the optimal answer for the current state
+    //             //depends on optimal annwers of smaller states.
+    //         //3. The same (currIdx, currAmount) states are reached repeatedly, giving overlapping
+    //             //subproblems
+            
+    //     //Tabulation (bottom-up approach):
+    //         //at any state we have two options, either to choose a coin or not with the 
+    //             //option of same coin being able to be chosen multiple times
+
+    //         //dp invariant:
+    //             //dp[currIdx][currAmount] represents the minimum number of coins needed to 
+    //                 //make currAmount when coins from currIdx...n-1 indices are available
+                
+    //             //dp[0][amount] will represent the minimum number of coins needed to make
+    //                 //amount when coins from 0...n-1 indices are available
+
+    //             //in order to compute dp[0][amount] we need to compute the substates 
+    //                 //like dp[1][amount-x]....dp[n-1][amount-x]
+
+    //                 //therefore, we will run the for loop from right to left for rows and left to 
+    //                     //right for cols
+
+    //             //now dp array can go till dp[n][amount-x], therefore, we need a dp array of
+    //                 //size n+1 x amount + 1
+
+    //         //recurrence relation:
+    //             //if we choose to pick the same coin then we reduce the amount by coin[i], keep 
+    //                 //the index same and add + 1 to the coin total as 1 coin was used. This makes
+    //                 //dp[currIdx][currAmount] state depend on dp[currIdx][currAmount-coins[currIdx]]
+                    
+    //                 // -> dp[currIdx][currAmount] = 1 + dp[currIdx][currAmount - coins[currIdx]]  
+
+    //             //if we choose to not to pick the same coin then we keep the amount same, move
+    //                 //to the next coin and do not add anything to the option
+
+    //                 //in this case the current state will depend on a sub state as per below relation:
+    //                 //-> dp[currIdx][currAmount] = dp[currIdx + 1][currAmount] 
+
+    //         //base case:
+    //             //when the amount is 0 we need 0 coins
+    //                 //therefore, first column of the matrix should be 0 
+                    
+    //             //when the currIdx is coins.length 
+    //                 //in this case we cannot form any amount except 0 as there is no coin to 
+    //                     //choose from
+    //                 //therefore, dp[coins.length] row starting from 1 will be INF
+
+    //             //when currAmount < coins[currIdx], that means that it is not possible for the
+    //                 //state dp[currIdx][currAmount] to make the amount, therefore, we fill it with INF
+
+    //         //TC: O(coins.length x amount)
+    //         //SC: O(coins.length x amount)
+
+
+    // public int coinChange(int[] coins, int amount) {
+        
+    //     if(amount == 0) return 0;
+    //     int rows = coins.length + 1;
+    //     int cols = amount + 1;
+
+    //     int[][] dp = new int[rows][cols];
+
+    //     //base cases
+    //     //filling first column as 0 for amount == 0
+    //     for(int row = 0; row < rows; row ++){
+    //         int col = 0;
+
+    //         dp[row][col] = 0;
+    //     }
+
+    //     //filling last row with INF for row == coins.length
+    //     for(int col = 1; col < cols; col ++){
+    //         int row = rows - 1;
+    //         dp[row][col] = Integer.MAX_VALUE;
+    //     }
+
+    //     for(int row = rows - 2; row >= 0; row --){
+    //         for(int col = 1; col < cols; col ++){
+    //             int currCoin = coins[row];
+    //             int currAmount = col;
+
+    //             int pick = Integer.MAX_VALUE;
+    //             int notPick = Integer.MAX_VALUE;
+    //             if(currCoin > currAmount){ //not possible to make currAmount, so the only option is to
+    //                 //not pick the currCoin
+    //                notPick = dp[row + 1][currAmount];
+    //             }
+    //             else{
+    //                 pick = dp[row][currAmount - currCoin];
+    //                 notPick = dp[row + 1][currAmount];
+    //             }
+
+
+    //             if(pick != Integer.MAX_VALUE) pick += 1;
+
+    //             dp[row][col] = Math.min(pick, notPick);
+
+    //         }
+    //     }
+
+    //     return dp[0][amount] == Integer.MAX_VALUE ? -1 : dp[0][amount];
+    // }
 
     
 
