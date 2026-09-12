@@ -62,7 +62,7 @@ class Solution {
                 //therefore, we can have current and next 1D rows and update them after each iteration
 
             //TC: O(coins.length x amount)
-            //SC: O(coins.length x amount)
+            //SC: O(2 x amount) = O(amount)
 
 
     public int coinChange(int[] coins, int amount) {
