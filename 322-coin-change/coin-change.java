@@ -67,7 +67,7 @@ class Solution {
         int option2 = recurse(coins, currIdx + 1, currAmount, dp);
 
         dp[currIdx][currAmount] = Math.min(option1 == Integer.MAX_VALUE ? Integer.MAX_VALUE : option1 + 1, 
-            option2 == Integer.MAX_VALUE ? Integer.MAX_VALUE : option2);
+            option2);
         return dp[currIdx][currAmount];
 
     }
