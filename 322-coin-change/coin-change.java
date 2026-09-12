@@ -56,9 +56,8 @@ class Solution {
                 //when currAmount < coins[currIdx], that means that it is not possible for the
                     //state dp[currIdx][currAmount] to make the amount, therefore, we fill it with INF
 
-            //TC: exponential O(2^(coins.length + amount)/minCoin) without memoization
-            //TC: O(coins.length x amount) with memoization
-            //SC: O(coins.length x amount) for dp array + O(coins.length) for recursive stack
+            //TC: O(coins.length x amount)
+            //SC: O(coins.length x amount)
 
 
     public int coinChange(int[] coins, int amount) {
