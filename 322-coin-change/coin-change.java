@@ -1,55 +1,75 @@
 class Solution {
 
-    //Re-solving on 16 Feb 2026:
+    //Re-solving on 11 Sept 2026:
     
-    //intuition 2: DP : 0/1 Knapsack : 1D DP
-        //we run two for loops, outer loop iterates over each coin and the internal loop runs
-            //from amount = coin till 'amount'. 
-        //This way we only consider the amount that is greater than equal to each coin.
-        //Now for each amount we choose the current coin which leaves total amount to be 
-            //amount - coin. This corresponds to dp[amount-coin] state.
-        
-        //base case: 
-            //initialize the dp array with amount + 1 as this is the maximum possile upper
-                //limit for number of coins (it will be 'amount' number of coins in case of
-                //coin = 1)
-        
-        //recurrence relation:  
-            //We will choose state from the minimum of picking the current coin and not
-                // picking the current coin.
-            //pick : 1 + dp[i-currCoin]
-            //notPick : dp[i] //amount unchanged
-            //dp[i] = Math.min(dp[i], dp[i-currCoin]
+    //intuition 1: 
+
+        //looks like a dp question because:
+            //1. we are being asked to find minimum number of coins
+            //2. previous decisions on whether to choose a coin or not need to be optimal
+                //in order to achieve overall optimal result
+            
+        //recursion (top-down approach):
+            //at any state we have two options, either to choose a coin or not with the 
+                //option of same coin being able to be chosen multiple times
+
+            //dp invariant:
+                //recurse(idx, x) represents the minimum number of coins needed to 
+                    //make x amount when coins from idx...n-1 indices are available
+
+            //recurrence relation:
+                //if we choose to pick the same coin then we reduce the amount by coin[i], keep 
+                    //the index same and add  +1 to the coin total as 1 coin was used
+
+                //if we choose to not to pick the same coin then we keep the amount same, move
+                    //to the next coin and do not add anything to the option
+
+            //base case:
+                //when the amount becomes <= 0 
+                    //return 0; -> there are 0 coins needed for this amount
+                //or, when the currIdx becomes equal to coins.length
+                    //return 0; -> ther is no coin left to choose from n...n-1
+
+            //memoization:
+                //we can store the states to avoid repeated calcualtion in a dp array
+                //dp[currIdx][currAmount] will denote, min number of coins needed to form
+                    //currAmount using coins from currIdx...n-1
+                //currIdx can be at max coins.length and currAmount can be at max amount
+                //therefore, we need a dp array of size coins.length + 1 x amount + 1
 
 
     public int coinChange(int[] coins, int amount) {
-        //dp[i] will represent minimum number of coins required to form i amount 
-        //dp[amount] will represent minimum number of coins required to form 'amount' amount
-        //therefore we will need a dp array of size amount + 1
+        
+        if(amount == 0) return 0;
+        int[][] dp = new int[coins.length + 1][amount + 1];
 
-        int[] dp = new int[amount + 1];
+        // for currIdx = coins.length we cannot form any amount but 
 
-        //base case
-        for(int i = 0; i < amount + 1; i ++){
-            dp[i] = amount + 1;
-        }
-        dp[0] = 0; //0 coins required to form 0 amount
+        int numCoins = recurse(coins, 0, amount, dp);
+       
+        return numCoins == Integer.MAX_VALUE ? -1 : numCoins;
+    }
+
+    private int recurse(int[] coins, int currIdx, int currAmount, int[][] dp){
+        if(currAmount == 0) return 0; //valid solution
+
+        if(currAmount < 0) return Integer.MAX_VALUE; //not a valid solution
+        if(currIdx == coins.length) return Integer.MAX_VALUE; //last of array is reached without currAmount
+            //reaching 0, therefore, it is impossible to have a valid solution
+
+        if(dp[currIdx][currAmount] != 0) return dp[currIdx][currAmount];
 
 
-        for(int currCoin : coins){
-            for(int j = currCoin; j < amount + 1; j ++){
-                int pick = amount + 1;
-                if(dp[j - currCoin] != amount + 1){
-                    pick = 1 + dp[j - currCoin];
-                }
-                int notPick = dp[j];
-                
-                dp[j] = Math.min(pick, notPick);
+        //picking the same coin
+        int option1 = recurse(coins, currIdx, currAmount - coins[currIdx], dp);
+        
+        //picking the next coin    
+        int option2 = recurse(coins, currIdx + 1, currAmount, dp);
 
-            }
-        }
+        dp[currIdx][currAmount] = Math.min(option1 == Integer.MAX_VALUE ? Integer.MAX_VALUE : option1 + 1, 
+            option2 == Integer.MAX_VALUE ? Integer.MAX_VALUE : option2);
+        return dp[currIdx][currAmount];
 
-        return dp[amount] == amount + 1 ? -1 : dp[amount];
     }
 
 
@@ -58,7 +78,89 @@ class Solution {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 16 Feb 2026:
+    
+//     //intuition 2: DP : 0/1 Knapsack : 1D DP
+//         //we run two for loops, outer loop iterates over each coin and the internal loop runs
+//             //from amount = coin till 'amount'. 
+//         //This way we only consider the amount that is greater than equal to each coin.
+//         //Now for each amount we choose the current coin which leaves total amount to be 
+//             //amount - coin. This corresponds to dp[amount-coin] state.
+        
+//         //base case: 
+//             //initialize the dp array with amount + 1 as this is the maximum possile upper
+//                 //limit for number of coins (it will be 'amount' number of coins in case of
+//                 //coin = 1)
+        
+//         //recurrence relation:  
+//             //We will choose state from the minimum of picking the current coin and not
+//                 // picking the current coin.
+//             //pick : 1 + dp[i-currCoin]
+//             //notPick : dp[i] //amount unchanged
+//             //dp[i] = Math.min(dp[i], dp[i-currCoin]
+
+
+//     public int coinChange(int[] coins, int amount) {
+//         //dp[i] will represent minimum number of coins required to form i amount 
+//         //dp[amount] will represent minimum number of coins required to form 'amount' amount
+//         //therefore we will need a dp array of size amount + 1
+
+//         int[] dp = new int[amount + 1];
+
+//         //base case
+//         for(int i = 0; i < amount + 1; i ++){
+//             dp[i] = amount + 1;
+//         }
+//         dp[0] = 0; //0 coins required to form 0 amount
+
+
+//         for(int currCoin : coins){
+//             for(int j = currCoin; j < amount + 1; j ++){
+//                 int pick = amount + 1;
+//                 if(dp[j - currCoin] != amount + 1){
+//                     pick = 1 + dp[j - currCoin];
+//                 }
+//                 int notPick = dp[j];
+                
+//                 dp[j] = Math.min(pick, notPick);
+
+//             }
+//         }
+
+//         return dp[amount] == amount + 1 ? -1 : dp[amount];
+//     }
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////
 
     // //Re-solving on 16 Feb 2026:
     
