@@ -2,7 +2,7 @@ class Solution {
 
     //Re-solving on 11 Sept 2026:
     
-    //intuition 1: 
+    //intuition 2: Tabulation
 
         //looks like a dp question because:
             //1. we are being asked to find minimum number of coins
@@ -11,41 +11,50 @@ class Solution {
             //3. The same (currIdx, currAmount) states are reached repeatedly, giving overlapping
                 //subproblems
             
-        //recursion (top-down approach):
+        //Tabulation (bottom-up approach):
             //at any state we have two options, either to choose a coin or not with the 
                 //option of same coin being able to be chosen multiple times
 
             //dp invariant:
-                //recurse(idx, x) represents the minimum number of coins needed to 
-                    //make x amount when coins from idx...n-1 indices are available
+                //dp[currIdx][currAmount] represents the minimum number of coins needed to 
+                    //make currAmount when coins from currIdx...n-1 indices are available
+                
+                //dp[0][amount] will represent the minimum number of coins needed to make
+                    //amount when coins from 0...n-1 indices are available
+
+                //in order to compute dp[0][amount] we need to compute the substates 
+                    //like dp[1][amount-x]....dp[n-1][amount-x]
+
+                    //therefore, we will run the for loop from right to left for rows and left to 
+                        //right for cols
+
+                //now dp array can go till dp[n][amount-x], therefore, we need a dp array of
+                    //size n+1 x amount + 1
 
             //recurrence relation:
                 //if we choose to pick the same coin then we reduce the amount by coin[i], keep 
-                    //the index same and add  +1 to the coin total as 1 coin was used
+                    //the index same and add + 1 to the coin total as 1 coin was used. This makes
+                    //dp[currIdx][currAmount] state depend on dp[currIdx][currAmount-coins[currIdx]]
+                    
+                    // -> dp[currIdx][currAmount] = 1 + dp[currIdx][currAmount - coins[currIdx]]  
 
                 //if we choose to not to pick the same coin then we keep the amount same, move
                     //to the next coin and do not add anything to the option
 
-            //base case:
-                //when the amount becomes == 0 
-                    //return 0; -> the amount has been successfully formed and now 0 coins are 
-                        //needed
-                //or, when the amount becomes < 0 
-                    //return Integer.MAX_VALUE; -> the amount is impossible to form, so we would
-                        //need infinite coins
-                //or, when the currIdx becomes equal to coins.length
-                    //return Integer.MAX_VALUE; -> the currIdx reached last of coins array without
-                        //ever forming the amount, hence the amount is impossible to form, so we
-                        //would need infinite coins
-                    //or "this recursive path cannot form the amount, so return Integer.MAX_VALUE as a 
-                        //sentinel for an impossible state"
+                    //in this case the current state will depend on a sub state as per below relation:
+                    //-> dp[currIdx][currAmount] = dp[currIdx + 1][currAmount] 
 
-            //memoization:
-                //we can store the states to avoid repeated calcualtion in a dp array
-                //dp[currIdx][currAmount] will denote, min number of coins needed to form
-                    //currAmount using coins from currIdx...n-1
-                //currIdx can be at max coins.length and currAmount can be at max amount
-                //therefore, we need a dp array of size coins.length + 1 x amount + 1
+            //base case:
+                //when the amount is 0 we need 0 coins
+                    //therefore, first column of the matrix should be 0 
+                    
+                //when the currIdx is coins.length 
+                    //in this case we cannot form any amount except 0 as there is no coin to 
+                        //choose from
+                    //therefore, dp[coins.length] row starting from 1 will be INF
+
+                //when currAmount < coins[currIdx], that means that it is not possible for the
+                    //state dp[currIdx][currAmount] to make the amount, therefore, we fill it with INF
 
             //TC: exponential O(2^(coins.length + amount)/minCoin) without memoization
             //TC: O(coins.length x amount) with memoization
@@ -55,36 +64,149 @@ class Solution {
     public int coinChange(int[] coins, int amount) {
         
         if(amount == 0) return 0;
-        int[][] dp = new int[coins.length + 1][amount + 1];
+        int rows = coins.length + 1;
+        int cols = amount + 1;
 
-        // for currIdx = coins.length we cannot form any amount but 
+        int[][] dp = new int[rows][cols];
 
-        int numCoins = recurse(coins, 0, amount, dp);
-       
-        return numCoins == Integer.MAX_VALUE ? -1 : numCoins;
+        //base cases
+        //filling first column as 0 for amount == 0
+        for(int row = 0; row < rows; row ++){
+            int col = 0;
+
+            dp[row][col] = 0;
+        }
+
+        //filling last row with INF for row == coins.length
+        for(int col = 1; col < cols; col ++){
+            int row = rows - 1;
+            dp[row][col] = Integer.MAX_VALUE;
+        }
+
+        for(int row = rows - 2; row >= 0; row --){
+            for(int col = 1; col < cols; col ++){
+                int currCoin = coins[row];
+                int currAmount = col;
+
+                int pick = Integer.MAX_VALUE;
+                int notPick = Integer.MAX_VALUE;
+                if(currCoin > currAmount){ //not possible to make currAmount, so the only option is to
+                    //not pick the currCoin
+                   notPick = dp[row + 1][currAmount];
+                }
+                else{
+                    pick = dp[row][currAmount - currCoin];
+                    notPick = dp[row + 1][currAmount];
+                }
+
+
+                if(pick != Integer.MAX_VALUE) pick += 1;
+
+                dp[row][col] = Math.min(pick, notPick);
+
+            }
+        }
+
+        return dp[0][amount] == Integer.MAX_VALUE ? -1 : dp[0][amount];
     }
 
-    private int recurse(int[] coins, int currIdx, int currAmount, int[][] dp){
-        if(currAmount == 0) return 0; //valid solution
-
-        if(currAmount < 0) return Integer.MAX_VALUE; //not a valid solution
-        if(currIdx == coins.length) return Integer.MAX_VALUE; //last of array is reached without currAmount
-            //reaching 0, therefore, it is impossible to have a valid solution
-
-        if(dp[currIdx][currAmount] != 0) return dp[currIdx][currAmount];
+    
 
 
-        //picking the same coin
-        int option1 = recurse(coins, currIdx, currAmount - coins[currIdx], dp);
+
+
+
+
+
+
+
+
+
+
+
+    // //intuition 1: 
+
+    //     //looks like a dp question because:
+    //         //1. we are being asked to find minimum number of coins
+    //         //2. The problem has optimal substructure: the optimal answer for the current state
+    //             //depends on optimal annwers of smaller states.
+    //         //3. The same (currIdx, currAmount) states are reached repeatedly, giving overlapping
+    //             //subproblems
+            
+    //     //recursion (top-down approach):
+    //         //at any state we have two options, either to choose a coin or not with the 
+    //             //option of same coin being able to be chosen multiple times
+
+    //         //dp invariant:
+    //             //recurse(idx, x) represents the minimum number of coins needed to 
+    //                 //make x amount when coins from idx...n-1 indices are available
+
+    //         //recurrence relation:
+    //             //if we choose to pick the same coin then we reduce the amount by coin[i], keep 
+    //                 //the index same and add  +1 to the coin total as 1 coin was used
+
+    //             //if we choose to not to pick the same coin then we keep the amount same, move
+    //                 //to the next coin and do not add anything to the option
+
+    //         //base case:
+    //             //when the amount becomes == 0 
+    //                 //return 0; -> the amount has been successfully formed and now 0 coins are 
+    //                     //needed
+    //             //or, when the amount becomes < 0 
+    //                 //return Integer.MAX_VALUE; -> the amount is impossible to form, so we would
+    //                     //need infinite coins
+    //             //or, when the currIdx becomes equal to coins.length
+    //                 //return Integer.MAX_VALUE; -> the currIdx reached last of coins array without
+    //                     //ever forming the amount, hence the amount is impossible to form, so we
+    //                     //would need infinite coins
+    //                 //or "this recursive path cannot form the amount, so return Integer.MAX_VALUE as a 
+    //                     //sentinel for an impossible state"
+
+    //         //memoization:
+    //             //we can store the states to avoid repeated calcualtion in a dp array
+    //             //dp[currIdx][currAmount] will denote, min number of coins needed to form
+    //                 //currAmount using coins from currIdx...n-1
+    //             //currIdx can be at max coins.length and currAmount can be at max amount
+    //             //therefore, we need a dp array of size coins.length + 1 x amount + 1
+
+    //         //TC: exponential O(2^(coins.length + amount)/minCoin) without memoization
+    //         //TC: O(coins.length x amount) with memoization
+    //         //SC: O(coins.length x amount) for dp array + O(coins.length) for recursive stack
+
+
+    // public int coinChange(int[] coins, int amount) {
         
-        //not picking the current coin denomination
-        int option2 = recurse(coins, currIdx + 1, currAmount, dp);
+    //     if(amount == 0) return 0;
+    //     int[][] dp = new int[coins.length + 1][amount + 1];
 
-        dp[currIdx][currAmount] = Math.min(option1 == Integer.MAX_VALUE ? Integer.MAX_VALUE : option1 + 1, 
-            option2);
-        return dp[currIdx][currAmount];
+    //     // for currIdx = coins.length we cannot form any amount but 
 
-    }
+    //     int numCoins = recurse(coins, 0, amount, dp);
+       
+    //     return numCoins == Integer.MAX_VALUE ? -1 : numCoins;
+    // }
+
+    // private int recurse(int[] coins, int currIdx, int currAmount, int[][] dp){
+    //     if(currAmount == 0) return 0; //valid solution
+
+    //     if(currAmount < 0) return Integer.MAX_VALUE; //not a valid solution
+    //     if(currIdx == coins.length) return Integer.MAX_VALUE; //last of array is reached without currAmount
+    //         //reaching 0, therefore, it is impossible to have a valid solution
+
+    //     if(dp[currIdx][currAmount] != 0) return dp[currIdx][currAmount];
+
+
+    //     //picking the same coin
+    //     int option1 = recurse(coins, currIdx, currAmount - coins[currIdx], dp);
+        
+    //     //not picking the current coin denomination
+    //     int option2 = recurse(coins, currIdx + 1, currAmount, dp);
+
+    //     dp[currIdx][currAmount] = Math.min(option1 == Integer.MAX_VALUE ? Integer.MAX_VALUE : option1 + 1, 
+    //         option2);
+    //     return dp[currIdx][currAmount];
+
+    // }
 
 
 
