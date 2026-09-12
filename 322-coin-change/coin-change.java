@@ -6,8 +6,10 @@ class Solution {
 
         //looks like a dp question because:
             //1. we are being asked to find minimum number of coins
-            //2. previous decisions on whether to choose a coin or not need to be optimal
-                //in order to achieve overall optimal result
+            //2. The problem has optimal substructure: the optimal answer for the current state
+                //depends on optimal annwers of smaller states.
+            //3. The same (currIdx, currAmount) states are reached repeatedly, giving overlapping
+                //subproblems
             
         //recursion (top-down approach):
             //at any state we have two options, either to choose a coin or not with the 
@@ -25,10 +27,18 @@ class Solution {
                     //to the next coin and do not add anything to the option
 
             //base case:
-                //when the amount becomes <= 0 
-                    //return 0; -> there are 0 coins needed for this amount
+                //when the amount becomes == 0 
+                    //return 0; -> the amount has been successfully formed and now 0 coins are 
+                        //needed
+                //or, when the amount becomes < 0 
+                    //return Integer.MAX_VALUE; -> the amount is impossible to form, so we would
+                        //need infinite coins
                 //or, when the currIdx becomes equal to coins.length
-                    //return 0; -> ther is no coin left to choose from n...n-1
+                    //return Integer.MAX_VALUE; -> the currIdx reached last of coins array without
+                        //ever forming the amount, hence the amount is impossible to form, so we
+                        //would need infinite coins
+                    //or "this recursive path cannot form the amount, so return Integer.MAX_VALUE as a 
+                        //sentinel for an impossible state"
 
             //memoization:
                 //we can store the states to avoid repeated calcualtion in a dp array
@@ -36,6 +46,10 @@ class Solution {
                     //currAmount using coins from currIdx...n-1
                 //currIdx can be at max coins.length and currAmount can be at max amount
                 //therefore, we need a dp array of size coins.length + 1 x amount + 1
+
+            //TC: exponential O(2^(coins.length + amount)/minCoin) without memoization
+            //TC: O(coins.length x amount) with memoization
+            //SC: O(coins.length x amount) for dp array + O(coins.length) for recursive stack
 
 
     public int coinChange(int[] coins, int amount) {
@@ -63,7 +77,7 @@ class Solution {
         //picking the same coin
         int option1 = recurse(coins, currIdx, currAmount - coins[currIdx], dp);
         
-        //picking the next coin    
+        //not picking the current coin denomination
         int option2 = recurse(coins, currIdx + 1, currAmount, dp);
 
         dp[currIdx][currAmount] = Math.min(option1 == Integer.MAX_VALUE ? Integer.MAX_VALUE : option1 + 1, 
