@@ -1,55 +1,63 @@
 class Solution {
 
-    //Re-solving on 20 Feb 2026:   
     
-    //intuition 1: 2D Dp : DP on grids
-        //To reach bottom right we have two immediate paths (up and left)
+    //Re-solving on 13 Sept 2026
+
+    //intuition 1: Brute force recursion + memoization 
+        //to reach bottom right from m-1, n-2 cell we would only have 1 way
+        //to reach bottom right from m-2, n-1 cell we would only have 1 way
+
+        //for any cell i, j we can only reach it from i-1, j or i, j-1 as we can only move
+            //right or down
         
-        //Base case:
-            //To reach bottom right from any cell in last row, there is only 1 path
-                //Therefore dp[m-1] will be all 1's
-            //To reach bottom right from any cell in last col, there is only path
-                //Therefore dp[n-1] will be all 1's
+        //so we depend on previous 2 states
+
+        //this looks like a dp problem because:
+            //1. Each state depends on previous 2 sub states
+            //2. The same states would be repeatedly reached, giving overlapping sub-problems 
         
-        //Recurrence relation:
-            //for any cell at non-boundary i,j we have two choices, either to move
-                //down or to move right
-            //Therefore, for i,j we can get total unique paths to reach bottom right
-                //by adding down (dp[i+1][j]) and right dp[i][j+1]
-            
+
+        //dp invariant:
+            //recurse(i, j) reperesents number of unique paths to reach bottom right from i, j while
+                //only moving right and down
+        
+        //recurrence relation:
+            //each state i, j depends on previous two states recurse(i-1, j) and recurse(i, j-1)
+
+            //current state recurse(i, j) would be equal to the sum of recurse(i-1, j) and recurse(i, j-1)
+
+            //recurse(0,0) will give us our answer
+
+
+        //base case:
+            //there is only 1 way to reach bottom right from all the cells in bottom row (m-1)
+            //there is only 1 way to reach bottom right from all the cells in last column (n-1)
+
+            //there is only 1 way to reach bottomr right from m-1, n-1, i.e. by staying there only
+
+        //memoization:
+            //we can store the results of states in a 2D dp array 
+
+        
+
+        //
 
     public int uniquePaths(int m, int n) {
-        //dp[i][j] represents number of unique paths possible to reach bottom right
-            //from i,j
-        //dp[0][0] will represent number of unique paths possible to reach bottom right
-            //from 0,0
-        //Therefore, we need a 2D DP matrix of size m x n 
-
 
         int[][] dp = new int[m][n];
-        //base cases
-        //filling last row
-        for(int j = 0; j < n; j ++){
-            int i = m-1;
+        return recurse(m, n, 0, 0, dp);
+        
+    }
 
-            dp[i][j] = 1;
-        }
+    public int recurse(int m, int n, int i, int j, int[][] dp){
+        if(i == m || j == n) return 0;
 
-        //filling last col
-        for(int i = 0; i < m; i ++){
-            int j = n-1;
-            
-            dp[i][j] = 1;
-        }
+        if(i == m-1 || j == n-1) return 1;
 
+        if(dp[i][j] != 0) return dp[i][j];
 
-        for(int i = m-2; i >= 0; i --){
-            for(int j = n-2; j >= 0; j --){
-                dp[i][j] = dp[i+1][j] + dp[i][j+1];
-            }
-        }
-
-        return dp[0][0];
+        dp[i][j] = recurse(m, n, i + 1, j, dp) + recurse(m, n, i, j + 1, dp); 
+        return dp[i][j];
 
     }
 
@@ -71,7 +79,7 @@ class Solution {
 
 
 
-
+ 
 
 
 
@@ -80,6 +88,86 @@ class Solution {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Re-solving on 20 Feb 2026:   
+    
+//     //intuition 1: 2D Dp : DP on grids
+//         //To reach bottom right we have two immediate paths (up and left)
+        
+//         //Base case:
+//             //To reach bottom right from any cell in last row, there is only 1 path
+//                 //Therefore dp[m-1] will be all 1's
+//             //To reach bottom right from any cell in last col, there is only path
+//                 //Therefore dp[n-1] will be all 1's
+        
+//         //Recurrence relation:
+//             //for any cell at non-boundary i,j we have two choices, either to move
+//                 //down or to move right
+//             //Therefore, for i,j we can get total unique paths to reach bottom right
+//                 //by adding down (dp[i+1][j]) and right dp[i][j+1]
+            
+
+//     public int uniquePaths(int m, int n) {
+//         //dp[i][j] represents number of unique paths possible to reach bottom right
+//             //from i,j while only travelling down and right
+//         //dp[0][0] will represent number of unique paths possible to reach bottom right
+//             //from 0,0 while only travelling down and right
+//         //Therefore, we need a 2D DP matrix of size m x n 
+
+
+//         int[][] dp = new int[m][n];
+//         //base cases
+//         //filling last row
+//         for(int j = 0; j < n; j ++){
+//             int i = m-1;
+
+//             dp[i][j] = 1;
+//         }
+
+//         //filling last col
+//         for(int i = 0; i < m; i ++){
+//             int j = n-1;
+            
+//             dp[i][j] = 1;
+//         }
+
+
+//         for(int i = m-2; i >= 0; i --){
+//             for(int j = n-2; j >= 0; j --){
+//                 dp[i][j] = dp[i+1][j] + dp[i][j+1];
+//             }
+//         }
+
+//         return dp[0][0];
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Re-solving on 13 Dec 2025:
 
 //     //intuition 2: DP on Grid problem - 2D Dp - Bottom up Tabulation solution (solution at 0,0)
