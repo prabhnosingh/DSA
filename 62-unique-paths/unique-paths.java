@@ -52,12 +52,9 @@ class Solution {
     
         
 
-        //TC: O(2^m+n) without memoization
-        //TC: O(m . n) with memoization
+        //TC: O(m . n) 
 
-        //SC: O(m+n) without memoization (recursive stack) 
-            //as one recursive path can contain approx. m-1 downs and n-1 rights before terminating 
-        //SC: O(m . n) with memoization
+        //SC: O(m . n) 
 
     public int uniquePaths(int m, int n) {
 
