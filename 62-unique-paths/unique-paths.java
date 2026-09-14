@@ -3,7 +3,7 @@ class Solution {
     
     //Re-solving on 13 Sept 2026
 
-    //intuition 1: Brute force recursion + memoization 
+    //intuition 2: Tabulation
         //to reach bottom right from m-1, n-2 cell we would only have 1 way
         //to reach bottom right from m-2, n-1 cell we would only have 1 way
 
@@ -13,53 +13,151 @@ class Solution {
         //so we depend on previous 2 states
 
         //this looks like a dp problem because:
-            //1. Each state depends on previous 2 sub states
+            //1. The problem can be divided into smaller subproblems
             //2. The same states would be repeatedly reached, giving overlapping sub-problems 
         
+        //topic: DP
+        //pattern: 2D DP
+        //sub-pattern: Counting paths
 
         //dp invariant:
-            //recurse(i, j) reperesents number of unique paths to reach bottom right from i, j while
+            //d[i][j] reperesents number of unique paths to reach bottom right from i, j while
                 //only moving right and down
+
+            //therefore, dp[0][0] will prepresent number of unique paths to reach bottom right from
+                //0,0 while only moving right and down
+
+            //the max coordintates that we might need in dp array is m-1, n-1. Therefore, we need a 2D
+                //dp array of size m x n 
         
         //recurrence relation:
-            //each state i, j depends on previous two states recurse(i-1, j) and recurse(i, j-1)
+            //each state i, j depends on next two states dp[i+1][j] and dp[i][j+1]
 
-            //current state recurse(i, j) would be equal to the sum of recurse(i-1, j) and recurse(i, j-1)
+            //current state dp[i][j] would be equal to the sum of dp[i+1][j] and dp[i][j+1]
 
-            //recurse(0,0) will give us our answer
+            //dp[0][0] will give us our answer
 
 
         //base case:
             //there is only 1 way to reach bottom right from all the cells in bottom row (m-1)
+                //fill dp[m-1][x] row with 1
             //there is only 1 way to reach bottom right from all the cells in last column (n-1)
+                //fill dp[x][n-1] col with 1
+            //there is only 1 way to reach bottom right from m-1, n-1, i.e. by staying there only  
+                //dp[m-1][n-1] = 0
 
-            //there is only 1 way to reach bottomr right from m-1, n-1, i.e. by staying there only
-
-        //memoization:
-            //we can store the results of states in a 2D dp array 
-
+        //algorithm:
+            //to compute any state dp[i][j] we need two forward states, therefore we would run two
+                //for loops in backward direction
+    
         
 
-        //
+        //TC: O(2^m+n) without memoization
+        //TC: O(m . n) with memoization
+
+        //SC: O(m+n) without memoization (recursive stack) 
+            //as one recursive path can contain approx. m-1 downs and n-1 rights before terminating 
+        //SC: O(m . n) with memoization
 
     public int uniquePaths(int m, int n) {
 
         int[][] dp = new int[m][n];
-        return recurse(m, n, 0, 0, dp);
+
+        //base cases:
+        for(int row = 0; row < m; row ++){
+            int col = n - 1;
+
+            dp[row][col] = 1;
+        }
+
+        for(int col = 0; col < n; col ++){
+            int row = m - 1;
+            dp[row][col] = 1;
+        }
+
+        for(int row = m - 2; row >= 0; row --){
+            for(int col = n - 2; col >= 0; col --){
+                dp[row][col] = dp[row + 1][col] + dp[row][col + 1];
+            }
+        }
+
+        return dp[0][0];
+
+
+    }
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 13 Sept 2026
+
+    // //intuition 1: Brute force recursion (top down) + memoization 
+    //     //to reach bottom right from m-1, n-2 cell we would only have 1 way
+    //     //to reach bottom right from m-2, n-1 cell we would only have 1 way
+
+    //     //for any cell i, j we can only reach it from i-1, j or i, j-1 as we can only move
+    //         //right or down
         
-    }
+    //     //so we depend on previous 2 states
 
-    public int recurse(int m, int n, int i, int j, int[][] dp){
-        if(i == m || j == n) return 0;
+    //     //this looks like a dp problem because:
+    //         //1. The problem can be divided into smaller subproblems
+    //         //2. The same states would be repeatedly reached, giving overlapping sub-problems 
+        
+    //     //topic: DP
+    //     //pattern: 2D DP
+    //     //sub-pattern: Counting paths
 
-        if(i == m-1 || j == n-1) return 1;
+    //     //dp invariant:
+    //         //recurse(i, j) reperesents number of unique paths to reach bottom right from i, j while
+    //             //only moving right and down
+        
+    //     //recurrence relation:
+    //         //each state i, j depends on next two states recurse(i+1, j) and recurse(i, j+1)
 
-        if(dp[i][j] != 0) return dp[i][j];
+    //         //current state recurse(i, j) would be equal to the sum of recurse(i+1, j) and recurse(i, j+1)
 
-        dp[i][j] = recurse(m, n, i + 1, j, dp) + recurse(m, n, i, j + 1, dp); 
-        return dp[i][j];
+    //         //recurse(0,0) will give us our answer
 
-    }
+
+    //     //base case:
+    //         //there is only 1 way to reach bottom right from all the cells in bottom row (m-1)
+    //         //there is only 1 way to reach bottom right from all the cells in last column (n-1)
+
+    //         //there is only 1 way to reach bottomr right from m-1, n-1, i.e. by staying there only
+
+    //     //memoization:
+    //         //we can store the results of states in a 2D dp array 
+
+        
+
+    //     //TC: O(2^m+n) without memoization
+    //     //TC: O(m . n) with memoization
+
+    //     //SC: O(m+n) without memoization (recursive stack) 
+    //         //as one recursive path can contain approx. m-1 downs and n-1 rights before terminating 
+    //     //SC: O(m . n) with memoization
+
+    // public int uniquePaths(int m, int n) {
+
+    //     int[][] dp = new int[m][n];
+    //     return recurse(m, n, 0, 0, dp);
+        
+    // }
+
+    // public int recurse(int m, int n, int i, int j, int[][] dp){
+    //     if(i == m || j == n) return 0;
+
+    //     if(i == m-1 || j == n-1) return 1;
+
+    //     if(dp[i][j] != 0) return dp[i][j];
+
+    //     dp[i][j] = recurse(m, n, i + 1, j, dp) + recurse(m, n, i, j + 1, dp); 
+    //     return dp[i][j];
+
+    // }
 
 
 
