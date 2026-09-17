@@ -1,66 +1,103 @@
 class Solution {    
-    // If in the problem it was allowed 4-direction movement (no revisits in the same path), it would have become a 
-        //"graph path-finding" problem with visited-state tracking, which is solved with backtracking / DFS.
+   
 
-        //Re-solving on 20 Feb 2026:
+    //Re-solving on 16 Sept 2026
+
+    //intuition 1: Recursion + memoization (top - down)
+        //From any cell (i,j), we can only move down or right, i.e., (i+1, j) and (i, j+1)
+        //Therefore, the number of paths from (i,j) to the bottom right is the sum of paths obtainable
+            //for both of these (bottom and right) cells
         
-        //intuition 1: 2D DP: DP on grids
-            //For any cell we have two choices to take, either go down or go right
-            //Therefore, to find number of uinque paths for any cell i,j we can add the unique
-                //paths from bottom (i+1, j) and right cell (i, j+1)
-            
-            //Base case:
-                //From last row there is only 1 way to reach bottom right, given that there is no
-                    //obstacle in the cells on the right of the cell.
-                //From last col there is only 1 way to reach bottom right, given that there is no
-                    //obstacle in the cells on the below of the cell.
-
-                //Any obstacle cell should be skipped while calculating DP and only marked as 0
-            
-            //Recurrence relation:
-                //dp[i][j] = dp[i+1][j] + dp[i][j+1], given that i, j is not an obstacle cell
-
+        //this looks like a DP problem. Why?
+            //1. There are subproblems that when calculated, will help us solve the bigger problems
+            //2. A single cell (state) can be reached from multiple paths, so we can store the results
+                //of already computed states to use in other state's calculation
         
+        //Topic: DP
+        //Pattern: 2D Grid DP
+        //Sub-pattern: 
+
+        //Recursion (top-down memoization)
+            //dp invariant:
+                //recurse(i, j) will represent number of unique paths to reach bottom right from i, j
+                    //while only travelling down and right plus avoiding any obstacles
+                
+                //recurse(0, 0) will represent number of unique paths to reach bottom right from 0, 0
+
+           
+            //recurrence relation:
+                //each state recurse(i, j) can be computed by calculating recurse(i+1, j) and 
+                    //recurse (i, j+1)
+
+                //recurse(i, j) = recurse(i+1, j) + recurse(i, j+1)
+            
+            //base cases:
+                //ifgrid[m-1][n-1] == 1 return 0
+                //recurse(m-1, n-1) = 1 as there is only 1 way to reach bottom right from m-1, n-1, i.e. by 
+                    //staying there
+
+                //if while recursing any state i,j we encounter an obstacle (grid(i, j)) then we simply return 0 
+                
+                //also for any cell in m-1 row and n-1 col we need to check whether there is any obstacle from  
+                    //current cell till bottom right, if yes, return 0, else return 1 as there is only 1 way to    
+                    //reach bottom right from m-1 row and n-1 col
+
+            //memoization:
+                //each state is dependent on two coordinates (i, j). Therefore, we can have a 2D int matrix
+                    //to store the computed values of states
+
+            //TC without memoization: exponential (2^(m+n))
+            //TC with memoization: m x n
+
+            //SC without memoization: m + n (recursive stack)
+            //SC with memoization: m x n + (m + n)
+
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        //dp[i][j] represents number of unique paths to reach bottom right form i,j while
-            //only travelling right and down with no obstacles in the paths
-        //dp[0][0] will represent number of unique paths to reach bottom right from 0,0
-            //while only travelling right and down with no obstacles in the paths
-        //Therefore, we need a 2D dp matrix of size rows x cols
-        
         int rows = obstacleGrid.length;
         int cols = obstacleGrid[0].length;
 
+
+        if(obstacleGrid[rows-1][cols-1] == 1) return 0;
+
         int[][] dp = new int[rows][cols];
 
-        if(obstacleGrid[0][0] == 1 || obstacleGrid[rows-1][cols-1] == 1) return 0;
-        
-        //base cases
-        dp[rows-1][cols-1] = 1; //there is 1 way to reach bottom right from bottom right
-            //i.e. by staying where you already are
-        //filling last row
-        for(int j = cols - 2; j >= 0; j --){
-            int i = rows - 1;
-            if(obstacleGrid[i][j] == 1) break;
-            dp[i][j] = 1;
-        }
-
-        //filling last col
-        for(int i = rows - 2; i >= 0; i --){
-            int j = cols - 1;
-            if(obstacleGrid[i][j] == 1) break;
-            dp[i][j] = 1;
-        }
-
-        for(int i = rows - 2; i >= 0; i --){
-            for(int j = cols - 2; j >= 0; j --){
-                if(obstacleGrid[i][j] == 1) continue;
-                dp[i][j] = dp[i+1][j] + dp[i][j+1];
+        for(int i = 0; i < rows; i ++){
+            for(int j = 0; j < cols; j ++){
+                dp[i][j] = -1;
             }
         }
 
-        return dp[0][0];
+        dp[rows-1][cols-1] = 1;
 
+        return recurse(obstacleGrid, 0, 0, dp);
+
+    }
+
+    private int recurse(int[][] obstacleGrid, int i, int j, int[][] dp){
+        
+        if(i == obstacleGrid.length || j == obstacleGrid[0].length) return 0;
+
+        if(obstacleGrid[i][j] == 1) return 0;
+
+        // if(i == obstacleGrid.length - 1) {
+        //     for(int col = j; col < obstacleGrid[0].length; col ++){
+        //         if(obstacleGrid[i][col] == 1) return 0;    
+        //     }
+        //     return 1;
+        // }
+        // if(j == obstacleGrid[0].length - 1) {
+        //     for(int row = i; row < obstacleGrid.length; row ++){
+        //         if(obstacleGrid[row][j] == 1) return 0;
+        //     }
+        //     return 1;
+        // }
+        // if(i == obstacleGrid.length || j == obstacleGrid[0].length) return 0;
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        dp[i][j] = recurse(obstacleGrid, i + 1, j, dp) + recurse(obstacleGrid, i, j + 1, dp);
+
+        return dp[i][j];
     }
 
 
@@ -85,6 +122,92 @@ class Solution {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // If in the problem it was allowed 4-direction movement (no revisits in the same path), it would have become a 
+//         //"graph path-finding" problem with visited-state tracking, which is solved with backtracking / DFS.
+
+//         //Re-solving on 20 Feb 2026:
+        
+//         //intuition 1: 2D DP: DP on grids
+//             //For any cell we have two choices to take, either go down or go right
+//             //Therefore, to find number of uinque paths for any cell i,j we can add the unique
+//                 //paths from bottom (i+1, j) and right cell (i, j+1)
+            
+//             //Base case:
+//                 //From last row there is only 1 way to reach bottom right, given that there is no
+//                     //obstacle in the cells on the right of the cell.
+//                 //From last col there is only 1 way to reach bottom right, given that there is no
+//                     //obstacle in the cells on the below of the cell.
+
+//                 //Any obstacle cell should be skipped while calculating DP and only marked as 0
+            
+//             //Recurrence relation:
+//                 //dp[i][j] = dp[i+1][j] + dp[i][j+1], given that i, j is not an obstacle cell
+
+        
+//     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+//         //dp[i][j] represents number of unique paths to reach bottom right form i,j while
+//             //only travelling right and down with no obstacles in the paths
+//         //dp[0][0] will represent number of unique paths to reach bottom right from 0,0
+//             //while only travelling right and down with no obstacles in the paths
+//         //Therefore, we need a 2D dp matrix of size rows x cols
+        
+//         int rows = obstacleGrid.length;
+//         int cols = obstacleGrid[0].length;
+
+//         int[][] dp = new int[rows][cols];
+
+//         if(obstacleGrid[0][0] == 1 || obstacleGrid[rows-1][cols-1] == 1) return 0;
+        
+//         //base cases
+//         dp[rows-1][cols-1] = 1; //there is 1 way to reach bottom right from bottom right
+//             //i.e. by staying where you already are
+//         //filling last row
+//         for(int j = cols - 2; j >= 0; j --){
+//             int i = rows - 1;
+//             if(obstacleGrid[i][j] == 1) break;
+//             dp[i][j] = 1;
+//         }
+
+//         //filling last col
+//         for(int i = rows - 2; i >= 0; i --){
+//             int j = cols - 1;
+//             if(obstacleGrid[i][j] == 1) break;
+//             dp[i][j] = 1;
+//         }
+
+//         for(int i = rows - 2; i >= 0; i --){
+//             for(int j = cols - 2; j >= 0; j --){
+//                 if(obstacleGrid[i][j] == 1) continue;
+//                 dp[i][j] = dp[i+1][j] + dp[i][j+1];
+//             }
+//         }
+
+//         return dp[0][0];
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     // If in the problem it was allowed 4-direction movement (no revisits in the same path), it would have become a 
 //         //"graph path-finding" problem with visited-state tracking, which is solved with backtracking / DFS.
 
