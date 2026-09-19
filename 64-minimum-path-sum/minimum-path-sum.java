@@ -7,7 +7,8 @@ class Solution {
             //that one
         
         //this looks like a dp problem. why dp?
-            //1. each state can be computed from 2 sub-states
+            //1. optimal substructure: The minimum path from i, j can be constructed using the optimal
+                //answers of 2 sub-states
             //2. each state can have multiple overlapping paths, resulting in repeated computation
                 //of paths. Therefore, storing paths from each cell is helpful to avoid re-computation
 
@@ -33,10 +34,12 @@ class Solution {
 
 
         //TC without memoization: O(2^ (m + n))
+            //At each state we potentially make two recursive calls, and a path has approximately
+                //m + n decisions
         //TC with memoization: O(m x n)
 
-        //SC without memoization: O(log (m + n)) for recursive stack
-        //SC with memoization: O(m x n) + O(log (m + n))
+        //SC without memoization: O(m + n) for recursive stack
+        //SC with memoization: O(m x n) + O(m + n)
 
     public int minPathSum(int[][] grid) {
 
