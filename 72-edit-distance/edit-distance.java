@@ -11,7 +11,6 @@ class Solution {
         //or, if it is not matching, then we have three choices either to insert a matching character,
             //delete the unmatching character or replace the unmatching character. This will count
             //towards 1 operation
-        //if the word1 length is more than equal to word2, then we would not consider inserting any character
 
         //we can solve this problem recursively by exploring all the states 
 
@@ -22,8 +21,8 @@ class Solution {
                 //on redundant computations
 
         //dp invariant:
-            //recurse(i, j) represents number of minimum operations required to convert word1 till i index to
-                //word2 till j index
+            //recurse(i, j) represents number of minimum operations required to convert word1[0...i] into
+                //word2[0...j]
 
             //recurse(word1.length - 1, word2.length - 1) will represent our answer
 
@@ -39,7 +38,7 @@ class Solution {
 
                     //insert a character in the word1 at index i and shift the rest of the elements towards
                         //left and now since technically we inserted a matching character at index i + 1, 
-                        //and now i+1th character in word1 matches with jth characte in word2, we only move
+                        //and now i+1th character in word1 matches with jth character in word2, we only move
                         //j to j-1 while keeping i at same place as ((i + 1) - 1) = i
                         //-> 1 + recurse(i, j - 1)
 
@@ -48,14 +47,12 @@ class Solution {
                         //but just omitting it from the calcualtions while j staying the same
                         //-> 1 + recurse(i - 1, j) 
 
+                        //remove i from consideration -> i decreases -> j stays the same
+
                     //replace a character in the word1 at index i with character in the word2 at index j
                     //this will lead to a scenario where both the characters match and eventually i and j 
                         //both move by 1
                         //-> 1 + recurse(i - 1, j - 1)
-
-                    
-                
-
 
 
         //base cases:
@@ -71,10 +68,27 @@ class Solution {
                 //number of states for each state
         
 
+        //m = word1.length()
+        //n = word2.length()
 
-        //TC: 3 ^ (max(word1.length, word2.length))
-            //at any state there are three possibilities 
-        //SC: max(word1.length, word2.length)
+        //TC without memoization: 3 ^ (m + n))
+            //A branch may reduce :
+                //Insert: n by 1
+                //Delete: m by 1
+                //Replace: both by 1
+
+            //The recursion depth can therefore reach approximately to m + n and each mismatch can generate
+                //upto 3 branche3s
+
+            
+        //TC with momoization: O(m x n)
+            //there are m x n states and each gets calculated at most once
+
+
+        //SC without memoization: O(m + n)
+            //Because insert/delete can reduce only one dimension (m or n) at a time, the worst-case recursive
+                //stack can reach O(m + n) only
+        //SC with memoization: O(m + n) + O(m x n)
 
     public int minDistance(String word1, String word2) {
         
@@ -91,7 +105,7 @@ class Solution {
     }
 
     private int recurse(String word1, String word2, int i, int j, int[][] dp){
-        if(i == -1 && j == -1) return 0;
+        // if(i == -1 && j == -1) return 0;
 
         if(i == -1) return j + 1;
         if(j == -1) return i + 1;
