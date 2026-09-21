@@ -1,80 +1,121 @@
 class Solution {
-    //Solving on 13 Dec 2025:
 
-    //intuition 1 (DP: Bottom Up Tabulation soultion: DP on strings / DP on prefixes of string pattern)
-        //Recurrence relation: While traversing the dp matrix we have two scenarios
-            //1. The current character of word1 matches with the current character of word2. In this case
-                //we do not need to perform any operation, therefore we take the minimum ops required if 
-                //these matching characters were not added. => dp[i-1][j-1]
+
+    //Re-solving on 20 Sept 2026:
+    
+    //intuition 1: Recursion (top-down + memoization)
+        //we can start from the first character and go till the last of each string and see if
+            //any particular character is matching 
+        //if it is matching, then we just proceed to the next character. This does not count towards
+            //any operation
+        //or, if it is not matching, then we have three choices either to insert a matching character,
+            //delete the unmatching character or replace the unmatching character. This will count
+            //towards 1 operation
+        //if the word1 length is more than equal to word2, then we would not consider inserting any character
+
+        //we can solve this problem recursively by exploring all the states 
+
+        //this looks like a dp problem. why dp?
+            //1. optimal substructure: we need to find minimum number of operations and the big problem
+                //depends on optimal sub-problem choices
+            //2. we can encounter repeated states and storing the values for these will help us cut down
+                //on redundant computations
+
+        //dp invariant:
+            //recurse(i, j) represents number of minimum operations required to convert word1 till i index to
+                //word2 till j index
+
+            //recurse(word1.length - 1, word2.length - 1) will represent our answer
+
+        //recurrence relation:
+            //each state will depend on probable three sub-states based on whether current character of 
+                //both strings are equal or not
+            //if both the characters are equal:
+                //then there is no operation involved and both the pointers move by 1 position
+                    //recurse(i, j) = recurse(i-1, j-1)
             
-            //2. The current character of word1 does not match with the current character of word2. In this 
-                //case we have three choices: Replace, Delete, or Insert
-                
-                //i. Replace: If we replace the current char from word1 to match with the current char from
-                    //word2, we use 1 operation. Now in the state after replacing, we have both our current 
-                    //chars matching. Therefore, we can take the min ops required if these matching chars
-                    //were not added. => 1 + dp[i-1][j-1]
-                
-                //ii. Delete: If we delete the current mismatching char from word1, we will be left with word1 
-                    //shorter by 1 length. This leaves us with the subproblem of finding min ops required
-                    //to convert word1 of new length(i-1) to word2 of unchanged length. => 1 + dp[i-1][j]
+            //if both the characters are not equal:
+                //then there we need to perform either of the below three operation and take the minimum:
+
+                    //insert a character in the word1 at index i and shift the rest of the elements towards
+                        //left and now since technically we inserted a matching character at index i + 1, 
+                        //and now i+1th character in word1 matches with jth characte in word2, we only move
+                        //j to j-1 while keeping i at same place as ((i + 1) - 1) = i
+                        //-> 1 + recurse(i, j - 1)
+
+                    //delete a character in the word1 at index i and shift the charaters towards right.
+                    //this will lead to i to move to i - 1 as we are not literally deleting the character
+                        //but just omitting it from the calcualtions while j staying the same
+                        //-> 1 + recurse(i - 1, j) 
+
+                    //replace a character in the word1 at index i with character in the word2 at index j
+                    //this will lead to a scenario where both the characters match and eventually i and j 
+                        //both move by 1
+                        //-> 1 + recurse(i - 1, j - 1)
+
                     
-                //iii. Insert: We insert a matching character similar to current char of word2 into word1. Now
-                    //we have our word1 length increased by 1 while word2 remains as it is. Now we also have 
-                    //current chars of both the strings matching. This leaves us with the subproblem of finding
-                    //min ops required to covert word1 to word2 if these matching chars were not added. 
-                    //=> 1 + dp[i+1 - 1][j-1] => 1 + dp[i][j-1]  
+                
 
-                //we take the operation which is minimum 
 
-        //Base cases:
-            //Given an empty word1 and empty word2 strings, we need 0 ops to match them
-            //Given an empty word1 and non-empty word2 strings, we need word2.length() ops to convert word1 to
-                //word2, i.e. by inserting word2 chars into word1.
-            //Given an empty word2 and non-empty word1 strings, we need word1.length() ops to convert word1 to 
-                //word2, i.e. by deleting all word1 chars.
+
+        //base cases:
+            //if i and j both becomes -1 we return 0 as there are 0 operations required to make empty strings
+                //equal
+            //if either of them becomes -1 then we retun the non-zero value as to make a non-empty string equal 
+                //to empty string we just need to delete the characters of non-empty string and to make an empty
+                //string equal to a non-empty string, we just need to add the characters of non-empty string 
+
+
+        //memoization: 
+            //as each state depends on two variables, i and j we can have a 2D integer array to store the 
+                //number of states for each state
+        
+
+
+        //TC: 3 ^ (max(word1.length, word2.length))
+            //at any state there are three possibilities 
+        //SC: max(word1.length, word2.length)
 
     public int minDistance(String word1, String word2) {
-        //dp[i][j] represents minimum ops required to convert word1 till length i to word2 till length j
-        //dp[word1.length()][word2.length()] will represent minimum ops required to convert word1 to word2
-        //Therefore, we need a 2D matrix of size word1.length()+1 x word2.length()+1
-
-        int rows = word1.length() + 1;
-        int cols = word2.length() + 1;
-
+        
+        int rows = word1.length();
+        int cols = word2.length();
         int[][] dp = new int[rows][cols];
-
-        //Base cases:
-
-        dp[0][0] = 0;
-
-        //filling first row (word1 is empty string)
-        for(int j = 1; j < cols; j ++){
-            dp[0][j] = j;
-        }
-
-        //filling first col (word2 is empty string)
-        for(int i = 1; i < rows; i ++){
-            dp[i][0] = i;
-        }
-
-
-        for(int i = 1; i < rows; i ++){
-            for(int j = 1; j < cols; j ++){
-                if(word1.charAt(i-1) == word2.charAt(j-1)) dp[i][j] = dp[i-1][j-1];
-                else{
-                    int replaceOp = 1 + dp[i-1][j-1];
-                    int deleteOp = 1 + dp[i-1][j];
-                    int insertOp = 1 + dp[i][j-1];
-
-                    dp[i][j] = Math.min(Math.min(replaceOp, deleteOp), insertOp);
-                }
+        for(int i = 0; i < rows; i ++){
+            for(int j = 0; j < cols; j ++){
+                dp[i][j] = -1;
             }
         }
 
-        return dp[rows-1][cols-1];
-        
+        return recurse(word1, word2, rows - 1, cols - 1, dp);
+    }
 
+    private int recurse(String word1, String word2, int i, int j, int[][] dp){
+        if(i == -1 && j == -1) return 0;
+
+        if(i == -1) return j + 1;
+        if(j == -1) return i + 1;
+
+        if(dp[i][j] != -1) return dp[i][j];  
+ 
+        char ch1 = word1.charAt(i);
+        char ch2 = word2.charAt(j);
+
+        if(ch1 == ch2){
+           dp[i][j] = recurse(word1, word2, i - 1, j - 1, dp);
+           return dp[i][j];
+        }
+        //insert
+        int op1 = 1 + recurse(word1, word2, i, j - 1, dp);
+
+        //delete
+        int op2 = 1 + recurse(word1, word2, i - 1, j, dp);
+
+        //replace
+        int op3 = 1 + recurse(word1, word2, i - 1, j - 1, dp);
+
+        dp[i][j] = Math.min(op1, Math.min(op2, op3));
+        return dp[i][j];
     }
 
 
@@ -108,6 +149,115 @@ class Solution {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 13 Dec 2025:
+
+//     //intuition 1 (DP: Bottom Up Tabulation soultion: DP on strings / DP on prefixes of string pattern)
+//         //Recurrence relation: While traversing the dp matrix we have two scenarios
+//             //1. The current character of word1 matches with the current character of word2. In this case
+//                 //we do not need to perform any operation, therefore we take the minimum ops required if 
+//                 //these matching characters were not added. => dp[i-1][j-1]
+            
+//             //2. The current character of word1 does not match with the current character of word2. In this 
+//                 //case we have three choices: Replace, Delete, or Insert
+                
+//                 //i. Replace: If we replace the current char from word1 to match with the current char from
+//                     //word2, we use 1 operation. Now in the state after replacing, we have both our current 
+//                     //chars matching. Therefore, we can take the min ops required if these matching chars
+//                     //were not added. => 1 + dp[i-1][j-1]
+                
+//                 //ii. Delete: If we delete the current mismatching char from word1, we will be left with word1 
+//                     //shorter by 1 length. This leaves us with the subproblem of finding min ops required
+//                     //to convert word1 of new length(i-1) to word2 of unchanged length. => 1 + dp[i-1][j]
+                    
+//                 //iii. Insert: We insert a matching character similar to current char of word2 into word1. Now
+//                     //we have our word1 length increased by 1 while word2 remains as it is. Now we also have 
+//                     //current chars of both the strings matching. This leaves us with the subproblem of finding
+//                     //min ops required to covert word1 to word2 if these matching chars were not added. 
+//                     //=> 1 + dp[i+1 - 1][j-1] => 1 + dp[i][j-1]  
+
+//                 //we take the operation which is minimum 
+
+//         //Base cases:
+//             //Given an empty word1 and empty word2 strings, we need 0 ops to match them
+//             //Given an empty word1 and non-empty word2 strings, we need word2.length() ops to convert word1 to
+//                 //word2, i.e. by inserting word2 chars into word1.
+//             //Given an empty word2 and non-empty word1 strings, we need word1.length() ops to convert word1 to 
+//                 //word2, i.e. by deleting all word1 chars.
+
+//     public int minDistance(String word1, String word2) {
+//         //dp[i][j] represents minimum ops required to convert word1 till length i to word2 till length j
+//         //dp[word1.length()][word2.length()] will represent minimum ops required to convert word1 to word2
+//         //Therefore, we need a 2D matrix of size word1.length()+1 x word2.length()+1
+
+//         int rows = word1.length() + 1;
+//         int cols = word2.length() + 1;
+
+//         int[][] dp = new int[rows][cols];
+
+//         //Base cases:
+
+//         dp[0][0] = 0;
+
+//         //filling first row (word1 is empty string)
+//         for(int j = 1; j < cols; j ++){
+//             dp[0][j] = j;
+//         }
+
+//         //filling first col (word2 is empty string)
+//         for(int i = 1; i < rows; i ++){
+//             dp[i][0] = i;
+//         }
+
+
+//         for(int i = 1; i < rows; i ++){
+//             for(int j = 1; j < cols; j ++){
+//                 if(word1.charAt(i-1) == word2.charAt(j-1)) dp[i][j] = dp[i-1][j-1];
+//                 else{
+//                     int replaceOp = 1 + dp[i-1][j-1];
+//                     int deleteOp = 1 + dp[i-1][j];
+//                     int insertOp = 1 + dp[i][j-1];
+
+//                     dp[i][j] = Math.min(Math.min(replaceOp, deleteOp), insertOp);
+//                 }
+//             }
+//         }
+
+//         return dp[rows-1][cols-1];
+        
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Solving on 13 Dec 2025:
 
 //     //intuition 1 (DP: Bottom up tabulation: DP on String/DP on prefixes of string pattern)
