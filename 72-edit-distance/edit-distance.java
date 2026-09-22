@@ -3,7 +3,7 @@ class Solution {
 
     //Re-solving on 20 Sept 2026:
     
-    //intuition 1: Recursion (top-down + memoization)
+    //intuition 2: Tabulation (bottom-up)
         //we can start from the first character and go till the last of each string and see if
             //any particular character is matching 
         //if it is matching, then we just proceed to the next character. This does not count towards
@@ -21,53 +21,57 @@ class Solution {
                 //on redundant computations
 
         //dp invariant:
-            //recurse(i, j) represents number of minimum operations required to convert word1[0...i] into
-                //word2[0...j]
+            //dp[i][j] represents number of minimum operations required to convert word1 of length i into
+                //word2 of length j
 
-            //recurse(word1.length - 1, word2.length - 1) will represent our answer
+            //dp[word1.length][word2.length] will represent our answer
+
+            //therefore, we need a 2D integer array of size word1.length + 1 x word2.length + 2
 
         //recurrence relation:
             //each state will depend on probable three sub-states based on whether current character of 
                 //both strings are equal or not
             //if both the characters are equal:
                 //then there is no operation involved and both the pointers move by 1 position
-                    //recurse(i, j) = recurse(i-1, j-1)
+                    //dp[i][j] = dp[i-1][j-1]
             
             //if both the characters are not equal:
                 //then there we need to perform either of the below three operation and take the minimum:
 
                     //insert a character in the word1 at index i and shift the rest of the elements towards
-                        //left and now since technically we inserted a matching character at index i + 1, 
+                        //left and now sice technically we inserted a matching character at index i + 1, 
                         //and now i+1th character in word1 matches with jth character in word2, we only move
                         //j to j-1 while keeping i at same place as ((i + 1) - 1) = i
-                        //-> 1 + recurse(i, j - 1)
+                        //-> 1 + dp[i][j - 1]
 
                     //delete a character in the word1 at index i and shift the charaters towards right.
                     //this will lead to i to move to i - 1 as we are not literally deleting the character
                         //but just omitting it from the calcualtions while j staying the same
-                        //-> 1 + recurse(i - 1, j) 
+                        //-> 1 + dp[i - 1][j]
 
                         //remove i from consideration -> i decreases -> j stays the same
 
                     //replace a character in the word1 at index i with character in the word2 at index j
                     //this will lead to a scenario where both the characters match and eventually i and j 
                         //both move by 1
-                        //-> 1 + recurse(i - 1, j - 1)
+                        //-> 1 + dp[i - 1][j - 1]
 
 
         //base cases:
-            //if i and j both becomes -1 we return 0 as there are 0 operations required to make empty strings
+            //for dp[0][0] we return 0 as there are 0 operations required to make empty strings
                 //equal
-            //if either of them becomes -1 then we retun the non-zero value as to make a non-empty string equal 
-                //to empty string we just need to delete the characters of non-empty string and to make an empty
-                //string equal to a non-empty string, we just need to add the characters of non-empty string 
+
+            //if either of them becomes 0, i.e. first row or first col then we retun the non-zero value 
+                //as to make a non-empty string equal to empty string we just need to delete the 
+                //characters of non-empty string and to make an empty string equal to a non-empty string,
+                //we just need to add the characters of non-empty string 
+
+        //algorithm:
+            //since the answer is at dp[m][n] we will start filling dp array starting from dp[1][1] and
+                //run two for loops from left to right
 
 
-        //memoization: 
-            //as each state depends on two variables, i and j we can have a 2D integer array to store the 
-                //number of states for each state
         
-
         //m = word1.length()
         //n = word2.length()
 
@@ -84,53 +88,187 @@ class Solution {
         //TC with momoization: O(m x n)
             //there are m x n states and each gets calculated at most once
 
+        //TC with tabulation: O(m x n)
+            //there are m x n states and each gets calculated at most once
 
         //SC without memoization: O(m + n)
             //Because insert/delete can reduce only one dimension (m or n) at a time, the worst-case recursive
                 //stack can reach O(m + n) only
+
         //SC with memoization: O(m + n) + O(m x n)
+
+        //SC with tabulation: O(m x n)
 
     public int minDistance(String word1, String word2) {
         
-        int rows = word1.length();
-        int cols = word2.length();
+        int rows = word1.length() + 1;
+        int cols = word2.length() + 1;
         int[][] dp = new int[rows][cols];
+
+        //base cases
+        //first col
         for(int i = 0; i < rows; i ++){
-            for(int j = 0; j < cols; j ++){
-                dp[i][j] = -1;
+            dp[i][0] = i;
+        }
+
+        //first row
+        for(int j = 0; j < cols; j ++){
+            dp[0][j] = j;
+        }
+
+        for(int i = 1; i < rows; i ++){
+            for(int j = 1; j < cols; j ++){
+                char ch1 = word1.charAt(i - 1);
+                char ch2 = word2.charAt(j - 1);
+
+                if(ch1 == ch2){
+                    dp[i][j] = dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j] = Math.min(1 + dp[i-1][j], Math.min(1 + dp[i][j-1], 1 + dp[i-1][j-1]));
+                }
             }
         }
 
-        return recurse(word1, word2, rows - 1, cols - 1, dp);
+        return dp[rows-1][cols-1];
+        
+        
     }
 
-    private int recurse(String word1, String word2, int i, int j, int[][] dp){
-        // if(i == -1 && j == -1) return 0;
 
-        if(i == -1) return j + 1;
-        if(j == -1) return i + 1;
 
-        if(dp[i][j] != -1) return dp[i][j];  
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 20 Sept 2026:
+    
+    // //intuition 1: Recursion (top-down + memoization)
+    //     //we can start from the first character and go till the last of each string and see if
+    //         //any particular character is matching 
+    //     //if it is matching, then we just proceed to the next character. This does not count towards
+    //         //any operation
+    //     //or, if it is not matching, then we have three choices either to insert a matching character,
+    //         //delete the unmatching character or replace the unmatching character. This will count
+    //         //towards 1 operation
+
+    //     //we can solve this problem recursively by exploring all the states 
+
+    //     //this looks like a dp problem. why dp?
+    //         //1. optimal substructure: we need to find minimum number of operations and the big problem
+    //             //depends on optimal sub-problem choices
+    //         //2. we can encounter repeated states and storing the values for these will help us cut down
+    //             //on redundant computations
+
+    //     //dp invariant:
+    //         //recurse(i, j) represents number of minimum operations required to convert word1[0...i] into
+    //             //word2[0...j]
+
+    //         //recurse(word1.length - 1, word2.length - 1) will represent our answer
+
+    //     //recurrence relation:
+    //         //each state will depend on probable three sub-states based on whether current character of 
+    //             //both strings are equal or not
+    //         //if both the characters are equal:
+    //             //then there is no operation involved and both the pointers move by 1 position
+    //                 //recurse(i, j) = recurse(i-1, j-1)
+            
+    //         //if both the characters are not equal:
+    //             //then there we need to perform either of the below three operation and take the minimum:
+
+    //                 //insert a character in the word1 at index i and shift the rest of the elements towards
+    //                     //left and now since technically we inserted a matching character at index i + 1, 
+    //                     //and now i+1th character in word1 matches with jth character in word2, we only move
+    //                     //j to j-1 while keeping i at same place as ((i + 1) - 1) = i
+    //                     //-> 1 + recurse(i, j - 1)
+
+    //                 //delete a character in the word1 at index i and shift the charaters towards right.
+    //                 //this will lead to i to move to i - 1 as we are not literally deleting the character
+    //                     //but just omitting it from the calcualtions while j staying the same
+    //                     //-> 1 + recurse(i - 1, j) 
+
+    //                     //remove i from consideration -> i decreases -> j stays the same
+
+    //                 //replace a character in the word1 at index i with character in the word2 at index j
+    //                 //this will lead to a scenario where both the characters match and eventually i and j 
+    //                     //both move by 1
+    //                     //-> 1 + recurse(i - 1, j - 1)
+
+
+    //     //base cases:
+    //         //if i and j both becomes -1 we return 0 as there are 0 operations required to make empty strings
+    //             //equal
+    //         //if either of them becomes -1 then we retun the non-zero value as to make a non-empty string equal 
+    //             //to empty string we just need to delete the characters of non-empty string and to make an empty
+    //             //string equal to a non-empty string, we just need to add the characters of non-empty string 
+
+
+    //     //memoization: 
+    //         //as each state depends on two variables, i and j we can have a 2D integer array to store the 
+    //             //number of states for each state
+        
+
+    //     //m = word1.length()
+    //     //n = word2.length()
+
+    //     //TC without memoization: 3 ^ (m + n))
+    //         //A branch may reduce :
+    //             //Insert: n by 1
+    //             //Delete: m by 1
+    //             //Replace: both by 1
+
+    //         //The recursion depth can therefore reach approximately to m + n and each mismatch can generate
+    //             //upto 3 branche3s
+
+            
+    //     //TC with momoization: O(m x n)
+    //         //there are m x n states and each gets calculated at most once
+
+
+    //     //SC without memoization: O(m + n)
+    //         //Because insert/delete can reduce only one dimension (m or n) at a time, the worst-case recursive
+    //             //stack can reach O(m + n) only
+    //     //SC with memoization: O(m + n) + O(m x n)
+
+    // public int minDistance(String word1, String word2) {
+        
+    //     int rows = word1.length();
+    //     int cols = word2.length();
+    //     int[][] dp = new int[rows][cols];
+    //     for(int i = 0; i < rows; i ++){
+    //         for(int j = 0; j < cols; j ++){
+    //             dp[i][j] = -1;
+    //         }
+    //     }
+
+    //     return recurse(word1, word2, rows - 1, cols - 1, dp);
+    // }
+
+    // private int recurse(String word1, String word2, int i, int j, int[][] dp){
+    //     // if(i == -1 && j == -1) return 0;
+
+    //     if(i == -1) return j + 1;
+    //     if(j == -1) return i + 1;
+
+    //     if(dp[i][j] != -1) return dp[i][j];  
  
-        char ch1 = word1.charAt(i);
-        char ch2 = word2.charAt(j);
+    //     char ch1 = word1.charAt(i);
+    //     char ch2 = word2.charAt(j);
 
-        if(ch1 == ch2){
-           dp[i][j] = recurse(word1, word2, i - 1, j - 1, dp);
-           return dp[i][j];
-        }
-        //insert
-        int op1 = 1 + recurse(word1, word2, i, j - 1, dp);
+    //     if(ch1 == ch2){
+    //        dp[i][j] = recurse(word1, word2, i - 1, j - 1, dp);
+    //        return dp[i][j];
+    //     }
+    //     //insert
+    //     int op1 = 1 + recurse(word1, word2, i, j - 1, dp);
 
-        //delete
-        int op2 = 1 + recurse(word1, word2, i - 1, j, dp);
+    //     //delete
+    //     int op2 = 1 + recurse(word1, word2, i - 1, j, dp);
 
-        //replace
-        int op3 = 1 + recurse(word1, word2, i - 1, j - 1, dp);
+    //     //replace
+    //     int op3 = 1 + recurse(word1, word2, i - 1, j - 1, dp);
 
-        dp[i][j] = Math.min(op1, Math.min(op2, op3));
-        return dp[i][j];
-    }
+    //     dp[i][j] = Math.min(op1, Math.min(op2, op3));
+    //     return dp[i][j];
+    // }
 
 
 
