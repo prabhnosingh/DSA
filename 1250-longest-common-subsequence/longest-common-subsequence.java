@@ -1,20 +1,20 @@
 class Solution {
 
     //Re-solving on 30 Sept 2026
-    //intuition 1: 
-        //the longest subsequence can be the shortest string of text1 and text2 in which case the 
-            //short_string.length will be our answer
+    //intuition 2: 
+        //the longest subsequence can be the shortest string of text1 and text2 if subsequence condition 
+            //matches, in which case the short_string.length will be our answer
 
         //We can traverse both the strings simultaneously and compare the characters using two pointers
         //Now we can have two scenarios:
             //scenario 1: both the characters match
-                //in this case we assume that current character is part of LCS
+                //in this case we can use this matching character as part of optimal LCS
                     //we increase the subsequence length by 1 and move both the pointers by 1
                
             
             //scenario 2: both the characters do not match. In this case the we have two choices, either
-                //to include char at i in the subsequence and excluding char at j or to include char at 
-                //j in the subsequence and excluding char at i
+                //to consider including char at i in the subsequence and excluding char at j or to 
+                //consider including char at j in the subsequence and excluding char at i
                 //in this case we have two choices:
                     //we move either of the pointer by 1 and keep the other as it is
                     //i+1, j
@@ -22,31 +22,41 @@ class Solution {
 
             
         //We can solve this by recursion
-            //recurse (i, j) will represent length of LCS staring form ith index of text1 till end and jth index of
+            //dp[i][j] will represent length of LCS staring form ith index of text1 till end and jth index of
                 //text2 till end 
         //We can also solve this by dp. Why dp?
             //1. Optimal substructure: we need to find longest common subsequence and getting optimal state
                 //depends on choosing optimal sub states
             //2. Recomputation of states can occur leading to duplicate work
 
-        //intuition 1: Recursion (top down + memoization)
+        //intuition 2: Tabulation (bottom up)
 
         //dp invariant:
-            //recurse(i,j) will represent length of LCS starting from ith index of text1 till end and jth index of
-                //text2 till end
-            //recurse(0, 0) will represent the answer
+            //dp[i][j] will represent length of LCS starting from ith index of text1 till m-1 and jth index of
+                //text2 till n-1
+            //dp[0][0] will represent the answer
+
+            //we need to have 1 extra row and 1 extra col at the last of the dp array to accomodate base case
+                //of LCS between empty and any other string
+
+            //therefore, we will have dp array of size m+1 x n+1
 
         //recurrence relation: 
             //if both the chars are equal:
-                //recurse(i, j) = 1 + recurse(i + 1, j + 1)
+                //dp[i][j] = 1 + dp[i + 1][j + 1]
 
             //else:
-                //recurse(i, j) = Math.max(recurse(i, j + 1), recurse(i + 1, j)) 
+                //dp[i][j] = Math.max(dp[i][j + 1], dp[i + 1][j]) 
 
         
         //base cases:   
-            //when i or j reaches end of the strings, return 0 as empty string cannot have 
-                //any LCS with any other string
+            //fill last col and last row with 0s
+
+
+
+        //algorithm:
+            //since we need forward states and answer is at dp[0][0] we fill dp array in reverse starting 
+                //m-1, n-1
 
 
 
@@ -54,55 +64,155 @@ class Solution {
             //since each state depends on two parameters i, j, we can have an int[][] of size
                 //text1.length() x text2.length()
 
-
-        
-        //TC without memoization:
-            //exponential
-            //branching factor <= 2
-            //max depth = m + n
-            //O(2 ^ (m + n))
-
-
-        //TC with memoizattion:
-            //each state gets traversed only once
+        //TC:
+            //each unique state gets computed only once
             //O(m x n)
-
-        //SC without memoization:   
-            //O(m + n) : recursive stack
-
         
-        //SC with memoization:
-            //O(m x n) + O(m + n)
+        //SC:
+            //O(m x n)
 
 
     
     public int longestCommonSubsequence(String text1, String text2) {
         
-        int rows = text1.length();
-        int cols = text2.length();
+        int rows = text1.length() + 1;
+        int cols = text2.length() + 1;
         int[][] dp = new int[rows][cols];
 
+        //base case 
+        //filling last col
         for(int i = 0; i < rows; i ++){
-            Arrays.fill(dp[i], -1);
+            dp[i][cols-1] = 0;
         }
 
-        return recurse(text1, text2, 0, 0, dp);
+        //filling last row
+        for(int j = 0; j < cols; j ++){
+            dp[rows - 1][j] = 0;
+        }
+
+        for(int i = rows - 2; i >= 0; i --){
+            for(int j = cols - 2; j >= 0; j --){
+                int ch1 = text1.charAt(i);
+                int ch2 = text2.charAt(j);
+
+                if(ch1 == ch2){
+                    dp[i][j] = 1 + dp[i + 1][j + 1];
+                }
+                else{
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
+                }
+            }
+        }
+
+        return dp[0][0];
+
         
     }
 
-    private int recurse(String text1, String text2, int i, int j, int[][] dp){
-        if(i == text1.length() || j == text2.length()) return 0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //Re-solving on 30 Sept 2026
+    // //intuition 1: 
+    //     //the longest subsequence can be the shortest string of text1 and text2 if subsequence condition 
+    //         //matches, in which case the short_string.length will be our answer
 
-        if(dp[i][j] != -1) return dp[i][j];
+    //     //We can traverse both the strings simultaneously and compare the characters using two pointers
+    //     //Now we can have two scenarios:
+    //         //scenario 1: both the characters match
+    //             //in this case we can use this matching character as part of optimal LCS
+    //                 //we increase the subsequence length by 1 and move both the pointers by 1
+               
+            
+    //         //scenario 2: both the characters do not match. In this case the we have two choices, either
+    //             //to consider including char at i in the subsequence and excluding char at j or to 
+    //             //consider including char at j in the subsequence and excluding char at i
+    //             //in this case we have two choices:
+    //                 //we move either of the pointer by 1 and keep the other as it is
+    //                 //i+1, j
+    //                 //i, j +1
 
-        if(text1.charAt(i) == text2.charAt(j)){
-            dp[i][j] = 1 + recurse(text1, text2, i + 1, j + 1, dp);
-            return dp[i][j];
-        }
+            
+    //     //We can solve this by recursion
+    //         //recurse (i, j) will represent length of LCS staring form ith index of text1 till end and jth index of
+    //             //text2 till end 
+    //     //We can also solve this by dp. Why dp?
+    //         //1. Optimal substructure: we need to find longest common subsequence and getting optimal state
+    //             //depends on choosing optimal sub states
+    //         //2. Recomputation of states can occur leading to duplicate work
 
-        dp[i][j] = Math.max(recurse(text1, text2, i + 1, j, dp), recurse(text1, text2, i, j + 1, dp));
-        return dp[i][j];
-    }
+    //     //intuition 1: Recursion (top down + memoization)
+
+    //     //dp invariant:
+    //         //recurse(i,j) will represent length of LCS starting from ith index of text1 till end and jth index of
+    //             //text2 till end
+    //         //recurse(0, 0) will represent the answer
+
+    //     //recurrence relation: 
+    //         //if both the chars are equal:
+    //             //recurse(i, j) = 1 + recurse(i + 1, j + 1)
+
+    //         //else:
+    //             //recurse(i, j) = Math.max(recurse(i, j + 1), recurse(i + 1, j)) 
+
+        
+    //     //base cases:   
+    //         //when i or j reaches end of the strings, return 0 as empty string cannot have 
+    //             //any LCS with any other string
+
+
+
+    //     //memoization:
+    //         //since each state depends on two parameters i, j, we can have an int[][] of size
+    //             //text1.length() x text2.length()
+
+
+        
+    //     //TC without memoization:
+    //         //exponential
+    //         //branching factor <= 2
+    //         //max depth = m + n
+    //         //O(2 ^ (m + n))
+
+
+    //     //TC with memoizattion:
+    //         //each unique state gets computed only once
+    //         //O(m x n)
+
+    //     //SC without memoization:   
+    //         //O(m + n) : recursive stack
+
+        
+    //     //SC with memoization:
+    //         //O(m x n) + O(m + n)
+
+
+    
+    // public int longestCommonSubsequence(String text1, String text2) {
+        
+    //     int rows = text1.length();
+    //     int cols = text2.length();
+    //     int[][] dp = new int[rows][cols];
+
+    //     for(int i = 0; i < rows; i ++){
+    //         Arrays.fill(dp[i], -1);
+    //     }
+
+    //     return recurse(text1, text2, 0, 0, dp);
+        
+    // }
+
+    // private int recurse(String text1, String text2, int i, int j, int[][] dp){
+    //     if(i == text1.length() || j == text2.length()) return 0;
+
+    //     if(dp[i][j] != -1) return dp[i][j];
+
+    //     if(text1.charAt(i) == text2.charAt(j)){
+    //         dp[i][j] = 1 + recurse(text1, text2, i + 1, j + 1, dp);
+    //         return dp[i][j];
+    //     }
+
+    //     dp[i][j] = Math.max(recurse(text1, text2, i + 1, j, dp), recurse(text1, text2, i, j + 1, dp));
+    //     return dp[i][j];
+    // }
 
 
 
