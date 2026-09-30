@@ -1,54 +1,98 @@
 class Solution {
 
-    //Solving on 23 Dec 2025:
+    //Re-solving on 30 Sept 2026:
+    
+    //intuition 1: 
+        //a square have both length and width equal
+        //a single 1 cell is a square of area 1   
+        //for any cell with 1 value we need to check if right, down and right-down diagnoal are also 1.
+            //if yes, then we can say that we have a square of area 4.
+        //now the main thing is that all these 3 neighbors should be 1 for a square to be extended.
 
-    //intuition 1: (2D DP: DP On Grids: Bottom - up - is this really bottom up as we are traversing matrix from 
-        //top left to bottom right?)
+        //We can recursively start from any 1 cell and see if it satifies the condition of all 3 neighbors 
+            //returning same value. Then we check the same condition for these 3 neighbors and so on. 
+            //With each level we increase the length by 1 which makes the area as length * length
+        //And any time we find that any neighbor is not 1, we stop traversing that path and return 
         
-        //Base cases: for top row and top col, fill dp matrix with same values as in matrix
-        //Recurrence relation: 
-            //For any cell that is 0, simply put 0(or skip) in dp matrix
-            //For a square to expand, all three previous neighbors(left, top-left, top) should be equal
-            //If all three previous negibors are not equal, then take the minimum of the three and add 1 for current
-                //cell in dp array  
+        //Also as we can see that each cell can be approached by multiple paths, there is redundancy when 
+            //it comes to computing the states. 
+        //This looks like a DP problem. Why DP?
+            //1. Optimal Substructure: We need to find the maximum area and a big problem of finding maximum
+                //square area in the whole matrix can be broken down to finding maximum square area in a
+                //smaller sub-matrix
+            //2. There is state re-computations involved, resulting in duplicated work and hence
+                //memoization can be applied 
+
+        //intuition 1: Recursion (top down + memoization)
+            //dp invariant:
+                //each cell is represented by i, j and a maximum square can start from any i, j cell
+                //recurse(i, j) will represent maximum lenght of square such that the square's left
+                    //corner is at i, j
+
+            //recurrence relation:
+                //each state recurse(i, j) depends on right, bottom and bottom right cell
+                //now each of these 3 sub-states can different values returning, means each of them 
+                    //can have different lengths of squares starting from them. We need to choose
+                    //the minimum of all these 3 states in order to proceed with the calculation of
+                    //maximum length for the current state as we need all the sides to increase uniformly
+                    //and by choosing min of these three sub-states we make sure that this is happening.
+                //the relation between these states will be:
+                    //recurse(i, j) = 1 + Math.min((i, j + 1), (i + 1, j) and (i + 1, j + 1)) 
+
+                //if any of the sub-state is 0, then we will have max length of the square from i, j as 1,
+                    //which makes sense
+
+            //base cases:
+                //if matrix[i][j] == 0, return 0
+                //if i, j are going out of matrix boudaries, return 0
+
+
+            //memoization: 
+                //since each recursive state depends on two parameters (i, j) we can store then in a
+                    //2D integer array of size m x n
+
+            
+            //algorigthm:
+                //since maximum square can be totally isolated in the whole matrix, we need to traverse 
+                    //the whole matrix and pass each 1 cell to the recure function and choose the maximum
+                    //of all such cells
+        
 
     public int maximalSquare(char[][] matrix) {
-        //dp[i][j] represents side of square containing all 1's ending at i,j
-            //store the maximum square encountered at each dp state to get final answer
-        //At max we can have a maximal square containing all 1's ending at matrix.length, matrix[0].length
-        //Therefore, we need a 2D array of size matrix.length x matrix[0].length
 
+        int maxLen = 0;
         int rows = matrix.length;
         int cols = matrix[0].length;
-        int maxSide = 0;
+
         int[][] dp = new int[rows][cols];
-
-        //base cases
-        //filling first col
         for(int i = 0; i < rows; i ++){
-            int j = 0;
-            dp[i][j] = matrix[i][j] - '0';
-            maxSide = Math.max(maxSide, dp[i][j]);
+            Arrays.fill(dp[i], -1);
         }
 
-        //filling first row
-        for(int j = 0; j < cols; j ++){
-            int i = 0;
-            dp[i][j] = matrix[i][j] - '0';
-            maxSide = Math.max(maxSide, dp[i][j]);
-        }
 
-        for(int i = 1; i < rows; i ++){
-            for(int j = 1; j < cols; j ++){
-                if(matrix[i][j] == '0') continue;                
-                dp[i][j] = 1 + Math.min(Math.min(dp[i-1][j], dp[i-1][j-1]), dp[i][j-1]);
 
-                maxSide = Math.max(maxSide, dp[i][j]);
+        for(int i = 0; i < rows; i ++){
+            for(int j = 0; j < cols; j ++){
+                if(matrix[i][j] == '1'){
+                    maxLen = Math.max(maxLen, recurse(matrix, i, j, dp));
+                }
             }
         }
 
-        return maxSide * maxSide;
+        return maxLen * maxLen;
+    }
 
+    public int recurse(char[][] matrix, int i, int j, int[][] dp){
+        if(i == matrix.length || j == matrix[0].length) return 0;
+        if(matrix[i][j] == '0') return 0;
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+
+        dp[i][j] = 1 + Math.min(recurse(matrix, i + 1, j, dp), 
+            Math.min(recurse(matrix, i, j + 1, dp), recurse(matrix, i + 1, j + 1, dp)));
+
+        return dp[i][j];
     }
 
 
@@ -80,6 +124,93 @@ class Solution {
 
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //Solving on 23 Dec 2025:
+
+//     //intuition 1: (2D DP: DP On Grids: Bottom - up - is this really bottom up as we are traversing matrix from 
+//         //top left to bottom right? -> Yes — it is bottom-up, even though you traverse top-left -> bottom-right,
+//         //becuase you compute each state using already-computed smaller subproblems)
+//         //"Bottom-up != reverse traversal
+//         //Bottom-up = “dependencies already solved”"
+        
+//         //Base cases: for top row and top col, fill dp matrix with same values as in matrix
+//             //“In the first row or first column, the largest square ending at any cell can only be of size 1 
+//                 //if the cell is '1', otherwise 0.”
+//         //Recurrence relation: 
+//             //For any cell that is 0, simply put 0(or skip) in dp matrix
+//             //For a square to expand, all three previous neighbors(left, top-left, top) should be atleast k-1
+//             //If all three previous negibors are not equal, then take the minimum of the three and add 1 for current
+//                 //cell in dp array  
+//             //"A square of side k can only end at i,j if all three neighbors (left, top-left, top) support atleast
+//                 //a square of side k-1. Therefore, the side of square is limited by the smallest of the three neighbors"
+
+//     public int maximalSquare(char[][] matrix) {
+//         //dp[i][j] represents the maximum side length of square containing all 1's ending at i,j
+//         //Update the maximum side encountered at each dp state to get final answer
+//         //At max we can have our max side of square containing all 1's ending at matrix.length-1, matrix[0].length-1
+//         //Therefore, we need a 2D array of size matrix.length x matrix[0].length
+
+//         int rows = matrix.length;
+//         int cols = matrix[0].length;
+//         int maxSide = 0;
+//         int[][] dp = new int[rows][cols];
+
+//         //base cases
+//         //filling first col
+//         for(int i = 0; i < rows; i ++){
+//             int j = 0;
+//             dp[i][j] = matrix[i][j] - '0';
+//             maxSide = Math.max(maxSide, dp[i][j]);
+//         }
+
+//         //filling first row
+//         for(int j = 0; j < cols; j ++){
+//             int i = 0;
+//             dp[i][j] = matrix[i][j] - '0';
+//             maxSide = Math.max(maxSide, dp[i][j]);
+//         }
+
+//         for(int i = 1; i < rows; i ++){
+//             for(int j = 1; j < cols; j ++){
+//                 if(matrix[i][j] == '0') continue;                
+//                 dp[i][j] = 1 + Math.min(Math.min(dp[i-1][j], dp[i-1][j-1]), dp[i][j-1]);
+
+//                 maxSide = Math.max(maxSide, dp[i][j]);
+//             }
+//         }
+
+//         return maxSide * maxSide;
+
+//     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //     //Solving on 20 Dec 2025:
 
 //     //intuition 2: (2D: DP: DP on grid pattern: Solution tracked while filling DP array):
@@ -109,8 +240,8 @@ class Solution {
 
 //     public int maximalSquare(char[][] matrix) {
 //         //dp[i][j] represents maximum side of square possible containing all 1's ending at i,j
-//         //"dp[i][j]" represents the maximum side length of a square containing all 1's that ends at cell i,j
-//         //We will traverse the whole matrix and filling the dp matix along the way till bottom right cell.
+//         //"dp[i][j] represents the maximum side length of a square containing all 1's that ends at cell i,j"
+//         //We will be traverse the whole matrix and filling the dp matix along the way till bottom right cell.
 //         //Therefore, we need a 2D matrix of size matrix.length x matrix[0].length
 
 //         int rows = matrix.length;
