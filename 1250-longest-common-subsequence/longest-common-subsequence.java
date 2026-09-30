@@ -58,12 +58,6 @@ class Solution {
             //since we need forward states and answer is at dp[0][0] we fill dp array in reverse starting 
                 //m-1, n-1
 
-
-
-        //memoization:
-            //since each state depends on two parameters i, j, we can have an int[][] of size
-                //text1.length() x text2.length()
-
         //TC:
             //each unique state gets computed only once
             //O(m x n)
@@ -92,8 +86,8 @@ class Solution {
 
         for(int i = rows - 2; i >= 0; i --){
             for(int j = cols - 2; j >= 0; j --){
-                int ch1 = text1.charAt(i);
-                int ch2 = text2.charAt(j);
+                char ch1 = text1.charAt(i);
+                char ch2 = text2.charAt(j);
 
                 if(ch1 == ch2){
                     dp[i][j] = 1 + dp[i + 1][j + 1];
