@@ -2,7 +2,7 @@ class Solution {
 
     //Re-solving on 30 Sept 2026:
     
-    //intuition 1: 
+    //intuition 2: 
         //a square have both length and width equal
         //a single 1 cell is a square of area 1   
         //for any cell with 1 value we need to check if right, down and right-down diagnoal are also 1.
@@ -23,40 +23,40 @@ class Solution {
             //2. There is state re-computations involved, resulting in duplicated work and hence
                 //memoization can be applied 
 
-        //intuition 1: Recursion (top down + memoization)
+        //intuition 2: Tabulation (bottom up)
             //dp invariant:
                 //each cell is represented by i, j and a maximum square can start from any i, j cell
-                //recurse(i, j) will represent maximum lenght of square such that the square's left
+                //dp[i][j] will represent maximum length of square such that the square's left
                     //corner is at i, j
 
             //recurrence relation:
-                //each state recurse(i, j) depends on right, bottom and bottom right cell
+                //each state dp[i][j] depends on right, bottom and bottom right cell
                 //now each of these 3 sub-states can different values returning, means each of them 
                     //can have different lengths of squares starting from them. We need to choose
                     //the minimum of all these 3 states in order to proceed with the calculation of
                     //maximum length for the current state as we need all the sides to increase uniformly
                     //and by choosing min of these three sub-states we make sure that this is happening.
                 //the relation between these states will be:
-                    //recurse(i, j) = 1 + Math.min((i, j + 1), (i + 1, j) and (i + 1, j + 1)) 
+                    //dp[i][j]= 1 + Math.min((i, j + 1), (i + 1, j) and (i + 1, j + 1)) 
 
                 //if any of the sub-state is 0, then we will have max length of the square from i, j as 1,
                     //which makes sense
 
             //base cases:
-                //if matrix[i][j] == 0, return 0
-                //if i, j are going out of matrix boudaries, return 0
+                //for last row and col, all the 1 cells would have 1 value as it is not possible to have
+                    //larger squares from these cells
 
 
-            //memoization: 
-                //since each recursive state depends on two parameters (i, j) we can store then in a
-                    //2D integer array of size m x n
 
             
             //algorigthm:
-                //since maximum square can be totally isolated in the whole matrix, we need to traverse 
-                    //the whole matrix and pass each 1 cell to the recure function and choose the maximum
-                    //of all such cells
-        
+                //since each state needs three further states to compute its value, we will traverse 
+                    //dp array from m-2, n-2 towards 0, 0
+                //also we would track the maximum length found throughtout the execution 
+
+
+            //TC: O(m x n)
+            //SC: O(m x n)
 
     public int maximalSquare(char[][] matrix) {
 
@@ -65,35 +65,151 @@ class Solution {
         int cols = matrix[0].length;
 
         int[][] dp = new int[rows][cols];
+        
+        //base cases
+        //last col
         for(int i = 0; i < rows; i ++){
-            Arrays.fill(dp[i], -1);
+            if(matrix[i][cols - 1] == '1') {
+                dp[i][cols - 1] = 1;
+                maxLen = 1;
+            }
+        }
+
+        //last row
+        for(int j = 0; j < cols; j ++){
+            if(matrix[rows - 1][j] == '1') {
+                dp[rows - 1][j] = 1;
+                maxLen = 1;
+            }
         }
 
 
 
-        for(int i = 0; i < rows; i ++){
-            for(int j = 0; j < cols; j ++){
+
+        for(int i = rows - 2; i >= 0; i --){
+            for(int j = cols - 2; j >= 0; j --){
                 if(matrix[i][j] == '1'){
-                    maxLen = Math.max(maxLen, recurse(matrix, i, j, dp));
+                    dp[i][j] = 1 + Math.min(dp[i + 1][j], Math.min(dp[i][j + 1], dp[i + 1][j + 1]));
+                    maxLen = Math.max(maxLen, dp[i][j]);
                 }
             }
         }
 
         return maxLen * maxLen;
+
     }
 
-    public int recurse(char[][] matrix, int i, int j, int[][] dp){
-        if(i == matrix.length || j == matrix[0].length) return 0;
-        if(matrix[i][j] == '0') return 0;
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(dp[i][j] != -1) return dp[i][j];
+    // //Re-solving on 30 Sept 2026:
+    
+    // //intuition 1: 
+    //     //a square have both length and width equal
+    //     //a single 1 cell is a square of area 1   
+    //     //for any cell with 1 value we need to check if right, down and right-down diagnoal are also 1.
+    //         //if yes, then we can say that we have a square of area 4.
+    //     //now the main thing is that all these 3 neighbors should be 1 for a square to be extended.
+
+    //     //We can recursively start from any 1 cell and see if it satifies the condition of all 3 neighbors 
+    //         //returning same value. Then we check the same condition for these 3 neighbors and so on. 
+    //         //With each level we increase the length by 1 which makes the area as length * length
+    //     //And any time we find that any neighbor is not 1, we stop traversing that path and return 
+        
+    //     //Also as we can see that each cell can be approached by multiple paths, there is redundancy when 
+    //         //it comes to computing the states. 
+    //     //This looks like a DP problem. Why DP?
+    //         //1. Optimal Substructure: We need to find the maximum area and a big problem of finding maximum
+    //             //square area in the whole matrix can be broken down to finding maximum square area in a
+    //             //smaller sub-matrix
+    //         //2. There is state re-computations involved, resulting in duplicated work and hence
+    //             //memoization can be applied 
+
+    //     //intuition 1: Recursion (top down + memoization)
+    //         //dp invariant:
+    //             //each cell is represented by i, j and a maximum square can start from any i, j cell
+    //             //recurse(i, j) will represent maximum lenght of square such that the square's left
+    //                 //corner is at i, j
+
+    //         //recurrence relation:
+    //             //each state recurse(i, j) depends on right, bottom and bottom right cell
+    //             //now each of these 3 sub-states can different values returning, means each of them 
+    //                 //can have different lengths of squares starting from them. We need to choose
+    //                 //the minimum of all these 3 states in order to proceed with the calculation of
+    //                 //maximum length for the current state as we need all the sides to increase uniformly
+    //                 //and by choosing min of these three sub-states we make sure that this is happening.
+    //             //the relation between these states will be:
+    //                 //recurse(i, j) = 1 + Math.min((i, j + 1), (i + 1, j) and (i + 1, j + 1)) 
+
+    //             //if any of the sub-state is 0, then we will have max length of the square from i, j as 1,
+    //                 //which makes sense
+
+    //         //base cases:
+    //             //if matrix[i][j] == 0, return 0
+    //             //if i, j are going out of matrix boudaries, return 0
 
 
-        dp[i][j] = 1 + Math.min(recurse(matrix, i + 1, j, dp), 
-            Math.min(recurse(matrix, i, j + 1, dp), recurse(matrix, i + 1, j + 1, dp)));
+    //         //memoization: 
+    //             //since each recursive state depends on two parameters (i, j) we can store then in a
+    //                 //2D integer array of size m x n
 
-        return dp[i][j];
-    }
+            
+    //         //algorigthm:
+    //             //since maximum square can be totally isolated in the whole matrix, we need to traverse 
+    //                 //the whole matrix and pass each 1 cell to the recure function and choose the maximum
+    //                 //of all such cells
+
+    //         //TC without memoization:
+    //             //exponential due to 3 recursive branches per state
+    //             //at worst, we explore 3 states from a state and all its substates
+    //             //O(m x n (3 ^ (m + n)))
+    //                 //branching factor <= 3
+    //                 //maximum recursion depth = O(m+n)
+    //                 //TC: O(branchingFactor ^ maximumRecursionDepth)
+    //         //TC with memoization: 
+    //             //each state is computed at most once
+    //             //O(m x n)
+
+    //         //SC without memoization:
+    //             //O(m + n) for recursive stack
+    //         //SC with memoization:
+    //             //O(m + n) for recursive stack + O(m x n) for DP array 
+
+    // public int maximalSquare(char[][] matrix) {
+
+    //     int maxLen = 0;
+    //     int rows = matrix.length;
+    //     int cols = matrix[0].length;
+
+    //     int[][] dp = new int[rows][cols];
+    //     for(int i = 0; i < rows; i ++){
+    //         Arrays.fill(dp[i], -1);
+    //     }
+
+
+
+    //     for(int i = 0; i < rows; i ++){
+    //         for(int j = 0; j < cols; j ++){
+    //             if(matrix[i][j] == '1'){
+    //                 maxLen = Math.max(maxLen, recurse(matrix, i, j, dp));
+    //             }
+    //         }
+    //     }
+
+    //     return maxLen * maxLen;
+    // }
+
+    // public int recurse(char[][] matrix, int i, int j, int[][] dp){
+    //     if(i == matrix.length || j == matrix[0].length) return 0;
+    //     if(matrix[i][j] == '0') return 0;
+
+    //     if(dp[i][j] != -1) return dp[i][j];
+
+
+    //     dp[i][j] = 1 + Math.min(recurse(matrix, i + 1, j, dp), 
+    //         Math.min(recurse(matrix, i, j + 1, dp), recurse(matrix, i + 1, j + 1, dp)));
+
+    //     return dp[i][j];
+    // }
 
 
 
